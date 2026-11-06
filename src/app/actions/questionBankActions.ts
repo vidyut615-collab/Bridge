@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { recordAuditLog } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 
 export async function updateTopicInventoryAction(params: {
@@ -40,56 +39,61 @@ export async function updateTopicInventoryAction(params: {
   const prevHard = topic.hardCount;
   const prevFolder = topic.folderName;
 
-  await prisma.$transaction(async (tx) => {
-    // 1. Update Topic counts
-    await tx.topic.update({
-      where: { id: params.topicId },
-      data: {
-        easyCount: params.easyCount,
-        mediumCount: params.mediumCount,
-        hardCount: params.hardCount,
-        folderName: params.folderName.trim(),
-      },
-    });
+  await prisma.$transaction(
+    async (tx) => {
+      // 1. Update Topic counts
+      await tx.topic.update({
+        where: { id: params.topicId },
+        data: {
+          easyCount: params.easyCount,
+          mediumCount: params.mediumCount,
+          hardCount: params.hardCount,
+          folderName: params.folderName.trim(),
+        },
+      });
 
-    // 2. Insert into TopicInventoryHistory
-    await tx.topicInventoryHistory.create({
-      data: {
-        topicId: params.topicId,
-        prevEasy,
-        newEasy: params.easyCount,
-        prevMedium,
-        newMedium: params.mediumCount,
-        prevHard,
-        newHard: params.hardCount,
-        prevFolder,
-        newFolder: params.folderName.trim(),
-        changeDescription: params.changeDescription.trim(),
-        changedBy: user.id,
-      },
-    });
+      // 2. Insert into TopicInventoryHistory
+      await tx.topicInventoryHistory.create({
+        data: {
+          topicId: params.topicId,
+          prevEasy,
+          newEasy: params.easyCount,
+          prevMedium,
+          newMedium: params.mediumCount,
+          prevHard,
+          newHard: params.hardCount,
+          prevFolder,
+          newFolder: params.folderName.trim(),
+          changeDescription: params.changeDescription.trim(),
+          changedBy: user.id,
+        },
+      });
 
-    // 3. Record Audit Log
-    await recordAuditLog({
-      entityType: "QUESTION_BANK",
-      entityId: params.topicId,
-      action: "UPDATE",
-      changeDescription: `Updated inventory for topic "${topic.name}" under ${topic.subject.name}: Easy ${prevEasy}->${params.easyCount}, Med ${prevMedium}->${params.mediumCount}, Hard ${prevHard}->${params.hardCount}. Reason: ${params.changeDescription}`,
-      userId: user.id,
-      previousValues: {
-        easy: prevEasy,
-        medium: prevMedium,
-        hard: prevHard,
-        folder: prevFolder,
-      },
-      newValues: {
-        easy: params.easyCount,
-        medium: params.mediumCount,
-        hard: params.hardCount,
-        folder: params.folderName.trim(),
-      },
-    });
-  });
+      // 3. Record Audit Log directly within transaction client to prevent SQLite lock deadlocks
+      await tx.auditLog.create({
+        data: {
+          entityType: "QUESTION_BANK",
+          entityId: params.topicId,
+          action: "UPDATE",
+          changeDescription: `Updated inventory for topic "${topic.name}" under ${topic.subject.name}: Easy ${prevEasy}->${params.easyCount}, Med ${prevMedium}->${params.mediumCount}, Hard ${prevHard}->${params.hardCount}. Reason: ${params.changeDescription.trim()}`,
+          changedBy: user.id,
+          previousValues: JSON.stringify({
+            easy: prevEasy,
+            medium: prevMedium,
+            hard: prevHard,
+            folder: prevFolder,
+          }),
+          newValues: JSON.stringify({
+            easy: params.easyCount,
+            medium: params.mediumCount,
+            hard: params.hardCount,
+            folder: params.folderName.trim(),
+          }),
+        },
+      });
+    },
+    { timeout: 15000, maxWait: 5000 }
+  );
 
   revalidatePath("/question-bank");
   revalidatePath(`/question-bank/${topic.subjectId}`);
@@ -127,61 +131,67 @@ export async function updateBatchTopicsInventoryAction(params: {
     throw new Error("Subject not found.");
   }
 
-  await prisma.$transaction(async (tx) => {
-    for (const t of params.topics) {
-      if (t.easyCount < 0 || t.mediumCount < 0 || t.hardCount < 0) {
-        throw new Error("Question counts cannot be negative numbers.");
+  await prisma.$transaction(
+    async (tx) => {
+      for (const t of params.topics) {
+        if (t.easyCount < 0 || t.mediumCount < 0 || t.hardCount < 0) {
+          throw new Error("Question counts cannot be negative numbers.");
+        }
+
+        const existing = subject.topics.find((mt) => mt.id === t.topicId);
+        if (!existing) continue;
+
+        const hasChanged =
+          existing.easyCount !== t.easyCount ||
+          existing.mediumCount !== t.mediumCount ||
+          existing.hardCount !== t.hardCount ||
+          existing.folderName !== t.folderName.trim();
+
+        if (hasChanged) {
+          await tx.topic.update({
+            where: { id: t.topicId },
+            data: {
+              easyCount: t.easyCount,
+              mediumCount: t.mediumCount,
+              hardCount: t.hardCount,
+              folderName: t.folderName.trim(),
+            },
+          });
+
+          await tx.topicInventoryHistory.create({
+            data: {
+              topicId: t.topicId,
+              prevEasy: existing.easyCount,
+              newEasy: t.easyCount,
+              prevMedium: existing.mediumCount,
+              newMedium: t.mediumCount,
+              prevHard: existing.hardCount,
+              newHard: t.hardCount,
+              prevFolder: existing.folderName,
+              newFolder: t.folderName.trim(),
+              changeDescription: params.changeDescription.trim(),
+              changedBy: user.id,
+            },
+          });
+        }
       }
 
-      const existing = subject.topics.find((mt) => mt.id === t.topicId);
-      if (!existing) continue;
-
-      const hasChanged =
-        existing.easyCount !== t.easyCount ||
-        existing.mediumCount !== t.mediumCount ||
-        existing.hardCount !== t.hardCount ||
-        existing.folderName !== t.folderName.trim();
-
-      if (hasChanged) {
-        await tx.topic.update({
-          where: { id: t.topicId },
-          data: {
-            easyCount: t.easyCount,
-            mediumCount: t.mediumCount,
-            hardCount: t.hardCount,
-            folderName: t.folderName.trim(),
-          },
-        });
-
-        await tx.topicInventoryHistory.create({
-          data: {
-            topicId: t.topicId,
-            prevEasy: existing.easyCount,
-            newEasy: t.easyCount,
-            prevMedium: existing.mediumCount,
-            newMedium: t.mediumCount,
-            prevHard: existing.hardCount,
-            newHard: t.hardCount,
-            prevFolder: existing.folderName,
-            newFolder: t.folderName.trim(),
-            changeDescription: params.changeDescription.trim(),
-            changedBy: user.id,
-          },
-        });
-      }
-    }
-
-    await recordAuditLog({
-      entityType: "QUESTION_BANK",
-      entityId: params.subjectId,
-      action: "UPDATE",
-      changeDescription: `Batch updated topic inventories for subject "${subject.name}". Reason: ${params.changeDescription}`,
-      userId: user.id,
-      newValues: {
-        updatedTopicsCount: params.topics.length,
-      },
-    });
-  });
+      // Record Audit Log within tx to prevent connection lock deadlock on SQLite
+      await tx.auditLog.create({
+        data: {
+          entityType: "QUESTION_BANK",
+          entityId: params.subjectId,
+          action: "UPDATE",
+          changeDescription: `Batch updated topic inventories for subject "${subject.name}". Reason: ${params.changeDescription.trim()}`,
+          changedBy: user.id,
+          newValues: JSON.stringify({
+            updatedTopicsCount: params.topics.length,
+          }),
+        },
+      });
+    },
+    { timeout: 15000, maxWait: 5000 }
+  );
 
   revalidatePath("/question-bank");
   revalidatePath(`/question-bank/${params.subjectId}`);
