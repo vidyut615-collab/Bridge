@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { BookOpen, ArrowRight, Layers, Folder, Clock, User, AlertCircle } from "lucide-react";
+import { BookOpen, ArrowRight } from "lucide-react";
 import { formatDateKolkata, formatNumber } from "@/lib/utils";
 
 export default async function QuestionBankPage() {
@@ -59,15 +59,15 @@ export default async function QuestionBankPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-[#0f1011] p-5 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-slate-900">Question Bank Observability</h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-[#f7f8f8]">Question Bank Observability</h1>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#27a644]/15 text-[#27a644] border border-[#27a644]/30">
               Active Inventory
             </span>
           </div>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-xs text-[#8a8f98]">
             Subject-wise aggregate question counts, folder associations, and difficulty distribution (Roman tiers I, II, III).
           </p>
         </div>
@@ -75,87 +75,87 @@ export default async function QuestionBankPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-slate-200">
-          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Questions</div>
-          <div className="text-2xl font-extrabold text-slate-900 mt-1">{formatNumber(grandTotal)}</div>
-          <div className="text-[11px] text-slate-400 mt-1">{subjects.length} Subjects</div>
+        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
+          <div className="text-[11px] font-mono font-semibold text-[#8a8f98] uppercase tracking-wider">Total Questions</div>
+          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-[#f7f8f8] mt-1 tabular-nums">{formatNumber(grandTotal)}</div>
+          <div className="text-[11px] text-[#8a8f98] mt-1 font-mono">{subjects.length} Subjects</div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-emerald-100 bg-emerald-50/20">
-          <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Easy (Level I)</div>
-          <div className="text-2xl font-extrabold text-emerald-700 mt-1">{formatNumber(totalEasy)}</div>
-          <div className="text-[11px] text-emerald-600 mt-1">
+        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-emerald-200 dark:border-[#27a644]/30 bg-emerald-50/20 dark:bg-[#27a644]/5">
+          <div className="text-[11px] font-mono font-semibold text-[#27a644] uppercase tracking-wider">Easy (Level I)</div>
+          <div className="text-2xl font-bold font-mono text-[#27a644] mt-1 tabular-nums">{formatNumber(totalEasy)}</div>
+          <div className="text-[11px] text-[#27a644]/80 mt-1 font-mono">
             {grandTotal > 0 ? `${((totalEasy / grandTotal) * 100).toFixed(1)}%` : "0%"} of total
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-amber-100 bg-amber-50/20">
-          <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Medium (Level II)</div>
-          <div className="text-2xl font-extrabold text-amber-700 mt-1">{formatNumber(totalMedium)}</div>
-          <div className="text-[11px] text-amber-600 mt-1">
+        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-amber-200 dark:border-[#f0bf00]/30 bg-amber-50/20 dark:bg-[#f0bf00]/5">
+          <div className="text-[11px] font-mono font-semibold text-[#f0bf00] uppercase tracking-wider">Medium (Level II)</div>
+          <div className="text-2xl font-bold font-mono text-[#f0bf00] mt-1 tabular-nums">{formatNumber(totalMedium)}</div>
+          <div className="text-[11px] text-[#f0bf00]/80 mt-1 font-mono">
             {grandTotal > 0 ? `${((totalMedium / grandTotal) * 100).toFixed(1)}%` : "0%"} of total
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-red-100 bg-red-50/20">
-          <div className="text-xs font-semibold text-red-700 uppercase tracking-wider">Hard (Level III)</div>
-          <div className="text-2xl font-extrabold text-red-700 mt-1">{formatNumber(totalHard)}</div>
-          <div className="text-[11px] text-red-600 mt-1">
+        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-red-200 dark:border-[#eb5757]/30 bg-red-50/20 dark:bg-[#eb5757]/5">
+          <div className="text-[11px] font-mono font-semibold text-[#eb5757] uppercase tracking-wider">Hard (Level III)</div>
+          <div className="text-2xl font-bold font-mono text-[#eb5757] mt-1 tabular-nums">{formatNumber(totalHard)}</div>
+          <div className="text-[11px] text-[#eb5757]/80 mt-1 font-mono">
             {grandTotal > 0 ? `${((totalHard / grandTotal) * 100).toFixed(1)}%` : "0%"} of total
           </div>
         </div>
       </div>
 
       {/* Consolidated Inventory Table (PRD Section 5.6) */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-slate-200 flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900">Subject Inventory Register</h2>
-          <span className="text-xs text-slate-500">Click &quot;Update Counts&quot; to modify any subject</span>
+      <div className="bg-white dark:bg-[#0f1011] rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] overflow-hidden">
+        <div className="p-4 border-b border-slate-200 dark:border-white/[0.06] flex items-center justify-between">
+          <h2 className="text-sm font-bold text-slate-900 dark:text-[#f7f8f8]">Subject Inventory Register</h2>
+          <span className="text-xs text-[#8a8f98]">Click &quot;Update Counts&quot; to modify any subject</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs uppercase font-semibold text-slate-600 border-b border-slate-200">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 dark:bg-[#141516] text-[11px] font-mono uppercase tracking-wider text-[#8a8f98] border-b border-slate-200 dark:border-white/[0.06]">
               <tr>
-                <th className="py-3 px-4 w-12 text-center">No.</th>
-                <th className="py-3 px-4">Subject</th>
-                <th className="py-3 px-4 text-right">Easy (I)</th>
-                <th className="py-3 px-4 text-right">Medium (II)</th>
-                <th className="py-3 px-4 text-right">Hard (III)</th>
-                <th className="py-3 px-4 text-right font-bold text-slate-900">Total</th>
-                <th className="py-3 px-4">Folder Information</th>
-                <th className="py-3 px-4">Last Updated</th>
-                <th className="py-3 px-4 text-center">Action</th>
+                <th className="py-2.5 px-3 w-10 text-center">No.</th>
+                <th className="py-2.5 px-3">Subject</th>
+                <th className="py-2.5 px-3 text-right">Easy (I)</th>
+                <th className="py-2.5 px-3 text-right">Medium (II)</th>
+                <th className="py-2.5 px-3 text-right">Hard (III)</th>
+                <th className="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-[#f7f8f8]">Total</th>
+                <th className="py-2.5 px-3">Folder Information</th>
+                <th className="py-2.5 px-3">Last Updated</th>
+                <th className="py-2.5 px-3 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
               {rows.map((row) => (
-                <tr key={row.id} className="hover:bg-slate-50/70 transition">
-                  <td className="py-3.5 px-4 text-center text-xs text-slate-400 font-mono">
+                <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
+                  <td className="py-2.5 px-3 text-center text-[#8a8f98] font-mono">
                     {row.no}
                   </td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-900">
+                  <td className="py-2.5 px-3 font-medium text-slate-900 dark:text-[#f7f8f8]">
                     <Link
                       href={`/question-bank/${row.id}`}
-                      className="hover:text-indigo-600 transition"
+                      className="hover:text-[#5e6ad2] transition"
                     >
                       {row.name}
                     </Link>
                   </td>
-                  <td className="py-3.5 px-4 text-right text-emerald-700 font-medium">
+                  <td className="py-2.5 px-3 text-right font-mono tabular-nums text-[#27a644]">
                     {formatNumber(row.easy)}
                   </td>
-                  <td className="py-3.5 px-4 text-right text-amber-700 font-medium">
+                  <td className="py-2.5 px-3 text-right font-mono tabular-nums text-[#f0bf00]">
                     {formatNumber(row.medium)}
                   </td>
-                  <td className="py-3.5 px-4 text-right text-red-700 font-medium">
+                  <td className="py-2.5 px-3 text-right font-mono tabular-nums text-[#eb5757]">
                     {formatNumber(row.hard)}
                   </td>
-                  <td className="py-3.5 px-4 text-right font-bold text-slate-900">
+                  <td className="py-2.5 px-3 text-right font-mono font-bold tabular-nums text-slate-900 dark:text-[#f7f8f8]">
                     {formatNumber(row.total)}
                   </td>
-                  <td className="py-3.5 px-4 text-xs text-slate-500">
-                    <div className="flex flex-col gap-0.5 font-mono text-[11px]">
+                  <td className="py-2.5 px-3 text-[#8a8f98]">
+                    <div className="flex flex-col gap-0.5 font-mono text-[10px]">
                       <span className="truncate max-w-[200px]" title={row.easyFolder}>
                         I: {row.easyFolder}
                       </span>
@@ -167,40 +167,40 @@ export default async function QuestionBankPage() {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 text-xs text-slate-500">
+                  <td className="py-2.5 px-3 text-[#8a8f98] font-mono text-[10px]">
                     <div>{formatDateKolkata(row.lastUpdated)}</div>
-                    <div className="text-[11px] text-slate-400">by {row.lastUpdatedBy}</div>
+                    <div className="text-[9px] text-[#62666d]">by {row.lastUpdatedBy}</div>
                   </td>
-                  <td className="py-3.5 px-4 text-center">
+                  <td className="py-2.5 px-3 text-center">
                     <Link
                       href={`/question-bank/${row.id}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d0d6e0] hover:text-[#5e6ad2] transition"
                     >
-                      Update Counts <ArrowRight className="h-3 w-3" />
+                      Update <ArrowRight className="h-3 w-3" />
                     </Link>
                   </td>
                 </tr>
               ))}
 
               {/* Total Row (PRD Section 5.6 Table Footer) */}
-              <tr className="bg-slate-100 font-bold text-slate-900 border-t-2 border-slate-300">
-                <td colSpan={2} className="py-3.5 px-4 uppercase text-xs tracking-wider">
+              <tr className="bg-slate-100 dark:bg-[#141516] font-bold text-slate-900 dark:text-[#f7f8f8] border-t-2 border-slate-300 dark:border-white/[0.1]">
+                <td colSpan={2} className="py-3 px-3 uppercase text-[10px] font-mono tracking-wider text-[#8a8f98]">
                   Total Questions
                 </td>
-                <td className="py-3.5 px-4 text-right text-emerald-800">
+                <td className="py-3 px-3 text-right font-mono tabular-nums text-[#27a644]">
                   {formatNumber(totalEasy)}
                 </td>
-                <td className="py-3.5 px-4 text-right text-amber-800">
+                <td className="py-3 px-3 text-right font-mono tabular-nums text-[#f0bf00]">
                   {formatNumber(totalMedium)}
                 </td>
-                <td className="py-3.5 px-4 text-right text-red-800">
+                <td className="py-3 px-3 text-right font-mono tabular-nums text-[#eb5757]">
                   {formatNumber(totalHard)}
                 </td>
-                <td className="py-3.5 px-4 text-right text-slate-950 text-base">
+                <td className="py-3 px-3 text-right font-mono font-bold tabular-nums text-slate-900 dark:text-[#f7f8f8] text-sm">
                   {formatNumber(grandTotal)}
                 </td>
-                <td colSpan={3} className="py-3.5 px-4 text-xs text-slate-500 italic">
-                  Sum of all {subjects.length} active subject question banks
+                <td colSpan={3} className="py-3 px-3 text-[11px] text-[#8a8f98] italic font-mono">
+                  {subjects.length} active subject question banks
                 </td>
               </tr>
             </tbody>

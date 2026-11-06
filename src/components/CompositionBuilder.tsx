@@ -11,9 +11,6 @@ import {
   Save,
   AlertCircle,
   CheckCircle2,
-  Layers,
-  ChevronDown,
-  Info,
 } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
 
@@ -173,9 +170,7 @@ export default function CompositionBuilder({
               ...s,
               topics: s.topics.map((t, tIdx) => {
                 if (tIdx !== topicIndex) return t;
-                const updated = { ...t, [field]: value };
-                // If questionCount was changed and doesn't match difficulty sum, keep user values
-                return updated;
+                return { ...t, [field]: value };
               }),
             }
           : s
@@ -213,8 +208,7 @@ export default function CompositionBuilder({
 
   const validationErrors: string[] = [];
 
-  sections.forEach((sec, sIdx) => {
-    const secNumber = sIdx + 1;
+  sections.forEach((sec) => {
     let secTotalQs = 0;
 
     sec.topics.forEach((t) => {
@@ -292,14 +286,14 @@ export default function CompositionBuilder({
         <div
           className={`p-4 rounded-xl flex items-center gap-2.5 text-sm ${
             feedback.type === "success"
-              ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-              : "bg-red-50 text-red-800 border border-red-200"
+              ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-[#27a644] border border-emerald-200 dark:border-emerald-500/30"
+              : "bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-[#eb5757] border border-rose-200 dark:border-rose-500/30"
           }`}
         >
           {feedback.type === "success" ? (
-            <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-[#27a644] shrink-0" />
           ) : (
-            <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
+            <AlertCircle className="h-5 w-5 text-rose-600 dark:text-[#eb5757] shrink-0" />
           )}
           <span>{feedback.text}</span>
         </div>
@@ -307,13 +301,13 @@ export default function CompositionBuilder({
 
       {/* Validation Banner (PRD Section 11.8) */}
       {validationErrors.length > 0 && (
-        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 space-y-1 text-xs">
-          <div className="flex items-center gap-2 font-bold text-amber-800 text-sm mb-1">
-            <AlertCircle className="h-4 w-4 text-amber-600" />
+        <div className="p-4 rounded-2xl bg-amber-50 dark:bg-[#f0bf00]/10 border border-amber-200 dark:border-[#f0bf00]/25 text-amber-900 dark:text-[#f0bf00] space-y-1 text-xs">
+          <div className="flex items-center gap-2 font-bold text-amber-800 dark:text-[#f0bf00] text-sm mb-1">
+            <AlertCircle className="h-4 w-4 text-[#f0bf00]" />
             <span>Composition Validation Issues ({validationErrors.length})</span>
           </div>
           {validationErrors.map((err, idx) => (
-            <div key={idx} className="pl-6 text-amber-800 font-medium">
+            <div key={idx} className="pl-6 text-amber-800 dark:text-[#f0bf00]/90 font-medium">
               • {err}
             </div>
           ))}
@@ -321,40 +315,40 @@ export default function CompositionBuilder({
       )}
 
       {/* Overall Examination Summary (PRD Section 11.6) */}
-      <div className="bg-slate-900 text-white p-5 rounded-2xl shadow-sm grid grid-cols-2 sm:grid-cols-5 gap-4">
+      <div className="bg-slate-900 dark:bg-[#08090a] border border-slate-800 dark:border-white/[0.12] text-white p-5 rounded-2xl shadow-sm grid grid-cols-2 sm:grid-cols-5 gap-4">
         <div>
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+          <span className="text-[11px] font-semibold text-slate-400 dark:text-[#8a8f98] uppercase tracking-wider block">
             Sections
           </span>
-          <span className="text-2xl font-bold text-white">{sections.length}</span>
+          <span className="text-2xl font-bold font-mono text-white">{sections.length}</span>
         </div>
 
         <div>
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+          <span className="text-[11px] font-semibold text-slate-400 dark:text-[#8a8f98] uppercase tracking-wider block">
             Total Topics
           </span>
-          <span className="text-2xl font-bold text-white">{examTotalTopics}</span>
+          <span className="text-2xl font-bold font-mono text-white">{examTotalTopics}</span>
         </div>
 
         <div>
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+          <span className="text-[11px] font-semibold text-slate-400 dark:text-[#8a8f98] uppercase tracking-wider block">
             Total Questions
           </span>
-          <span className="text-2xl font-extrabold text-emerald-400">
+          <span className="text-2xl font-extrabold font-mono text-[#27a644]">
             {formatNumber(examTotalQuestions)}
           </span>
         </div>
 
-        <div className="sm:col-span-2 border-t sm:border-t-0 sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+        <div className="sm:col-span-2 border-t sm:border-t-0 sm:border-l border-slate-800 dark:border-white/[0.12] sm:pl-4 pt-2 sm:pt-0">
+          <span className="text-[11px] font-semibold text-slate-400 dark:text-[#8a8f98] uppercase tracking-wider block">
             Difficulty Distribution
           </span>
-          <div className="flex items-center gap-3 mt-1 text-sm font-bold">
-            <span className="text-emerald-400">Easy (I): {examTotalEasy}</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-amber-400">Med (II): {examTotalMedium}</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-red-400">Hard (III): {examTotalHard}</span>
+          <div className="flex items-center gap-3 mt-1 text-sm font-bold font-mono">
+            <span className="text-[#27a644]">Easy (I): {examTotalEasy}</span>
+            <span className="text-slate-600 dark:text-[#62666d]">•</span>
+            <span className="text-[#f0bf00]">Med (II): {examTotalMedium}</span>
+            <span className="text-slate-600 dark:text-[#62666d]">•</span>
+            <span className="text-[#eb5757]">Hard (III): {examTotalHard}</span>
           </div>
         </div>
       </div>
@@ -369,12 +363,12 @@ export default function CompositionBuilder({
           return (
             <div
               key={section.id || sIdx}
-              className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden"
+              className="bg-white dark:bg-[#0f1011] rounded-2xl border border-slate-200 dark:border-white/[0.08] shadow-xs overflow-hidden"
             >
               {/* Section Header */}
-              <div className="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="p-4 sm:p-5 bg-slate-50 dark:bg-[#141516] border-b border-slate-200 dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="px-2.5 py-1 rounded-md bg-indigo-600 text-white font-bold text-xs">
+                  <span className="px-2.5 py-1 rounded-md bg-[#5e6ad2] text-white font-bold font-mono text-xs shadow-xs">
                     Section {sIdx + 1}
                   </span>
                   <input
@@ -383,15 +377,15 @@ export default function CompositionBuilder({
                     value={section.sectionName}
                     onChange={(e) => updateSectionName(sIdx, e.target.value)}
                     placeholder="Section Title (e.g. Arithmetic Core)"
-                    className="font-bold text-slate-900 text-sm px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white"
+                    className="font-bold text-slate-900 dark:text-[#f7f8f8] text-sm px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#0f1011]"
                   />
                   <select
                     value={section.subjectId}
                     onChange={(e) => updateSectionSubject(sIdx, e.target.value)}
-                    className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white"
+                    className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#0f1011] text-slate-900 dark:text-[#f7f8f8]"
                   >
                     {subjects.map((sub) => (
-                      <option key={sub.id} value={sub.id}>
+                      <option key={sub.id} value={sub.id} className="dark:bg-[#141516]">
                         Subject: {sub.name}
                       </option>
                     ))}
@@ -402,7 +396,7 @@ export default function CompositionBuilder({
                   <button
                     type="button"
                     onClick={() => setActiveModalSectionId(section.id || `sec-${sIdx}`)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 text-xs font-semibold hover:bg-indigo-100 transition"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-[#5e6ad2]/15 text-[#5e6ad2] dark:text-[#8b95f6] border border-indigo-100 dark:border-[#5e6ad2]/30 text-xs font-semibold hover:bg-indigo-100 dark:hover:bg-[#5e6ad2]/25 transition"
                   >
                     <Sparkles className="h-3.5 w-3.5" /> Upload Blueprint (AI)
                   </button>
@@ -410,7 +404,7 @@ export default function CompositionBuilder({
                     type="button"
                     onClick={() => removeSection(sIdx)}
                     title="Remove Section"
-                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                    className="p-1.5 text-slate-400 dark:text-[#8a8f98] hover:text-[#eb5757] dark:hover:text-[#eb5757] hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -420,7 +414,7 @@ export default function CompositionBuilder({
               {/* Topics Table (PRD Section 11.4) */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-100 uppercase font-semibold text-slate-600 border-b border-slate-200">
+                  <thead className="bg-slate-100 dark:bg-[#141516] uppercase font-semibold text-slate-600 dark:text-[#8a8f98] border-b border-slate-200 dark:border-white/[0.08]">
                     <tr>
                       <th className="py-2.5 px-4">Topic (Filtered by Subject)</th>
                       <th className="py-2.5 px-4 text-right">Composition %</th>
@@ -431,11 +425,11 @@ export default function CompositionBuilder({
                       <th className="py-2.5 px-4 text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-white/[0.06]">
                     {section.topics.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="py-6 text-center text-slate-400">
-                          No topics added yet. Click &quot;Add Topic&quot; below or &quot;Upload Blueprint (AI)&quot; above.
+                        <td colSpan={7} className="py-6 text-center text-slate-400 dark:text-[#62666d]">
+                          No topics added yet. Click &quot;Add Topic Row&quot; below or &quot;Upload Blueprint (AI)&quot; above.
                         </td>
                       </tr>
                     ) : (
@@ -451,7 +445,11 @@ export default function CompositionBuilder({
                         return (
                           <tr
                             key={tIdx}
-                            className={diffMismatch ? "bg-red-50/50" : "hover:bg-slate-50"}
+                            className={
+                              diffMismatch
+                                ? "bg-rose-50/50 dark:bg-rose-500/10"
+                                : "hover:bg-slate-50 dark:hover:bg-white/[0.03]"
+                            }
                           >
                             <td className="py-2.5 px-4">
                               <select
@@ -459,21 +457,21 @@ export default function CompositionBuilder({
                                 onChange={(e) =>
                                   updateTopicField(sIdx, tIdx, "topicId", e.target.value)
                                 }
-                                className="w-full px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 bg-white"
+                                className="w-full px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8]"
                               >
                                 {availableTopics.map((mt) => (
-                                  <option key={mt.id} value={mt.id}>
+                                  <option key={mt.id} value={mt.id} className="dark:bg-[#141516]">
                                     {mt.name}
                                   </option>
                                 ))}
                               </select>
                             </td>
 
-                            <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-600">
+                            <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-600 dark:text-[#8a8f98]">
                               {compPercentage}%
                             </td>
 
-                            <td className="py-2.5 px-4 text-right">
+                            <td className="py-2.5 px-4 text-right font-mono">
                               <input
                                 type="number"
                                 min="1"
@@ -487,11 +485,11 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="w-16 px-2 py-1 text-right text-xs font-bold rounded border border-slate-300"
+                                className="w-16 px-2 py-1 text-right text-xs font-bold rounded border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8]"
                               />
                             </td>
 
-                            <td className="py-2.5 px-4 text-right">
+                            <td className="py-2.5 px-4 text-right font-mono">
                               <input
                                 type="number"
                                 min="0"
@@ -505,11 +503,11 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="w-16 px-2 py-1 text-right text-xs text-emerald-700 font-semibold rounded border border-slate-300"
+                                className="w-16 px-2 py-1 text-right text-xs text-emerald-700 dark:text-[#27a644] font-semibold rounded border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516]"
                               />
                             </td>
 
-                            <td className="py-2.5 px-4 text-right">
+                            <td className="py-2.5 px-4 text-right font-mono">
                               <input
                                 type="number"
                                 min="0"
@@ -523,11 +521,11 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="w-16 px-2 py-1 text-right text-xs text-amber-700 font-semibold rounded border border-slate-300"
+                                className="w-16 px-2 py-1 text-right text-xs text-amber-700 dark:text-[#f0bf00] font-semibold rounded border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516]"
                               />
                             </td>
 
-                            <td className="py-2.5 px-4 text-right">
+                            <td className="py-2.5 px-4 text-right font-mono">
                               <input
                                 type="number"
                                 min="0"
@@ -541,7 +539,7 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="w-16 px-2 py-1 text-right text-xs text-red-700 font-semibold rounded border border-slate-300"
+                                className="w-16 px-2 py-1 text-right text-xs text-rose-700 dark:text-[#eb5757] font-semibold rounded border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516]"
                               />
                             </td>
 
@@ -549,7 +547,7 @@ export default function CompositionBuilder({
                               <button
                                 type="button"
                                 onClick={() => removeTopicRow(sIdx, tIdx)}
-                                className="p-1 text-slate-400 hover:text-red-600 rounded"
+                                className="p-1 text-slate-400 dark:text-[#8a8f98] hover:text-[#eb5757] rounded"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
                               </button>
@@ -560,21 +558,21 @@ export default function CompositionBuilder({
                     )}
 
                     {/* Section Summary Row */}
-                    <tr className="bg-slate-50 font-bold text-slate-900 border-t border-slate-200">
-                      <td className="py-2.5 px-4 uppercase text-[11px] text-slate-500">
+                    <tr className="bg-slate-50 dark:bg-[#141516] font-bold text-slate-900 dark:text-[#f7f8f8] border-t border-slate-200 dark:border-white/[0.08]">
+                      <td className="py-2.5 px-4 uppercase text-[11px] text-slate-500 dark:text-[#8a8f98]">
                         Section Total ({section.topics.length} topics)
                       </td>
                       <td className="py-2.5 px-4 text-right font-mono">100%</td>
-                      <td className="py-2.5 px-4 text-right text-indigo-700 font-extrabold">
+                      <td className="py-2.5 px-4 text-right text-[#5e6ad2] dark:text-[#8b95f6] font-extrabold font-mono">
                         {sectionTotalQs}
                       </td>
-                      <td className="py-2.5 px-4 text-right text-emerald-700 font-bold">
+                      <td className="py-2.5 px-4 text-right text-emerald-700 dark:text-[#27a644] font-bold font-mono">
                         {section.topics.reduce((s, t) => s + t.level1Easy, 0)}
                       </td>
-                      <td className="py-2.5 px-4 text-right text-amber-700 font-bold">
+                      <td className="py-2.5 px-4 text-right text-amber-700 dark:text-[#f0bf00] font-bold font-mono">
                         {section.topics.reduce((s, t) => s + t.level2Medium, 0)}
                       </td>
-                      <td className="py-2.5 px-4 text-right text-red-700 font-bold">
+                      <td className="py-2.5 px-4 text-right text-rose-700 dark:text-[#eb5757] font-bold font-mono">
                         {section.topics.reduce((s, t) => s + t.level3Hard, 0)}
                       </td>
                       <td></td>
@@ -584,11 +582,11 @@ export default function CompositionBuilder({
               </div>
 
               {/* Add Topic Action in Section */}
-              <div className="p-3 bg-slate-50 border-t border-slate-200 flex justify-start">
+              <div className="p-3 bg-slate-50 dark:bg-[#141516] border-t border-slate-200 dark:border-white/[0.08] flex justify-start">
                 <button
                   type="button"
                   onClick={() => addTopicRow(sIdx)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#0f1011] text-xs font-semibold text-slate-700 dark:text-[#d0d3d8] hover:bg-slate-50 dark:hover:bg-white/[0.05] transition"
                 >
                   <Plus className="h-3.5 w-3.5" /> Add Topic Row
                 </button>
@@ -603,17 +601,17 @@ export default function CompositionBuilder({
         <button
           type="button"
           onClick={addSection}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-indigo-200 bg-indigo-50/50 text-indigo-700 text-xs font-bold hover:bg-indigo-100 transition shadow-xs"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-indigo-200 dark:border-[#5e6ad2]/30 bg-indigo-50/50 dark:bg-[#5e6ad2]/10 text-[#5e6ad2] dark:text-[#8b95f6] text-xs font-bold hover:bg-indigo-100 dark:hover:bg-[#5e6ad2]/20 transition shadow-xs"
         >
           <Plus className="h-4 w-4" /> Add Another Section
         </button>
       </div>
 
       {/* Mandatory Change Reason & Save Footer */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-[#0f1011] p-6 rounded-2xl border border-slate-200 dark:border-white/[0.08] shadow-xs space-y-4">
         <div>
-          <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-            Mandatory Change Description <span className="text-red-500">*</span>
+          <label className="block text-xs font-bold text-slate-800 dark:text-[#d0d3d8] uppercase tracking-wider mb-1">
+            Mandatory Change Description <span className="text-[#eb5757]">*</span>
           </label>
           <textarea
             required
@@ -621,7 +619,7 @@ export default function CompositionBuilder({
             value={changeDescription}
             onChange={(e) => setChangeDescription(e.target.value)}
             placeholder="e.g. Added Arithmetic Core section and 8 topics per examination blueprint."
-            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8] placeholder-slate-400 dark:placeholder-[#62666d] focus:ring-2 focus:ring-[#5e6ad2]"
           />
         </div>
 
@@ -629,7 +627,7 @@ export default function CompositionBuilder({
           <button
             type="submit"
             disabled={isSubmitting || validationErrors.length > 0}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 transition shadow-xs disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#5e6ad2] hover:bg-[#6875e5] text-white font-semibold text-sm shadow-xs dark:shadow-[0_0_20px_rgba(94,106,210,0.35)] transition disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {isSubmitting ? "Saving Composition..." : "Save Examination Composition"}

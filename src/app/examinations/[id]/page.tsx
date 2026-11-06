@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, Building2, Calendar, Clock, Layers, ShieldCheck } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import ExamDetailTabs from "@/components/ExamDetailTabs";
 import { formatDateKolkata } from "@/lib/utils";
 
@@ -62,51 +62,51 @@ export default async function ExaminationDetailPage({ params }: PageProps) {
       <div>
         <Link
           href="/examinations"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-indigo-600 transition mb-3"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-[#8a8f98] hover:text-[#5e6ad2] dark:hover:text-[#8b95f6] transition mb-3"
         >
           <ChevronLeft className="h-4 w-4" /> Back to Examination Registry
         </Link>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="bg-white dark:bg-[#0f1011] p-6 rounded-2xl border border-slate-200 dark:border-white/[0.08] shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900 font-mono tracking-tight">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-[#f7f8f8] font-mono tracking-tight">
                 {exam.generatedName}
               </h1>
               <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-bold ${
                   exam.overallStatus === "COMPLETED"
-                    ? "bg-emerald-100 text-emerald-800"
+                    ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-[#27a644] border border-emerald-200 dark:border-emerald-500/20"
                     : exam.overallStatus === "LMS_PENDING"
-                    ? "bg-blue-100 text-blue-800"
+                    ? "bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20"
                     : exam.overallStatus === "READY_FOR_TESTPRESS"
-                    ? "bg-amber-100 text-amber-800"
-                    : "bg-slate-100 text-slate-700"
+                    ? "bg-amber-50 dark:bg-amber-500/10 text-amber-800 dark:text-[#f0bf00] border border-amber-200 dark:border-amber-500/20"
+                    : "bg-slate-100 dark:bg-white/[0.05] text-slate-700 dark:text-[#d0d3d8] border border-slate-200 dark:border-white/[0.08]"
                 }`}
               >
                 {exam.overallStatus.replace(/_/g, " ")}
               </span>
-              <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-600">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-indigo-50 dark:bg-[#5e6ad2]/15 text-[#5e6ad2] dark:text-[#8b95f6] border border-indigo-100 dark:border-[#5e6ad2]/30">
                 v{exam.currentVersion}
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 mt-2 text-xs text-slate-500">
-              <span className="font-mono text-slate-700 font-semibold">{exam.examId}</span>
+            <div className="flex flex-wrap items-center gap-4 mt-2 text-xs text-slate-500 dark:text-[#8a8f98]">
+              <span className="font-mono text-slate-700 dark:text-[#d0d3d8] font-semibold">{exam.examId}</span>
               <span>•</span>
               <span className="capitalize">{exam.category.replace(/_/g, " ").toLowerCase()}</span>
               {exam.college && (
                 <>
                   <span>•</span>
-                  <span className="font-semibold text-indigo-700">
+                  <span className="font-semibold text-[#5e6ad2] dark:text-[#8b95f6]">
                     {exam.college.name} ({exam.college.code})
                   </span>
                 </>
               )}
               <span>•</span>
-              <span>Duration: {exam.durationMinutes} min</span>
+              <span className="font-mono">Duration: {exam.durationMinutes} min</span>
               <span>•</span>
-              <span>Registered {formatDateKolkata(exam.createdAt)}</span>
+              <span className="font-mono">Registered {formatDateKolkata(exam.createdAt)}</span>
             </div>
           </div>
         </div>
