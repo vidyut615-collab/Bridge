@@ -21,7 +21,7 @@ model User {
   updatedAt    DateTime @updatedAt
 
   examsCreated             Exam[]
-  inventoryHistories       InventoryHistory[]
+  topicInventoryHistories  TopicInventoryHistory[]
   auditLogs                AuditLog[]
   examVersions             ExamVersion[]
   testpressCompletedExams  ExamPlatformStatus[] @relation("TestpressCompletedByUser")
@@ -58,8 +58,6 @@ model Subject {
   updatedAt  DateTime @updatedAt
 
   topics                Topic[]
-  inventoryRecords      QuestionBankInventory[]
-  inventoryHistories    InventoryHistory[]
   examSections          ExamSection[]
 }
 
@@ -73,46 +71,39 @@ model Topic {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  subject           Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  examSectionTopics ExamSectionTopic[]
+  // 3 Difficulty Levels per Topic (Level I Easy, Level II Medium, Level III Hard)
+  easyCount   Int     @default(0)
+  mediumCount Int     @default(0)
+  hardCount   Int     @default(0)
+  folderName  String  @default("")
+
+  subject                Subject                 @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  examSectionTopics      ExamSectionTopic[]
+  inventoryHistories     TopicInventoryHistory[]
 
   @@unique([subjectId, name])
 }
 
 // ----------------------------------------------------
-// 4. Question Bank Observability
+// 4. Topic Inventory Observability & History
 // ----------------------------------------------------
-model QuestionBankInventory {
-  id              String   @id @default(uuid())
-  subjectId       String
-  difficultyLevel String   // "I_EASY", "II_MEDIUM", "III_HARD"
-  folderName      String   @default("")
-  questionCount   Int      @default(0)
-  lastUpdatedBy   String
-  updatedAt       DateTime @updatedAt
-
-  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-
-  @@unique([subjectId, difficultyLevel])
-}
-
-model InventoryHistory {
+model TopicInventoryHistory {
   id                String   @id @default(uuid())
-  subjectId         String
+  topicId           String
   prevEasy          Int
   newEasy           Int
   prevMedium        Int
   newMedium         Int
   prevHard          Int
   newHard           Int
-  prevFolders       String   // JSON string of folder names
-  newFolders        String   // JSON string of folder names
+  prevFolder        String   @default("")
+  newFolder         String   @default("")
   changeDescription String   // Mandatory reason
   changedBy         String
   createdAt         DateTime @default(now())
 
-  subject     Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  changedByUser User   @relation(fields: [changedBy], references: [id])
+  topic         Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  changedByUser User  @relation(fields: [changedBy], references: [id])
 }
 
 // ----------------------------------------------------
@@ -134,86 +125,93 @@ model NamingSequence {
 // 6. Examination Registry & Metadata
 // ----------------------------------------------------
 model Exam {
-  id              String    @id @default(uuid())
-  examId          String    @unique // e.g. "EXM-0001"
-  category        String    // "GLOBAL", "COLLEGE_TRAINING", "COLLEGE_REGULAR"
+  id              String   @id @default(uuid())
+  examId          String   @unique // Internal ID e.g. "EXAM-00001"
+  category        String   // "GLOBAL" | "COLLEGE_TRAINING" | "COLLEGE_REGULAR"
   collegeId       String?
-  title           String    // Staff entered title
-  generatedName   String    @unique // e.g. "DYPCOE-TR-Aptitude Assessment-001"
-  uniqueCode      String    // e.g. "001"
-  testType        String    @default("PUBLIC") // "PUBLIC" | "PRIVATE"
-  durationMinutes Int       @default(60)
-  totalMarks      Float     @default(100)
-  marksCorrect    Float     @default(1)
-  marksIncorrect  Float     @default(0)
+  title           String   // User-entered title
+  generatedName   String   @unique // Standardized e.g. "DYPCOE-TR-PLACEMENT-001"
+  uniqueCode      String   // Generated sequence e.g. "DYPCOE-TR-001" or "GLOBAL-00001"
+  testType        String   @default("PRIVATE") // "PUBLIC" | "PRIVATE"
+  durationMinutes Int
+  totalMarks      Float
+  marksCorrect    Float    @default(1.0)
+  marksIncorrect  Float    @default(0.0)
   startDate       DateTime?
   endDate         DateTime?
-  attemptPolicy   String    @default("UNLIMITED") // "UNLIMITED" | "LIMITED"
+  attemptPolicy   String   @default("UNLIMITED") // "UNLIMITED" | "LIMITED"
   maxAttempts     Int?
-  overallStatus   String    @default("DRAFT") // "DRAFT", "READY_FOR_TESTPRESS", "TESTPRESS_PENDING", "LMS_PENDING", "COMPLETED", "ON_HOLD", "CANCELLED"
-  currentVersion  Int       @default(1)
+  overallStatus   String   @default("DRAFT") // "DRAFT" | "READY_FOR_TESTPRESS" | "LMS_PENDING" | "COMPLETED"
+  currentVersion  Int      @default(1)
   createdBy       String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  college                College?                @relation(fields: [collegeId], references: [id], onDelete: SetNull)
-  createdByUser          User                    @relation(fields: [createdBy], references: [id])
-  sections               ExamSection[]
-  platformStatus         ExamPlatformStatus?
+  college                 College?                @relation(fields: [collegeId], references: [id], onDelete: SetNull)
+  createdByUser           User                    @relation(fields: [createdBy], references: [id])
+  sections                ExamSection[]
+  versions                ExamVersion[]
+  platformStatus          ExamPlatformStatus?
   platformUpdateHistories PlatformUpdateHistory[]
-  versions               ExamVersion[]
+  blueprintUploads        BlueprintUpload[]
 }
 
 // ----------------------------------------------------
-// 7. Exam Sections & Composition Builder
+// 7. Examination Sections & Composition
 // ----------------------------------------------------
 model ExamSection {
   id          String   @id @default(uuid())
   examId      String
   subjectId   String
-  sectionName String   // e.g. "Arithmetic Core"
+  sectionName String   // e.g. "Aptitude Section 1"
   sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  exam            Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
-  subject         Subject            @relation(fields: [subjectId], references: [id])
-  topics          ExamSectionTopic[]
-  blueprintUploads BlueprintUpload[]
+  exam    Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
+  subject Subject            @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  topics  ExamSectionTopic[]
 }
 
 model ExamSectionTopic {
-  id                    String  @id @default(uuid())
+  id                    String   @id @default(uuid())
   sectionId             String
   topicId               String
-  questionCount         Int     @default(0)
-  level1Easy            Int     @default(0)
-  level2Medium          Int     @default(0)
-  level3Hard            Int     @default(0)
-  compositionPercentage Float   @default(0.0)
+  questionCount         Int
+  compositionPercentage Float    @default(0.0)
+  level1Easy            Int      @default(0)
+  level2Medium          Int      @default(0)
+  level3Hard            Int      @default(0)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   section ExamSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  topic   Topic       @relation(fields: [topicId], references: [id])
+  topic   Topic       @relation(fields: [topicId], references: [id], onDelete: Restrict)
 
   @@unique([sectionId, topicId])
 }
 
 // ----------------------------------------------------
-// 8. AI Blueprint Uploads
+// 8. Examination Versioning (Strict Immutable Specs)
 // ----------------------------------------------------
-model BlueprintUpload {
-  id               String   @id @default(uuid())
-  sectionId        String
-  imageUrl         String   // Path or URL to stored image
-  rawExtractedJson String   // JSON string of LLM extraction response
-  extractionStatus String   @default("EXTRACTED") // "PENDING", "EXTRACTED", "RESOLVED", "APPROVED"
-  uploadedBy       String
-  createdAt        DateTime @default(now())
+model ExamVersion {
+  id                String   @id @default(uuid())
+  examId            String
+  versionNumber     Int      // 1, 2, 3...
+  snapshotJson      String   @default("{}") // Full immutable JSON snapshot of exam metadata & composition
+  snapshotData      String?  // Backward-compatible alias
+  changeDescription String   // Mandatory reason for version change
+  changedBy         String
+  createdAt         DateTime @default(now())
 
-  section        ExamSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  uploadedByUser User        @relation(fields: [uploadedBy], references: [id])
+  exam          Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  changedByUser User @relation(fields: [changedBy], references: [id])
+
+  @@unique([examId, versionNumber])
 }
 
 // ----------------------------------------------------
-// 9. Deployment Lifecycle & Subsequent Updates
+// 9. Two-Stage Platform Deployment & Observability
 // ----------------------------------------------------
 model ExamPlatformStatus {
   id                     String    @id @default(uuid())
@@ -228,6 +226,7 @@ model ExamPlatformStatus {
   lmsNotes               String?
   testpressUpdatePending Boolean   @default(false)
   lmsUpdatePending       Boolean   @default(false)
+  updatedAt              DateTime  @updatedAt
 
   exam                     Exam  @relation(fields: [examId], references: [id], onDelete: Cascade)
   testpressCompletedByUser User? @relation("TestpressCompletedByUser", fields: [testpressCompletedBy], references: [id])
@@ -238,7 +237,7 @@ model PlatformUpdateHistory {
   id                String   @id @default(uuid())
   examId            String
   platform          String   // "TESTPRESS" | "TRUSKILL_LMS"
-  action            String   // "UPDATE_PENDING" | "UPDATE_CONFIRMED"
+  action            String   // "UPDATE_REQUIRED" | "UPDATE_CONFIRMED"
   changeDescription String
   confirmedBy       String
   createdAt         DateTime @default(now())
@@ -247,33 +246,37 @@ model PlatformUpdateHistory {
   confirmedByUser User @relation(fields: [confirmedBy], references: [id])
 }
 
-model ExamVersion {
-  id                String   @id @default(uuid())
-  examId            String
-  versionNumber     Int
-  snapshotData      String   // Complete JSON serialization of exam metadata & composition
-  changeDescription String   // Mandatory description
-  changedBy         String
-  createdAt         DateTime @default(now())
+// ----------------------------------------------------
+// 10. AI Vision Blueprint Processing Audit
+// ----------------------------------------------------
+model BlueprintUpload {
+  id               String   @id @default(uuid())
+  examId           String?
+  sectionId        String
+  uploadedBy       String
+  imageUrl         String?
+  rawExtractedJson String?
+  rawResponseText  String   @default("")
+  extractionStatus String   @default("SUCCESS")
+  status           String   @default("SUCCESS")
+  createdAt        DateTime @default(now())
 
-  exam          Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
-  changedByUser User @relation(fields: [changedBy], references: [id])
-
-  @@unique([examId, versionNumber])
+  exam Exam? @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user User  @relation(fields: [uploadedBy], references: [id])
 }
 
 // ----------------------------------------------------
-// 10. Audit Log & Change Tracking
+// 11. Immutable Audit Log & Accountability
 // ----------------------------------------------------
 model AuditLog {
   id                String   @id @default(uuid())
-  entityType        String   // "QUESTION_BANK", "MASTER_DATA", "EXAMINATION", "PLATFORM_STATUS"
+  entityType        String   // "QUESTION_BANK" | "EXAM" | "MASTER_COLLEGE" | "MASTER_SUBJECT" | "MASTER_TOPIC" | "DEPLOYMENT"
   entityId          String
-  action            String   // "CREATE", "UPDATE", "RENAME", "ARCHIVE", "COMPLETION", "VERSION_INCREMENT"
-  prevValue         String?  // JSON string
-  newValue          String?  // JSON string
-  changeDescription String   // Mandatory
+  action            String   // "CREATE" | "UPDATE" | "ARCHIVE" | "RESTORE" | "COMPLETION" | "RENAME"
+  changeDescription String   // Mandatory reason
   changedBy         String
+  previousValues    String?  // JSON string
+  newValues         String?  // JSON string
   createdAt         DateTime @default(now())
 
   changedByUser User @relation(fields: [changedBy], references: [id])

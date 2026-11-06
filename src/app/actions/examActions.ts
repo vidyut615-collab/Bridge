@@ -176,7 +176,7 @@ export async function createExamAction(params: {
         entityType: "EXAMINATION",
         entityId: newExam.id,
         action: "CREATE",
-        newValue: JSON.stringify({
+        newValues: JSON.stringify({
           examId,
           generatedName,
           category: params.category,
@@ -312,12 +312,12 @@ export async function updateExamMetadataAction(params: {
         entityType: "EXAMINATION",
         entityId: exam.id,
         action: "UPDATE",
-        prevValue: JSON.stringify({
+        previousValues: JSON.stringify({
           title: exam.title,
           generatedName: exam.generatedName,
           duration: exam.durationMinutes,
         }),
-        newValue: JSON.stringify({
+        newValues: JSON.stringify({
           title: cleanedTitle,
           generatedName: updatedGeneratedName,
           duration: params.durationMinutes,
@@ -506,7 +506,7 @@ export async function saveExamCompositionAction(params: {
         entityType: "EXAMINATION",
         entityId: exam.id,
         action: "UPDATE",
-        newValue: JSON.stringify(params.sections),
+        newValues: JSON.stringify(params.sections),
         changeDescription: params.changeDescription.trim(),
         changedBy: user.id,
       },
@@ -559,7 +559,7 @@ export async function markTestpressCompletedAction(params: {
         entityType: "PLATFORM_STATUS",
         entityId: exam.id,
         action: "COMPLETION",
-        newValue: JSON.stringify({ testpress: "COMPLETED", notes: params.notes }),
+        newValues: JSON.stringify({ testpress: "COMPLETED", notes: params.notes }),
         changeDescription: `Marked Testpress creation completed by ${user.name}`,
         changedBy: user.id,
       },
@@ -615,7 +615,7 @@ export async function markLmsCompletedAction(params: {
         entityType: "PLATFORM_STATUS",
         entityId: exam.id,
         action: "COMPLETION",
-        newValue: JSON.stringify({ truskillLms: "COMPLETED", notes: params.notes }),
+        newValues: JSON.stringify({ truskillLms: "COMPLETED", notes: params.notes }),
         changeDescription: `Marked Truskill LMS listing completed by ${user.name}`,
         changedBy: user.id,
       },

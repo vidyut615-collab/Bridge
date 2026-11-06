@@ -17,31 +17,39 @@ import { formatDateKolkata, formatNumber } from "@/lib/utils";
 export default async function DashboardPage() {
   const user = await getCurrentUser();
 
-  // 1. Fetch Question Bank metrics
-  const subjects = await prisma.subject.findMany({
+  // 1. Fetch Question Bank metrics from topics
+  const topics = await prisma.topic.findMany({
+    where: { isArchived: false, subject: { isArchived: false } },
+    include: { subject: true },
+  });
+
+  const subjectsWithTopics = await prisma.subject.findMany({
     where: { isArchived: false },
     include: {
-      inventoryRecords: true,
+      topics: {
+        where: { isArchived: false },
+      },
     },
+    orderBy: { name: "asc" },
   });
+
+  const subjectsCount = subjectsWithTopics.length;
 
   let totalQuestions = 0;
   let totalEasy = 0;
   let totalMedium = 0;
   let totalHard = 0;
 
-  subjects.forEach((s) => {
-    s.inventoryRecords.forEach((inv) => {
-      totalQuestions += inv.questionCount;
-      if (inv.difficultyLevel === "I_EASY") totalEasy += inv.questionCount;
-      if (inv.difficultyLevel === "II_MEDIUM") totalMedium += inv.questionCount;
-      if (inv.difficultyLevel === "III_HARD") totalHard += inv.questionCount;
-    });
+  topics.forEach((t) => {
+    totalQuestions += t.easyCount + t.mediumCount + t.hardCount;
+    totalEasy += t.easyCount;
+    totalMedium += t.mediumCount;
+    totalHard += t.hardCount;
   });
 
-  const latestInventoryUpdate = await prisma.inventoryHistory.findFirst({
+  const latestInventoryUpdate = await prisma.topicInventoryHistory.findFirst({
     orderBy: { createdAt: "desc" },
-    include: { subject: true, changedByUser: true },
+    include: { topic: { include: { subject: true } }, changedByUser: true },
   });
 
   // 2. Fetch Examination metrics
@@ -160,8 +168,8 @@ export default async function DashboardPage() {
             {formatNumber(totalQuestions)}
           </div>
           <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-white/[0.05] flex items-center justify-between text-[11px] text-[#8a8f98]">
-            <span>{subjects.length} active subjects</span>
-            <span className="font-mono text-[#5e6ad2]">3 Difficulty Tiers</span>
+            <span>{subjectsCount} active subjects</span>
+            <span className="font-mono text-[#5e6ad2]">3 Tiers per Topic</span>
           </div>
         </div>
 
@@ -187,7 +195,7 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-2 pt-2 border-t border-slate-100 dark:border-white/[0.05] text-[11px] text-[#8a8f98] truncate">
             {latestInventoryUpdate ? (
-              <span>Last: {latestInventoryUpdate.subject.name} by {latestInventoryUpdate.changedByUser.name}</span>
+              <span>Last: {latestInventoryUpdate.topic.name} by {latestInventoryUpdate.changedByUser.name}</span>
             ) : (
               <span>No updates yet</span>
             )}
@@ -259,10 +267,10 @@ export default async function DashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
-                {subjects.map((sub) => {
-                  const easy = sub.inventoryRecords.find((i) => i.difficultyLevel === "I_EASY")?.questionCount || 0;
-                  const med = sub.inventoryRecords.find((i) => i.difficultyLevel === "II_MEDIUM")?.questionCount || 0;
-                  const hard = sub.inventoryRecords.find((i) => i.difficultyLevel === "III_HARD")?.questionCount || 0;
+                {subjectsWithTopics.map((sub) => {
+                  const easy = sub.topics.reduce((acc, t) => acc + t.easyCount, 0);
+                  const med = sub.topics.reduce((acc, t) => acc + t.mediumCount, 0);
+                  const hard = sub.topics.reduce((acc, t) => acc + t.hardCount, 0);
                   const total = easy + med + hard;
 
                   return (

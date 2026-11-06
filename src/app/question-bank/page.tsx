@@ -1,36 +1,37 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { BookOpen, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { formatDateKolkata, formatNumber } from "@/lib/utils";
 
 export default async function QuestionBankPage() {
   const subjects = await prisma.subject.findMany({
     where: { isArchived: false },
     include: {
-      inventoryRecords: true,
-      inventoryHistories: {
-        take: 1,
-        orderBy: { createdAt: "desc" },
-        include: { changedByUser: true },
+      topics: {
+        where: { isArchived: false },
+        include: {
+          inventoryHistories: {
+            take: 1,
+            orderBy: { createdAt: "desc" },
+            include: { changedByUser: true },
+          },
+        },
       },
     },
     orderBy: { name: "asc" },
   });
 
-  // Calculate totals
+  // Calculate totals across all subjects
   let grandTotal = 0;
   let totalEasy = 0;
   let totalMedium = 0;
   let totalHard = 0;
 
   const rows = subjects.map((sub, idx) => {
-    const easyRecord = sub.inventoryRecords.find((i) => i.difficultyLevel === "I_EASY");
-    const mediumRecord = sub.inventoryRecords.find((i) => i.difficultyLevel === "II_MEDIUM");
-    const hardRecord = sub.inventoryRecords.find((i) => i.difficultyLevel === "III_HARD");
-
-    const easy = easyRecord?.questionCount || 0;
-    const medium = mediumRecord?.questionCount || 0;
-    const hard = hardRecord?.questionCount || 0;
+    // Subject totals are the exact aggregate of its topics
+    const easy = sub.topics.reduce((acc, t) => acc + t.easyCount, 0);
+    const medium = sub.topics.reduce((acc, t) => acc + t.mediumCount, 0);
+    const hard = sub.topics.reduce((acc, t) => acc + t.hardCount, 0);
     const total = easy + medium + hard;
 
     grandTotal += total;
@@ -38,21 +39,22 @@ export default async function QuestionBankPage() {
     totalMedium += medium;
     totalHard += hard;
 
-    const latestHistory = sub.inventoryHistories[0];
+    // Latest topic update in this subject
+    const allTopicHistories = sub.topics.flatMap((t) => t.inventoryHistories);
+    allTopicHistories.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const latestHistory = allTopicHistories[0];
 
     return {
       no: idx + 1,
       id: sub.id,
       name: sub.name,
+      topicsCount: sub.topics.length,
       easy,
-      easyFolder: easyRecord?.folderName || "—",
       medium,
-      mediumFolder: mediumRecord?.folderName || "—",
       hard,
-      hardFolder: hardRecord?.folderName || "—",
       total,
       lastUpdated: latestHistory?.createdAt,
-      lastUpdatedBy: latestHistory?.changedByUser?.name || "System",
+      lastUpdatedBy: latestHistory?.changedByUser?.name || "System Seed",
     };
   });
 
@@ -68,7 +70,7 @@ export default async function QuestionBankPage() {
             </span>
           </div>
           <p className="mt-1 text-xs text-[#8a8f98]">
-            Subject-wise aggregate question counts, folder associations, and difficulty distribution (Roman tiers I, II, III).
+            3 difficulty levels (Roman I, II, III) defined per topic. Subject totals below are calculated automatically as the live aggregate of all topics.
           </p>
         </div>
       </div>
@@ -78,7 +80,7 @@ export default async function QuestionBankPage() {
         <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
           <div className="text-[11px] font-mono font-semibold text-[#8a8f98] uppercase tracking-wider">Total Questions</div>
           <div className="text-2xl font-bold font-mono text-slate-900 dark:text-[#f7f8f8] mt-1 tabular-nums">{formatNumber(grandTotal)}</div>
-          <div className="text-[11px] text-[#8a8f98] mt-1 font-mono">{subjects.length} Subjects</div>
+          <div className="text-[11px] text-[#8a8f98] mt-1 font-mono">{subjects.length} Subjects Aggregate</div>
         </div>
 
         <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-emerald-200 dark:border-[#27a644]/30 bg-emerald-50/20 dark:bg-[#27a644]/5">
@@ -110,7 +112,7 @@ export default async function QuestionBankPage() {
       <div className="bg-white dark:bg-[#0f1011] rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] overflow-hidden">
         <div className="p-4 border-b border-slate-200 dark:border-white/[0.06] flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-900 dark:text-[#f7f8f8]">Subject Inventory Register</h2>
-          <span className="text-xs text-[#8a8f98]">Click &quot;Update Counts&quot; to modify any subject</span>
+          <span className="text-xs text-[#8a8f98]">Click &quot;Manage Topics&quot; to inspect & modify individual topic counts</span>
         </div>
 
         <div className="overflow-x-auto">
@@ -119,12 +121,12 @@ export default async function QuestionBankPage() {
               <tr>
                 <th className="py-2.5 px-3 w-10 text-center">No.</th>
                 <th className="py-2.5 px-3">Subject</th>
+                <th className="py-2.5 px-3 text-center">Topics</th>
                 <th className="py-2.5 px-3 text-right">Easy (I)</th>
                 <th className="py-2.5 px-3 text-right">Medium (II)</th>
                 <th className="py-2.5 px-3 text-right">Hard (III)</th>
-                <th className="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-[#f7f8f8]">Total</th>
-                <th className="py-2.5 px-3">Folder Information</th>
-                <th className="py-2.5 px-3">Last Updated</th>
+                <th className="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-[#f7f8f8]">Subject Total</th>
+                <th className="py-2.5 px-3">Latest Update</th>
                 <th className="py-2.5 px-3 text-center">Action</th>
               </tr>
             </thead>
@@ -137,10 +139,15 @@ export default async function QuestionBankPage() {
                   <td className="py-2.5 px-3 font-medium text-slate-900 dark:text-[#f7f8f8]">
                     <Link
                       href={`/question-bank/${row.id}`}
-                      className="hover:text-[#5e6ad2] transition"
+                      className="hover:text-[#5e6ad2] transition font-bold"
                     >
                       {row.name}
                     </Link>
+                  </td>
+                  <td className="py-2.5 px-3 text-center font-mono">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] bg-indigo-50 dark:bg-[#5e6ad2]/15 text-[#5e6ad2] dark:text-[#8b95f6] border border-indigo-100 dark:border-[#5e6ad2]/30">
+                      {row.topicsCount} Topics
+                    </span>
                   </td>
                   <td className="py-2.5 px-3 text-right font-mono tabular-nums text-[#27a644]">
                     {formatNumber(row.easy)}
@@ -154,19 +161,6 @@ export default async function QuestionBankPage() {
                   <td className="py-2.5 px-3 text-right font-mono font-bold tabular-nums text-slate-900 dark:text-[#f7f8f8]">
                     {formatNumber(row.total)}
                   </td>
-                  <td className="py-2.5 px-3 text-[#8a8f98]">
-                    <div className="flex flex-col gap-0.5 font-mono text-[10px]">
-                      <span className="truncate max-w-[200px]" title={row.easyFolder}>
-                        I: {row.easyFolder}
-                      </span>
-                      <span className="truncate max-w-[200px]" title={row.mediumFolder}>
-                        II: {row.mediumFolder}
-                      </span>
-                      <span className="truncate max-w-[200px]" title={row.hardFolder}>
-                        III: {row.hardFolder}
-                      </span>
-                    </div>
-                  </td>
                   <td className="py-2.5 px-3 text-[#8a8f98] font-mono text-[10px]">
                     <div>{formatDateKolkata(row.lastUpdated)}</div>
                     <div className="text-[9px] text-[#62666d]">by {row.lastUpdatedBy}</div>
@@ -176,7 +170,7 @@ export default async function QuestionBankPage() {
                       href={`/question-bank/${row.id}`}
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d0d6e0] hover:text-[#5e6ad2] transition"
                     >
-                      Update <ArrowRight className="h-3 w-3" />
+                      Manage Topics <ArrowRight className="h-3 w-3" />
                     </Link>
                   </td>
                 </tr>
@@ -184,8 +178,8 @@ export default async function QuestionBankPage() {
 
               {/* Total Row (PRD Section 5.6 Table Footer) */}
               <tr className="bg-slate-100 dark:bg-[#141516] font-bold text-slate-900 dark:text-[#f7f8f8] border-t-2 border-slate-300 dark:border-white/[0.1]">
-                <td colSpan={2} className="py-3 px-3 uppercase text-[10px] font-mono tracking-wider text-[#8a8f98]">
-                  Total Questions
+                <td colSpan={3} className="py-3 px-3 uppercase text-[10px] font-mono tracking-wider text-[#8a8f98]">
+                  Total Across All Subjects
                 </td>
                 <td className="py-3 px-3 text-right font-mono tabular-nums text-[#27a644]">
                   {formatNumber(totalEasy)}
@@ -199,8 +193,8 @@ export default async function QuestionBankPage() {
                 <td className="py-3 px-3 text-right font-mono font-bold tabular-nums text-slate-900 dark:text-[#f7f8f8] text-sm">
                   {formatNumber(grandTotal)}
                 </td>
-                <td colSpan={3} className="py-3 px-3 text-[11px] text-[#8a8f98] italic font-mono">
-                  {subjects.length} active subject question banks
+                <td colSpan={2} className="py-3 px-3 text-[11px] text-[#8a8f98] italic font-mono">
+                  {subjects.length} active subject aggregates
                 </td>
               </tr>
             </tbody>

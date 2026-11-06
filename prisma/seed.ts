@@ -73,73 +73,53 @@ async function main() {
 
   console.log("✅ Master Colleges and Naming Sequences created.");
 
-  // 3. Create Subjects & Topics from PRD Section 6.2
+  // 3. Create Subjects & Topics with 3 difficulty levels per topic
   const subjectMaster = [
     {
       name: "Quantitative Aptitude",
       topics: [
-        "Number System",
-        "Ratio, Proportion and Partnership",
-        "Percentage",
-        "Average",
-        "Profit and Loss",
-        "Simple and Compound Interest",
-        "Time and Work",
-        "Time, Speed and Distance",
-        "Mixtures and Allegations",
-      ],
-      inventory: [
-        { level: "I_EASY", count: 250, folder: "QuantitativeAptitude_Beginner" },
-        { level: "II_MEDIUM", count: 180, folder: "QuantitativeAptitude_Intermediate" },
-        { level: "III_HARD", count: 90, folder: "QuantitativeAptitude_Advanced" },
+        { name: "Number System", easy: 35, medium: 25, hard: 12, folder: "QA_NumberSystem" },
+        { name: "Ratio, Proportion and Partnership", easy: 28, medium: 20, hard: 10, folder: "QA_Ratio_Prop" },
+        { name: "Percentage", easy: 32, medium: 24, hard: 14, folder: "QA_Percentage" },
+        { name: "Average", easy: 25, medium: 18, hard: 8, folder: "QA_Average" },
+        { name: "Profit and Loss", easy: 30, medium: 22, hard: 12, folder: "QA_Profit_Loss" },
+        { name: "Simple and Compound Interest", easy: 24, medium: 18, hard: 10, folder: "QA_Interest" },
+        { name: "Time and Work", easy: 28, medium: 20, hard: 10, folder: "QA_Time_Work" },
+        { name: "Time, Speed and Distance", easy: 26, medium: 18, hard: 10, folder: "QA_TSD" },
+        { name: "Mixtures and Allegations", easy: 22, medium: 15, hard: 8, folder: "QA_Mixtures" },
       ],
     },
     {
       name: "Logical Reasoning",
       topics: [
-        "Blood Relations",
-        "Coding and Decoding",
-        "Seating Arrangement",
-        "Syllogism",
-        "Direction Sense",
-        "Series",
-        "Puzzles",
-      ],
-      inventory: [
-        { level: "I_EASY", count: 180, folder: "LogicalReasoning_Level1" },
-        { level: "II_MEDIUM", count: 150, folder: "LogicalReasoning_Level2" },
-        { level: "III_HARD", count: 80, folder: "LogicalReasoning_Level3" },
+        { name: "Blood Relations", easy: 30, medium: 22, hard: 10, folder: "LR_Blood_Relations" },
+        { name: "Coding and Decoding", easy: 35, medium: 25, hard: 12, folder: "LR_Coding_Decoding" },
+        { name: "Seating Arrangement", easy: 25, medium: 30, hard: 20, folder: "LR_Seating_Arrangement" },
+        { name: "Syllogism", easy: 28, medium: 24, hard: 14, folder: "LR_Syllogism" },
+        { name: "Direction Sense", easy: 32, medium: 20, hard: 8, folder: "LR_Direction_Sense" },
+        { name: "Series", easy: 30, medium: 20, hard: 10, folder: "LR_Series" },
+        { name: "Puzzles", easy: 20, medium: 25, hard: 18, folder: "LR_Puzzles" },
       ],
     },
     {
       name: "Verbal Ability",
       topics: [
-        "Reading Comprehension",
-        "Sentence Correction",
-        "Para Jumbles",
-        "Vocabulary",
-        "Fill in the Blanks",
-      ],
-      inventory: [
-        { level: "I_EASY", count: 120, folder: "VerbalAbility_Easy" },
-        { level: "II_MEDIUM", count: 100, folder: "VerbalAbility_Medium" },
-        { level: "III_HARD", count: 60, folder: "VerbalAbility_Hard" },
+        { name: "Reading Comprehension", easy: 25, medium: 25, hard: 15, folder: "VA_Reading_Comp" },
+        { name: "Sentence Correction", easy: 28, medium: 20, hard: 12, folder: "VA_Sentence_Correction" },
+        { name: "Para Jumbles", easy: 22, medium: 18, hard: 10, folder: "VA_Para_Jumbles" },
+        { name: "Vocabulary", easy: 35, medium: 25, hard: 15, folder: "VA_Vocabulary" },
+        { name: "Fill in the Blanks", easy: 30, medium: 20, hard: 10, folder: "VA_Fill_Blanks" },
       ],
     },
     {
       name: "Technical Competency",
       topics: [
-        "Data Structures",
-        "Algorithms",
-        "Object Oriented Programming",
-        "Database Management Systems",
-        "Computer Networks",
-        "Operating Systems",
-      ],
-      inventory: [
-        { level: "I_EASY", count: 200, folder: "Technical_Easy" },
-        { level: "II_MEDIUM", count: 150, folder: "Technical_Medium" },
-        { level: "III_HARD", count: 100, folder: "Technical_Hard" },
+        { name: "Data Structures", easy: 35, medium: 28, hard: 18, folder: "TECH_Data_Structures" },
+        { name: "Algorithms", easy: 30, medium: 25, hard: 20, folder: "TECH_Algorithms" },
+        { name: "Object Oriented Programming", easy: 35, medium: 25, hard: 15, folder: "TECH_OOP" },
+        { name: "Database Management Systems", easy: 32, medium: 24, hard: 16, folder: "TECH_DBMS" },
+        { name: "Computer Networks", easy: 34, medium: 24, hard: 15, folder: "TECH_Networks" },
+        { name: "Operating Systems", easy: 34, medium: 24, hard: 16, folder: "TECH_OS" },
       ],
     },
   ];
@@ -156,52 +136,39 @@ async function main() {
       },
     });
 
-    // Create topics
-    for (const topicName of s.topics) {
+    // Create / update topics with their 3 difficulty level counts
+    for (const t of s.topics) {
       const topicCode = `TOP-${String(topicCounter).padStart(5, "0")}`;
       topicCounter++;
 
-      const existingTopic = await prisma.topic.findFirst({
-        where: { subjectId: subject.id, name: topicName },
-      });
-
-      if (!existingTopic) {
-        await prisma.topic.create({
-          data: {
-            topicCode,
-            name: topicName,
-            subjectId: subject.id,
-            createdBy: superadmin.id,
-          },
-        });
-      }
-    }
-
-    // Create 3 difficulty inventory records
-    for (const inv of s.inventory) {
-      await prisma.questionBankInventory.upsert({
+      await prisma.topic.upsert({
         where: {
-          subjectId_difficultyLevel: {
+          subjectId_name: {
             subjectId: subject.id,
-            difficultyLevel: inv.level,
+            name: t.name,
           },
         },
         update: {
-          questionCount: inv.count,
-          folderName: inv.folder,
+          easyCount: t.easy,
+          mediumCount: t.medium,
+          hardCount: t.hard,
+          folderName: t.folder,
         },
         create: {
+          topicCode,
+          name: t.name,
           subjectId: subject.id,
-          difficultyLevel: inv.level,
-          questionCount: inv.count,
-          folderName: inv.folder,
-          lastUpdatedBy: superadmin.id,
+          easyCount: t.easy,
+          mediumCount: t.medium,
+          hardCount: t.hard,
+          folderName: t.folder,
+          createdBy: superadmin.id,
         },
       });
     }
   }
 
-  console.log("✅ Master Subjects, Topics, and Initial Question Bank Inventories created.");
+  console.log("✅ Master Subjects and Topics created with individual Easy, Medium, and Hard inventory counts.");
 
   // Add initial Audit Log
   await prisma.auditLog.create({
@@ -209,7 +176,7 @@ async function main() {
       entityType: "MASTER_DATA",
       entityId: "SYSTEM_INIT",
       action: "CREATE",
-      changeDescription: "Initial system seeding with master data and default users.",
+      changeDescription: "Initial system seeding with master data, topics, and initial difficulty levels.",
       changedBy: superadmin.id,
     },
   });
