@@ -154,56 +154,60 @@ export default function ExamDetailTabs({
 
   return (
     <div className="space-y-6">
-      {/* Tab Navigation */}
-      <div className="flex border-b border-slate-200 dark:border-white/[0.08] gap-2">
+      {/* Segmented Tab Navigation */}
+      <div className="inline-flex items-center gap-1 p-1 rounded-lg bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200/80 dark:border-zinc-700/80 text-xs">
         <button
+          type="button"
           onClick={() => setActiveTab("composition")}
-          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition -mb-px ${
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors ${
             activeTab === "composition"
-              ? "border-[#5e6ad2] text-[#5e6ad2] dark:text-[#8b95f6]"
-              : "border-transparent text-slate-500 dark:text-[#8a8f98] hover:text-slate-800 dark:hover:text-[#f7f8f8]"
+              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-semibold shadow-2xs"
+              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <Layers className="h-4 w-4" />
-          Composition & AI Blueprint
+          <Layers className="h-3.5 w-3.5" />
+          Composition & Blueprint
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("operations")}
-          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition -mb-px ${
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors ${
             activeTab === "operations"
-              ? "border-[#5e6ad2] text-[#5e6ad2] dark:text-[#8b95f6]"
-              : "border-transparent text-slate-500 dark:text-[#8a8f98] hover:text-slate-800 dark:hover:text-[#f7f8f8]"
+              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-semibold shadow-2xs"
+              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <Send className="h-4 w-4" />
+          <Send className="h-3.5 w-3.5" />
           Deployment & Operations
           {(platformStatus?.testpressUpdatePending || platformStatus?.lmsUpdatePending) && (
-            <span className="h-2 w-2 rounded-full bg-[#f0bf00] animate-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
           )}
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("overview")}
-          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition -mb-px ${
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors ${
             activeTab === "overview"
-              ? "border-[#5e6ad2] text-[#5e6ad2] dark:text-[#8b95f6]"
-              : "border-transparent text-slate-500 dark:text-[#8a8f98] hover:text-slate-800 dark:hover:text-[#f7f8f8]"
+              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-semibold shadow-2xs"
+              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <FileSpreadsheet className="h-4 w-4" />
+          <FileSpreadsheet className="h-3.5 w-3.5" />
           Metadata & Settings
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab("history")}
-          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition -mb-px ${
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors ${
             activeTab === "history"
-              ? "border-[#5e6ad2] text-[#5e6ad2] dark:text-[#8b95f6]"
-              : "border-transparent text-slate-500 dark:text-[#8a8f98] hover:text-slate-800 dark:hover:text-[#f7f8f8]"
+              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-semibold shadow-2xs"
+              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <History className="h-4 w-4" />
+          <History className="h-3.5 w-3.5" />
           Versions ({versions.length + 1})
         </button>
       </div>
@@ -230,26 +234,26 @@ export default function ExamDetailTabs({
 
       {/* 3. Overview & Metadata Tab */}
       {activeTab === "overview" && (
-        <form onSubmit={handleUpdateMetadata} className="bg-white dark:bg-[#0f1011] rounded-2xl border border-slate-200 dark:border-white/[0.08] p-6 space-y-6 shadow-xs">
+        <form onSubmit={handleUpdateMetadata} className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 p-5 space-y-5 shadow-xs">
           <div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-[#f7f8f8]">Examination Metadata & Configurations</h2>
-            <p className="text-xs text-slate-500 dark:text-[#8a8f98] mt-0.5">
-              Title modifications will update the generated title while strictly preserving the unique code (<code className="text-[#5e6ad2] dark:text-[#8b95f6] font-mono">{exam.uniqueCode}</code>).
+            <h2 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Examination Metadata & Configurations</h2>
+            <p className="text-xs text-zinc-500 mt-0.5">
+              Title modifications will update the generated title while strictly preserving the unique code (<code className="font-mono text-zinc-900 dark:text-zinc-100">{exam.uniqueCode}</code>).
             </p>
           </div>
 
           {metadataFeedback && (
             <div
-              className={`p-4 rounded-xl flex items-center gap-2.5 text-sm ${
+              className={`p-3.5 rounded-lg flex items-center gap-2.5 text-xs ${
                 metadataFeedback.type === "success"
-                  ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-[#27a644] border border-emerald-200 dark:border-emerald-500/30"
-                  : "bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-[#eb5757] border border-rose-200 dark:border-rose-500/30"
+                  ? "bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700"
+                  : "bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/30"
               }`}
             >
               {metadataFeedback.type === "success" ? (
-                <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-[#27a644] shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               ) : (
-                <AlertCircle className="h-5 w-5 text-rose-600 dark:text-[#eb5757] shrink-0" />
+                <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" />
               )}
               <span>{metadataFeedback.text}</span>
             </div>
@@ -257,7 +261,7 @@ export default function ExamDetailTabs({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-[#d0d3d8] mb-1">
+              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
                 Descriptive Title
               </label>
               <input
@@ -265,28 +269,28 @@ export default function ExamDetailTabs({
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8] font-semibold"
+                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-[#d0d3d8] mb-1">
+              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
                 Visibility Type
               </label>
               <select
                 value={testType}
                 onChange={(e) => setTestType(e.target.value as "PUBLIC" | "PRIVATE")}
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8]"
+                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
               >
-                <option value="PRIVATE" className="dark:bg-[#141516]">Private (College Specific)</option>
-                <option value="PUBLIC" className="dark:bg-[#141516]">Public</option>
+                <option value="PRIVATE">Private (College Specific)</option>
+                <option value="PUBLIC">Public</option>
               </select>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-[#d0d3d8] mb-1">
+              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
                 Duration (Minutes)
               </label>
               <input
@@ -295,12 +299,12 @@ export default function ExamDetailTabs({
                 required
                 value={durationMinutes}
                 onChange={(e) => setDurationMinutes(parseInt(e.target.value) || 60)}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8] font-mono"
+                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-[#d0d3d8] mb-1">
+              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
                 Total Marks
               </label>
               <input
@@ -309,12 +313,12 @@ export default function ExamDetailTabs({
                 required
                 value={totalMarks}
                 onChange={(e) => setTotalMarks(parseFloat(e.target.value) || 100)}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8] font-mono"
+                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-[#d0d3d8] mb-1">
+              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
                 Marks for Correct (+)
               </label>
               <input
@@ -323,12 +327,12 @@ export default function ExamDetailTabs({
                 required
                 value={marksCorrect}
                 onChange={(e) => setMarksCorrect(parseFloat(e.target.value) || 1)}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8] font-mono"
+                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-[#d0d3d8] mb-1">
+              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
                 Marks for Incorrect (-)
               </label>
               <input
@@ -337,14 +341,14 @@ export default function ExamDetailTabs({
                 required
                 value={marksIncorrect}
                 onChange={(e) => setMarksIncorrect(parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8] font-mono"
+                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
               />
             </div>
           </div>
 
-          <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-white/[0.08]">
-            <label className="block text-xs font-bold text-slate-800 dark:text-[#d0d3d8] uppercase tracking-wider">
-              Mandatory Change Reason <span className="text-[#eb5757]">*</span>
+          <div className="space-y-1.5 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider">
+              Mandatory Change Reason <span className="text-red-500">*</span>
             </label>
             <textarea
               required
@@ -352,7 +356,7 @@ export default function ExamDetailTabs({
               value={changeDescription}
               onChange={(e) => setChangeDescription(e.target.value)}
               placeholder="e.g. Updated exam title and duration per revised academic calendar."
-              className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-white/[0.12] bg-white dark:bg-[#141516] text-slate-900 dark:text-[#f7f8f8] placeholder-slate-400 dark:placeholder-[#62666d]"
+              className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
             />
           </div>
 
@@ -360,60 +364,60 @@ export default function ExamDetailTabs({
             <button
               type="submit"
               disabled={isUpdatingMetadata}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5e6ad2] hover:bg-[#6875e5] text-white font-semibold text-xs shadow-xs dark:shadow-[0_0_20px_rgba(94,106,210,0.35)] transition disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-xs disabled:opacity-50"
             >
-              <Save className="h-4 w-4" />
+              <Save className="h-3.5 w-3.5" />
               {isUpdatingMetadata ? "Saving Metadata..." : "Save Metadata Modifications"}
             </button>
           </div>
         </form>
       )}
 
-      {/* 4. History & Versions Tab (PRD Section 14.5) */}
+      {/* 4. History & Versions Tab */}
       {activeTab === "history" && (
-        <div className="bg-white dark:bg-[#0f1011] rounded-2xl border border-slate-200 dark:border-white/[0.08] shadow-xs overflow-hidden">
-          <div className="p-5 border-b border-slate-200 dark:border-white/[0.08] flex items-center justify-between">
-            <h2 className="text-base font-bold text-slate-900 dark:text-[#f7f8f8]">Historical Examination Versions</h2>
-            <span className="text-xs text-slate-500 dark:text-[#8a8f98]">
-              Current Active Version: <strong className="text-slate-800 dark:text-[#f7f8f8] font-mono">v{exam.currentVersion}</strong>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs overflow-hidden">
+          <div className="p-4 border-b border-zinc-200/80 dark:border-zinc-800 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Historical Examination Versions</h2>
+            <span className="text-xs text-zinc-500">
+              Active Version: <strong className="text-zinc-900 dark:text-zinc-100 font-mono">v{exam.currentVersion}</strong>
             </span>
           </div>
 
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-[#141516] uppercase font-semibold text-slate-600 dark:text-[#8a8f98] border-b border-slate-200 dark:border-white/[0.08]">
+            <thead className="bg-zinc-50/70 dark:bg-zinc-800/40 text-[11px] font-mono uppercase tracking-wider text-zinc-500 border-b border-zinc-200/80 dark:border-zinc-800">
               <tr>
-                <th className="py-2.5 px-4">Version</th>
-                <th className="py-2.5 px-4">Change Description</th>
-                <th className="py-2.5 px-4">Updated By</th>
-                <th className="py-2.5 px-4">Timestamp (IST)</th>
+                <th className="py-2.5 px-4 font-medium">Version</th>
+                <th className="py-2.5 px-4 font-medium">Change Description</th>
+                <th className="py-2.5 px-4 font-medium">Updated By</th>
+                <th className="py-2.5 px-4 font-medium">Timestamp (IST)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-white/[0.06]">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
               {/* Current version row */}
-              <tr className="bg-indigo-50/30 dark:bg-[#5e6ad2]/10">
-                <td className="py-3 px-4 font-mono font-bold text-[#5e6ad2] dark:text-[#8b95f6]">
+              <tr className="bg-zinc-50/40 dark:bg-zinc-800/20">
+                <td className="py-3 px-4 font-mono font-semibold text-zinc-950 dark:text-zinc-50">
                   v{exam.currentVersion} (Current)
                 </td>
-                <td className="py-3 px-4 font-semibold text-slate-800 dark:text-[#f7f8f8]">
+                <td className="py-3 px-4 font-medium text-zinc-900 dark:text-zinc-100">
                   Current active specification
                 </td>
-                <td className="py-3 px-4 text-slate-600 dark:text-[#8a8f98] font-medium">Live</td>
-                <td className="py-3 px-4 text-slate-500 dark:text-[#8a8f98] font-mono">Current</td>
+                <td className="py-3 px-4 text-zinc-500">Live</td>
+                <td className="py-3 px-4 text-zinc-500 font-mono">Current</td>
               </tr>
 
               {/* Previous versions */}
               {versions.map((ver) => (
-                <tr key={ver.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03] transition">
-                  <td className="py-3 px-4 font-mono font-bold text-slate-700 dark:text-[#d0d3d8]">
+                <tr key={ver.id} className="hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors">
+                  <td className="py-3 px-4 font-mono font-medium text-zinc-900 dark:text-zinc-100">
                     v{ver.versionNumber}
                   </td>
-                  <td className="py-3 px-4 text-slate-800 dark:text-[#d0d3d8] font-medium">
+                  <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">
                     {ver.changeDescription}
                   </td>
-                  <td className="py-3 px-4 text-slate-700 dark:text-[#d0d3d8] font-semibold">
+                  <td className="py-3 px-4 font-medium text-zinc-900 dark:text-zinc-100">
                     {ver.changedByName}
                   </td>
-                  <td className="py-3 px-4 font-mono text-slate-500 dark:text-[#8a8f98]">
+                  <td className="py-3 px-4 font-mono text-zinc-500">
                     {formatDateKolkata(ver.createdAt)}
                   </td>
                 </tr>

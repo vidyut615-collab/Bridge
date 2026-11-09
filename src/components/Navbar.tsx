@@ -39,73 +39,75 @@ export default function Navbar({ user }: NavbarProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-white/[0.08] bg-white/80 dark:bg-[#08090a]/80 backdrop-blur-md transition-colors">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between">
-          {/* Logo & Product Title */}
-          <div className="flex items-center gap-3">
+          {/* Brand Logo & Identifier */}
+          <div className="flex items-center gap-6">
             <Link href="/dashboard" className="flex items-center gap-2.5 group">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#5e6ad2] text-white shadow-[0_0_12px_rgba(94,106,210,0.5)] transition-transform group-hover:scale-105">
-                <Layers className="h-4 w-4" />
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 shadow-xs transition-transform group-hover:scale-105">
+                <Layers className="h-3.5 w-3.5" />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-900 dark:text-[#f7f8f8] text-xs tracking-tight font-mono">
-                  TRUSKILL
+              <div className="flex items-center gap-1.5 font-mono">
+                <span className="font-semibold text-zinc-950 dark:text-zinc-50 text-xs tracking-tight">
+                  BRIDGE
                 </span>
-                <span className="hidden sm:inline-block text-[#8a8f98] font-mono text-[11px]">
+                <span className="text-zinc-400 dark:text-zinc-500 text-[11px]">
                   / ops
                 </span>
               </div>
             </Link>
+
+            {/* Navigation Links — Modern Tab-style */}
+            <nav className="hidden md:flex items-center gap-1">
+              {navLinks.map((item) => {
+                const Icon = item.icon;
+                const isActive =
+                  item.href === "/dashboard"
+                    ? pathname === "/dashboard" || pathname === "/"
+                    : pathname.startsWith(item.href);
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      isActive
+                        ? "bg-zinc-100 text-zinc-950 dark:bg-zinc-800 dark:text-zinc-50 font-semibold shadow-2xs"
+                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-100/60 dark:hover:bg-zinc-800/60"
+                    }`}
+                  >
+                    <Icon
+                      className={`h-3.5 w-3.5 ${
+                        isActive
+                          ? "text-zinc-950 dark:text-zinc-50"
+                          : "text-zinc-400 dark:text-zinc-500"
+                      }`}
+                    />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navLinks.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                item.href === "/dashboard"
-                  ? pathname === "/dashboard" || pathname === "/"
-                  : pathname.startsWith(item.href);
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                    isActive
-                      ? "bg-slate-200/70 dark:bg-white/[0.08] text-slate-900 dark:text-[#f7f8f8] border border-slate-300/80 dark:border-white/[0.08] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]"
-                      : "text-slate-600 dark:text-[#8a8f98] hover:text-slate-900 dark:hover:text-[#f7f8f8] hover:bg-slate-100 dark:hover:bg-white/[0.03]"
-                  }`}
-                >
-                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-[#5e6ad2]" : "text-[#8a8f98]"}`} />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right Actions: Theme Toggle + User Badge + Logout */}
-          <div className="flex items-center gap-2.5">
+          {/* Right Actions: Theme Toggle + User Badge + Sign Out */}
+          <div className="flex items-center gap-3">
             <ThemeToggle />
 
-            <div className="flex items-center gap-2 pl-2.5 border-l border-slate-200 dark:border-white/[0.08]">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 dark:bg-[#141516] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d0d6e0]">
+            <div className="flex items-center gap-2.5 pl-3 border-l border-zinc-200 dark:border-zinc-800">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300">
                 <UserIcon className="h-3.5 w-3.5" />
               </div>
               <div className="hidden sm:flex flex-col text-left">
-                <span className="text-xs font-medium text-slate-900 dark:text-[#f7f8f8] leading-none">
+                <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100 leading-none">
                   {user.name}
                 </span>
                 <div className="flex items-center gap-1 mt-0.5">
-                  <span
-                    className={`inline-flex items-center gap-0.5 px-1 py-0.2 rounded text-[9px] font-mono font-bold tracking-wider uppercase ${
-                      user.role === "SUPERADMIN"
-                        ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/40"
-                        : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/40"
-                    }`}
-                  >
-                    {user.role === "SUPERADMIN" && <Shield className="h-2 w-2" />}
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700">
+                    {user.role === "SUPERADMIN" && (
+                      <Shield className="h-2.5 w-2.5 text-zinc-950 dark:text-zinc-100" />
+                    )}
                     {user.role}
                   </span>
                 </div>
@@ -116,7 +118,7 @@ export default function Navbar({ user }: NavbarProps) {
               <button
                 type="submit"
                 title="Sign out"
-                className="inline-flex items-center justify-center p-1.5 rounded-md text-[#8a8f98] hover:text-[#eb5757] hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                className="inline-flex items-center justify-center h-8 w-8 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
               >
                 <LogOut className="h-3.5 w-3.5" />
               </button>

@@ -37,15 +37,18 @@ export default async function MasterDataPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-[#0f1011] p-6 rounded-2xl border border-slate-200 dark:border-white/[0.08] shadow-xs">
+      {/* Header — Flat, Minimalist */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-zinc-200/80 dark:border-zinc-800">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-[#f7f8f8]">Master Data Management</h1>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 font-mono">
-              <Shield className="h-3 w-3" /> Superadmin Controlled
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+              Master Data Management
+            </h1>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700">
+              <Shield className="h-3 w-3" /> Superadmin Protected
             </span>
           </div>
-          <p className="mt-1 text-sm text-slate-500 dark:text-[#8a8f98]">
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
             Maintain centralized Colleges, Subjects, Topics, and Staff Accounts. Soft-delete and historical stability enforced.
           </p>
         </div>

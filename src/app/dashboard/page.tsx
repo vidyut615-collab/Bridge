@@ -4,13 +4,11 @@ import Link from "next/link";
 import {
   BookOpen,
   FileSpreadsheet,
-  Clock,
   CheckCircle2,
   AlertTriangle,
   ArrowRight,
   TrendingUp,
-  PlusCircle,
-  Layers,
+  Plus,
 } from "lucide-react";
 import { formatDateKolkata, formatNumber } from "@/lib/utils";
 
@@ -83,35 +81,35 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Welcome Banner & Quick Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-[#0f1011] p-5 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-colors">
+      {/* Page Header — Flat, Minimalist, No outer box */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-zinc-200/80 dark:border-zinc-800">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-[#f7f8f8]">
-              Assessment Operations & Observability
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+              Bridge Operations & Observability
             </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#5e6ad2]/15 text-[#5e6ad2] dark:text-[#828fff] border border-[#5e6ad2]/30">
-              Live System
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700">
+              Internal Platform
             </span>
           </div>
-          <p className="mt-1 text-xs text-[#8a8f98]">
-            Welcome back, <strong className="text-slate-800 dark:text-[#d0d6e0] font-semibold">{user?.name}</strong>. Centralized internal register for Question Bank and Testpress/LMS deployments.
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+            Signed in as <span className="text-zinc-900 dark:text-zinc-100 font-medium">{user?.name}</span> • Centralized register for Question Bank and Testpress/LMS deployments.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <Link
             href="/question-bank"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-300 dark:border-white/[0.08] bg-white dark:bg-[#141516] text-xs font-medium text-slate-700 dark:text-[#d0d6e0] hover:bg-slate-50 dark:hover:bg-white/[0.04] transition shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 transition-colors shadow-2xs"
           >
-            <BookOpen className="h-3.5 w-3.5 text-[#8a8f98]" />
-            Update Inventory
+            <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
+            Manage Inventory
           </Link>
           <Link
             href="/examinations/new"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#5e6ad2] text-xs font-medium text-white hover:bg-[#6c76e0] shadow-[0_0_16px_rgba(94,106,210,0.35),inset_0_1px_0_rgba(255,255,255,0.2)] active:scale-[0.98] transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-zinc-950 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-xs"
           >
-            <PlusCircle className="h-3.5 w-3.5" />
+            <Plus className="h-3.5 w-3.5" />
             Add Examination
           </Link>
         </div>
@@ -119,34 +117,36 @@ export default async function DashboardPage() {
 
       {/* Outstanding Update Alerts (if any) */}
       {pendingPlatformUpdates.length > 0 && (
-        <div className="rounded-xl border border-amber-300 dark:border-[#f0bf00]/30 bg-amber-50 dark:bg-[#f0bf00]/10 p-4 shadow-xs">
-          <div className="flex items-center gap-2 text-amber-900 dark:text-[#ffd500] font-semibold text-xs mb-1.5">
-            <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-[#f0bf00] shrink-0" />
-            <span>Attention: External Platform Updates Required ({pendingPlatformUpdates.length})</span>
+        <div className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/40 dark:bg-amber-950/20 p-4">
+          <div className="flex items-center gap-2 text-zinc-950 dark:text-zinc-50 font-semibold text-xs mb-1">
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400">
+              <AlertTriangle className="h-3 w-3" />
+            </span>
+            <span>External Platform Updates Required ({pendingPlatformUpdates.length})</span>
           </div>
-          <p className="text-[11px] text-amber-800 dark:text-[#ffd500]/80 mb-3">
-            The following completed examinations have been modified internally. Staff must make the corresponding changes on Testpress or Truskill LMS and confirm them below:
+          <p className="text-[12px] text-zinc-600 dark:text-zinc-400 mb-3">
+            Completed examinations modified internally. Corresponding updates on Testpress or Truskill LMS must be performed:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             {pendingPlatformUpdates.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-[#141516] border border-amber-200 dark:border-white/[0.06] text-xs"
+                className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs"
               >
                 <div>
-                  <div className="font-semibold text-slate-900 dark:text-[#f7f8f8]">{item.exam.generatedName}</div>
-                  <div className="flex items-center gap-2 text-[11px] text-[#8a8f98] mt-0.5">
+                  <div className="font-medium text-zinc-900 dark:text-zinc-100">{item.exam.generatedName}</div>
+                  <div className="flex items-center gap-2 text-[11px] text-zinc-500 mt-0.5">
                     {item.testpressUpdatePending && (
-                      <span className="font-medium text-orange-600 dark:text-orange-400">• Testpress Update Pending</span>
+                      <span className="font-mono text-zinc-900 dark:text-zinc-200">• Testpress Pending</span>
                     )}
                     {item.lmsUpdatePending && (
-                      <span className="font-medium text-amber-600 dark:text-amber-400">• LMS Update Pending</span>
+                      <span className="font-mono text-zinc-900 dark:text-zinc-200">• LMS Pending</span>
                     )}
                   </div>
                 </div>
                 <Link
                   href={`/examinations/${item.exam.id}`}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#5e6ad2] hover:text-[#7170ff]"
+                  className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-md bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 transition"
                 >
                   Review <ArrowRight className="h-3 w-3" />
                 </Link>
@@ -156,44 +156,48 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* Top Metric Cards (Linear KPI Strip) */}
+      {/* Top 4 KPI Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Questions */}
-        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
-          <div className="flex items-center justify-between text-[#8a8f98] text-[11px] font-mono uppercase tracking-wider mb-1">
-            <span>Total Questions</span>
-            <BookOpen className="h-3.5 w-3.5 text-[#5e6ad2]" />
+        <div className="bg-white dark:bg-zinc-900/70 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-zinc-500 text-[11px] font-mono uppercase tracking-wider mb-1">
+              <span>Total Questions</span>
+              <BookOpen className="h-3.5 w-3.5 text-zinc-400" />
+            </div>
+            <div className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 tracking-tight tabular-nums mt-1">
+              {formatNumber(totalQuestions)}
+            </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-[#f7f8f8] tabular-nums">
-            {formatNumber(totalQuestions)}
-          </div>
-          <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-white/[0.05] flex items-center justify-between text-[11px] text-[#8a8f98]">
+          <div className="mt-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-500">
             <span>{subjectsCount} active subjects</span>
-            <span className="font-mono text-[#5e6ad2]">3 Tiers per Topic</span>
+            <span className="font-mono text-zinc-900 dark:text-zinc-300">3 Tiers</span>
           </div>
         </div>
 
         {/* Difficulty Breakdown */}
-        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
-          <div className="flex items-center justify-between text-[#8a8f98] text-[11px] font-mono uppercase tracking-wider mb-1">
-            <span>Difficulty Breakdown</span>
-            <TrendingUp className="h-3.5 w-3.5 text-[#27a644]" />
+        <div className="bg-white dark:bg-zinc-900/70 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-zinc-500 text-[11px] font-mono uppercase tracking-wider mb-1">
+              <span>Inventory by Tier</span>
+              <TrendingUp className="h-3.5 w-3.5 text-zinc-400" />
+            </div>
+            <div className="grid grid-cols-3 gap-1.5 mt-2 font-mono text-xs">
+              <div className="bg-zinc-50 dark:bg-zinc-800/60 p-2 rounded-lg text-center border border-zinc-200/50 dark:border-zinc-700/50">
+                <span className="text-[10px] uppercase text-zinc-500 block">Easy (I)</span>
+                <span className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tabular-nums">{formatNumber(totalEasy)}</span>
+              </div>
+              <div className="bg-zinc-50 dark:bg-zinc-800/60 p-2 rounded-lg text-center border border-zinc-200/50 dark:border-zinc-700/50">
+                <span className="text-[10px] uppercase text-zinc-500 block">Med (II)</span>
+                <span className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tabular-nums">{formatNumber(totalMedium)}</span>
+              </div>
+              <div className="bg-zinc-50 dark:bg-zinc-800/60 p-2 rounded-lg text-center border border-zinc-200/50 dark:border-zinc-700/50">
+                <span className="text-[10px] uppercase text-zinc-500 block">Hard (III)</span>
+                <span className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tabular-nums">{formatNumber(totalHard)}</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3 mt-1 font-mono text-xs">
-            <div>
-              <span className="text-[10px] uppercase text-[#8a8f98] block">Easy (I)</span>
-              <span className="text-sm font-bold text-[#27a644] tabular-nums">{formatNumber(totalEasy)}</span>
-            </div>
-            <div className="border-l border-slate-200 dark:border-white/[0.08] pl-3">
-              <span className="text-[10px] uppercase text-[#8a8f98] block">Med (II)</span>
-              <span className="text-sm font-bold text-[#f0bf00] tabular-nums">{formatNumber(totalMedium)}</span>
-            </div>
-            <div className="border-l border-slate-200 dark:border-white/[0.08] pl-3">
-              <span className="text-[10px] uppercase text-[#8a8f98] block">Hard (III)</span>
-              <span className="text-sm font-bold text-[#eb5757] tabular-nums">{formatNumber(totalHard)}</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 dark:border-white/[0.05] text-[11px] text-[#8a8f98] truncate">
+          <div className="mt-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-800 text-[11px] text-zinc-500 truncate">
             {latestInventoryUpdate ? (
               <span>Last: {latestInventoryUpdate.topic.name} by {latestInventoryUpdate.changedByUser.name}</span>
             ) : (
@@ -203,36 +207,40 @@ export default async function DashboardPage() {
         </div>
 
         {/* Registered Examinations */}
-        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
-          <div className="flex items-center justify-between text-[#8a8f98] text-[11px] font-mono uppercase tracking-wider mb-1">
-            <span>Examinations</span>
-            <FileSpreadsheet className="h-3.5 w-3.5 text-blue-500" />
+        <div className="bg-white dark:bg-zinc-900/70 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-zinc-500 text-[11px] font-mono uppercase tracking-wider mb-1">
+              <span>Examinations</span>
+              <FileSpreadsheet className="h-3.5 w-3.5 text-zinc-400" />
+            </div>
+            <div className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 tracking-tight tabular-nums mt-1">
+              {formatNumber(totalExams)}
+            </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-[#f7f8f8] tabular-nums">
-            {formatNumber(totalExams)}
-          </div>
-          <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-white/[0.05] flex items-center gap-2 text-[11px] text-[#8a8f98]">
-            <span className="font-semibold text-blue-500">{trainingExams} TR</span>
+          <div className="mt-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-800 flex items-center gap-2 text-[11px] text-zinc-500">
+            <span className="font-mono text-zinc-900 dark:text-zinc-300">{trainingExams} TR</span>
             <span>•</span>
-            <span className="font-semibold text-purple-400">{regularExams} RG</span>
+            <span className="font-mono text-zinc-900 dark:text-zinc-300">{regularExams} RG</span>
             <span>•</span>
-            <span>{globalExams} Global</span>
+            <span className="font-mono">{globalExams} Global</span>
           </div>
         </div>
 
         {/* Operational Deployment Progress */}
-        <div className="bg-white dark:bg-[#0f1011] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
-          <div className="flex items-center justify-between text-[#8a8f98] text-[11px] font-mono uppercase tracking-wider mb-1">
-            <span>Deployment</span>
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#27a644]" />
+        <div className="bg-white dark:bg-zinc-900/70 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-zinc-500 text-[11px] font-mono uppercase tracking-wider mb-1">
+              <span>Deployment</span>
+              <CheckCircle2 className="h-3.5 w-3.5 text-zinc-400" />
+            </div>
+            <div className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 tracking-tight tabular-nums mt-1">
+              {formatNumber(completedExams)}
+              <span className="text-xs font-normal text-zinc-500 ml-2">Completed</span>
+            </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-[#27a644] tabular-nums">
-            {formatNumber(completedExams)}
-            <span className="text-xs font-normal text-[#8a8f98] ml-1.5">Completed</span>
-          </div>
-          <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-white/[0.05] flex items-center justify-between text-[11px] text-[#8a8f98]">
-            <span className="text-[#f0bf00] font-medium">{readyForTestpress} Testpress Pending</span>
-            <span className="text-blue-400 font-medium">{lmsPending} LMS Pending</span>
+          <div className="mt-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-500">
+            <span>{readyForTestpress} Testpress Pending</span>
+            <span>{lmsPending} LMS Pending</span>
           </div>
         </div>
       </div>
@@ -240,15 +248,15 @@ export default async function DashboardPage() {
       {/* Main Grid: Question Bank Summary Table & Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Question Bank Summary Table (2 Columns) */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#0f1011] rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] overflow-hidden">
-          <div className="p-4 border-b border-slate-200 dark:border-white/[0.06] flex items-center justify-between">
+        <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs overflow-hidden">
+          <div className="p-4 border-b border-zinc-200/80 dark:border-zinc-800 flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-[#f7f8f8]">Question Bank Inventory Overview</h2>
-              <p className="text-[11px] text-[#8a8f98] mt-0.5">Subject-wise inventory and Roman numeral difficulty distribution</p>
+              <h2 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Question Bank Inventory Overview</h2>
+              <p className="text-[11px] text-zinc-500 mt-0.5">Subject-wise inventory and Roman numeral difficulty distribution</p>
             </div>
             <Link
               href="/question-bank"
-              className="text-xs font-semibold text-[#5e6ad2] hover:text-[#7170ff] flex items-center gap-1"
+              className="text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1"
             >
               View All <ArrowRight className="h-3 w-3" />
             </Link>
@@ -256,17 +264,17 @@ export default async function DashboardPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-[#141516] text-[11px] font-mono uppercase tracking-wider text-[#8a8f98] border-b border-slate-200 dark:border-white/[0.06]">
+              <thead className="bg-zinc-50/70 dark:bg-zinc-800/40 text-[11px] font-mono uppercase tracking-wider text-zinc-500 border-b border-zinc-200/80 dark:border-zinc-800">
                 <tr>
-                  <th className="py-2.5 px-3.5">Subject</th>
-                  <th className="py-2.5 px-3.5 text-right">Easy (I)</th>
-                  <th className="py-2.5 px-3.5 text-right">Medium (II)</th>
-                  <th className="py-2.5 px-3.5 text-right">Hard (III)</th>
-                  <th className="py-2.5 px-3.5 text-right font-bold text-slate-900 dark:text-[#f7f8f8]">Total</th>
-                  <th className="py-2.5 px-3.5 text-center">Action</th>
+                  <th className="py-2.5 px-4 font-medium">Subject</th>
+                  <th className="py-2.5 px-4 text-right font-medium">Easy (I)</th>
+                  <th className="py-2.5 px-4 text-right font-medium">Medium (II)</th>
+                  <th className="py-2.5 px-4 text-right font-medium">Hard (III)</th>
+                  <th className="py-2.5 px-4 text-right font-semibold text-zinc-950 dark:text-zinc-100">Total</th>
+                  <th className="py-2.5 px-4 text-center font-medium">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
                 {subjectsWithTopics.map((sub) => {
                   const easy = sub.topics.reduce((acc, t) => acc + t.easyCount, 0);
                   const med = sub.topics.reduce((acc, t) => acc + t.mediumCount, 0);
@@ -274,26 +282,26 @@ export default async function DashboardPage() {
                   const total = easy + med + hard;
 
                   return (
-                    <tr key={sub.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
-                      <td className="py-2.5 px-3.5 font-medium text-slate-900 dark:text-[#f7f8f8]">
+                    <tr key={sub.id} className="hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors">
+                      <td className="py-3 px-4 font-medium text-zinc-900 dark:text-zinc-100">
                         {sub.name}
                       </td>
-                      <td className="py-2.5 px-3.5 text-right font-mono tabular-nums text-[#27a644]">
+                      <td className="py-3 px-4 text-right font-mono tabular-nums text-zinc-800 dark:text-zinc-200">
                         {formatNumber(easy)}
                       </td>
-                      <td className="py-2.5 px-3.5 text-right font-mono tabular-nums text-[#f0bf00]">
+                      <td className="py-3 px-4 text-right font-mono tabular-nums text-zinc-800 dark:text-zinc-200">
                         {formatNumber(med)}
                       </td>
-                      <td className="py-2.5 px-3.5 text-right font-mono tabular-nums text-[#eb5757]">
+                      <td className="py-3 px-4 text-right font-mono tabular-nums text-zinc-800 dark:text-zinc-200">
                         {formatNumber(hard)}
                       </td>
-                      <td className="py-2.5 px-3.5 text-right font-mono font-bold tabular-nums text-slate-900 dark:text-[#f7f8f8]">
+                      <td className="py-3 px-4 text-right font-mono font-semibold tabular-nums text-zinc-950 dark:text-zinc-50">
                         {formatNumber(total)}
                       </td>
-                      <td className="py-2.5 px-3.5 text-center">
+                      <td className="py-3 px-4 text-center">
                         <Link
                           href={`/question-bank/${sub.id}`}
-                          className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d0d6e0] hover:text-[#5e6ad2] transition"
+                          className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium bg-zinc-50 dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
                         >
                           Manage
                         </Link>
@@ -307,35 +315,35 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Audit Activities (1 Column) */}
-        <div className="bg-white dark:bg-[#0f1011] rounded-xl border border-slate-200 dark:border-white/[0.08] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] flex flex-col">
-          <div className="p-4 border-b border-slate-200 dark:border-white/[0.06] flex items-center justify-between">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs flex flex-col">
+          <div className="p-4 border-b border-zinc-200/80 dark:border-zinc-800 flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-[#f7f8f8]">Recent Activity</h2>
-              <p className="text-[11px] text-[#8a8f98] mt-0.5">Traceable audit stream</p>
+              <h2 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Recent Activity</h2>
+              <p className="text-[11px] text-zinc-500 mt-0.5">Traceable audit stream</p>
             </div>
             <Link
               href="/audit-logs"
-              className="text-xs font-semibold text-[#5e6ad2] hover:text-[#7170ff] flex items-center gap-1"
+              className="text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1"
             >
               Full Log <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
 
-          <div className="p-3 flex-1 divide-y divide-slate-100 dark:divide-white/[0.04] overflow-y-auto max-h-[480px]">
+          <div className="p-4 flex-1 divide-y divide-zinc-100 dark:divide-zinc-800/60 overflow-y-auto max-h-[460px]">
             {recentActivities.map((act) => (
-              <div key={act.id} className="py-2.5 first:pt-0 last:pb-0">
-                <div className="flex items-center justify-between text-[11px] text-[#8a8f98] mb-0.5">
-                  <span className="font-medium text-slate-800 dark:text-[#d0d6e0]">{act.changedByUser.name}</span>
+              <div key={act.id} className="py-3 first:pt-0 last:pb-0">
+                <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1">
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">{act.changedByUser.name}</span>
                   <span className="font-mono text-[10px]">{formatDateKolkata(act.createdAt)}</span>
                 </div>
-                <p className="text-xs font-normal text-slate-800 dark:text-[#f7f8f8] leading-snug">
+                <p className="text-xs font-normal text-zinc-700 dark:text-zinc-300 leading-snug">
                   {act.changeDescription}
                 </p>
-                <div className="flex items-center gap-1.5 mt-1 font-mono text-[9px] uppercase tracking-wider">
-                  <span className="px-1.5 py-0.2 rounded bg-slate-100 dark:bg-white/[0.05] text-[#8a8f98] border border-slate-200 dark:border-white/[0.06]">
+                <div className="flex items-center gap-1.5 mt-1.5 font-mono text-[9px] uppercase tracking-wider">
+                  <span className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-700">
                     {act.entityType}
                   </span>
-                  <span className="px-1.5 py-0.2 rounded bg-[#5e6ad2]/15 text-[#5e6ad2] dark:text-[#828fff] border border-[#5e6ad2]/20">
+                  <span className="px-1.5 py-0.5 rounded bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium">
                     {act.action}
                   </span>
                 </div>
