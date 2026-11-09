@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { loginAction } from "@/app/actions/authActions";
-import { Layers, Shield, User, ArrowRight, AlertCircle } from "lucide-react";
+import { Layers, ArrowRight, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -37,10 +37,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickLogin = (demoEmail: string, demoPass: string) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-  };
 
   return (
     <div className="min-h-[85vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
@@ -107,29 +103,10 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Quick Demo Logins for Fast Access */}
-        <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800">
-          <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 text-center mb-2.5">
-            Quick Fill Demo Accounts
+        <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 text-center">
+          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+            Authorized personnel only. Contact your administrator if you need access.
           </p>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuickLogin("admin@truskill.com", "admin123")}
-              className="flex items-center justify-center gap-1.5 h-8 px-2.5 text-xs font-medium rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-            >
-              <Shield className="h-3 w-3" />
-              Superadmin
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin("staff@truskill.com", "staff123")}
-              className="flex items-center justify-center gap-1.5 h-8 px-2.5 text-xs font-medium rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-            >
-              <User className="h-3 w-3" />
-              Staff
-            </button>
-          </div>
         </div>
 
         <div className="pt-2 text-center border-t border-zinc-100 dark:border-zinc-800/80">

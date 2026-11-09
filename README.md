@@ -1,5 +1,7 @@
-# Truskill Assessment Operations & Observability System
+# Bridge — Assessment Operations & Observability Platform
 
+> **Internal Operations Platform** • Powered by Truskill
+>
 > **Single Source of Truth** for MCQ question bank inventory, standardized examination registration & naming, dynamic multi-section composition building, AI blueprint extraction, and deployment tracking across Testpress and Truskill LMS.
 
 ---
@@ -7,8 +9,8 @@
 ## 🚀 Key Modules & Capabilities
 
 1. **Authentication & RBAC**:
-   - `SUPERADMIN`: Full administrative control, Master Data management (Colleges, Subjects, Topics), and user creation.
-   - `STAFF`: Day-to-day operations (updating question bank counts, registering examinations, blueprint extraction, and marking deployment milestones).
+   - `SUPERADMIN`: Full administrative control, Master Data management (Colleges, Subjects, Topics), and user provisioning.
+   - `STAFF`: Operational access (updating question bank counts, registering examinations, blueprint extraction, and marking deployment milestones).
 
 2. **Question Bank Observability**:
    - Subject inventory categorized into **3 fixed difficulty levels**: Level I (Easy), Level II (Medium), Level III (Hard).
@@ -23,7 +25,7 @@
 
 4. **Examination Registry & Atomic Naming Engine**:
    - **3 Exam Categories**:
-     - `Global`: Platform-wide assessment with free manual title.
+     - `Global`: Platform-wide assessment with custom title.
      - `College Training`: Training program assessment (`TR`).
      - `College Regular`: Regular college assessment (`RG`).
    - **Standardized Formula**: `COLLEGECODE-TR/RG-TITLE-###` (e.g. `DYPCOE-TR-Aptitude Assessment-001`).
@@ -52,17 +54,21 @@
 - npm
 
 ### 2. Setup Environment
-All sensitive credentials are kept in `.env` (which is git-ignored):
+Copy the example environment file:
 ```bash
 cp .env.example .env
 ```
-Default `.env` configuration:
+
+Configure your `.env` variables:
 ```env
 DATABASE_URL="file:./dev.db"
-GROQ_API_KEY="" # Paste your key when ready
-JWT_SECRET="truskill-dev-jwt-secret-key-change-in-production"
+GROQ_API_KEY="your-groq-api-key"
+JWT_SECRET="your-secure-random-jwt-secret"
 NEXT_PUBLIC_APP_TIMEZONE="Asia/Kolkata"
 ```
+
+> [!NOTE]
+> All credentials and secrets are kept in `.env`, which is strictly ignored by version control. Never commit sensitive keys or database binaries to the repository.
 
 ### 3. Initialize & Seed Database
 ```bash
@@ -78,14 +84,12 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-## 👥 Default Demo Accounts
+## 👥 Access & Roles
 
-| Role | Email | Password | Scope |
-| :--- | :--- | :--- | :--- |
-| **Superadmin** | `admin@truskill.com` | `admin123` | Full access + Master Data + User Management |
-| **Staff** | `staff@truskill.com` | `staff123` | Operational access (Question Bank & Exams) |
-
-*(Quick-fill buttons are available on the `/login` screen for fast testing).*
+| Role | Permissions & Scope |
+| :--- | :--- |
+| **Superadmin** | Full access to Master Data governance, Colleges, Subjects, Topics, User Administration, and System Audit Logs |
+| **Staff** | Question Bank inventory updates, Examination Registry, Dynamic Blueprint Builder, and Deployment pipeline management |
 
 ---
 
@@ -97,12 +101,13 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
    git commit -m "feat: complete truskill assessment ops implementation"
    git push origin main
    ```
+
 2. **Import into Vercel**:
    - Connect the repository on [vercel.com](https://vercel.com).
-   - Add a **Vercel Postgres (Neon)** or **Supabase** database from the Vercel Storage tab.
-   - In `prisma/schema.prisma`, change `provider = "sqlite"` to `provider = "postgresql"`.
-   - In Vercel Environment Variables, add:
-     - `DATABASE_URL` (injected automatically by Vercel Postgres)
-     - `GROQ_API_KEY` (your Groq API Key)
-     - `JWT_SECRET` (secure random string)
-   - Deploy!
+   - In `prisma/schema.prisma`, change `provider = "sqlite"` to `provider = "postgresql"` (or use Supabase / Neon / Vercel Postgres).
+   - Configure Environment Variables in the Vercel Project Dashboard:
+     - `DATABASE_URL` (PostgreSQL connection string with pooling)
+     - `GROQ_API_KEY` (Groq API Key for Vision Blueprint Extraction)
+     - `JWT_SECRET` (A strong, random 32+ character secret)
+     - `NEXT_PUBLIC_APP_TIMEZONE` (`Asia/Kolkata`)
+   - Trigger deployment.

@@ -6,9 +6,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Starting database seeding...");
 
-  // 1. Create Default Users
-  const adminPassword = await bcrypt.hash("admin123", 10);
-  const staffPassword = await bcrypt.hash("staff123", 10);
+  // 1. Create Default Users (configured via environment variables or local dev fallback)
+  const adminPasswordPlain = process.env.SEED_ADMIN_PASSWORD || "admin123";
+  const staffPasswordPlain = process.env.SEED_STAFF_PASSWORD || "staff123";
+  const adminPassword = await bcrypt.hash(adminPasswordPlain, 10);
+  const staffPassword = await bcrypt.hash(staffPasswordPlain, 10);
 
   const superadmin = await prisma.user.upsert({
     where: { email: "admin@truskill.com" },

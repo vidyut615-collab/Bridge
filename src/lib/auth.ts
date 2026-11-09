@@ -4,7 +4,7 @@ import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "truskill-dev-jwt-secret-key-change-in-production"
+  process.env.JWT_SECRET || "bridge-internal-dev-secret-do-not-use-in-production"
 );
 
 const COOKIE_NAME = "truskill_session";
