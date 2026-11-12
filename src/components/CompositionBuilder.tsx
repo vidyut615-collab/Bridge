@@ -546,7 +546,7 @@ export default function CompositionBuilder({
                                 onClick={() => removeTopicRow(sIdx, tIdx)}
                                 className="h-6 w-6 inline-flex items-center justify-center text-zinc-400 hover:text-red-600 rounded transition-colors"
                               >
-                                <Trash2 className="h-3 w-3" strokeWidth={1.75} />
+                                <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
                               </button>
                             </td>
                           </tr>
@@ -555,9 +555,9 @@ export default function CompositionBuilder({
                     )}
 
                     {/* Section Summary Row */}
-                    <tr className="bg-zinc-50/60 dark:bg-zinc-800/30 font-medium text-zinc-950 dark:text-zinc-50 border-t border-zinc-200/80 dark:border-zinc-800">
+                    <tr className="bg-[#f4f4f5] dark:bg-[#232325] font-medium text-zinc-900 dark:text-zinc-100 border-t border-black/[0.08] dark:border-white/[0.08]">
                       <td className="py-2 px-3 text-[11px] font-mono text-zinc-500">
-                        Section Aggregate ({section.topics.length} topics)
+                        Section aggregate ({section.topics.length} topics)
                       </td>
                       <td className="py-2 px-3 text-right font-mono text-zinc-500">100%</td>
                       <td className="py-2 px-3 text-right font-mono font-medium tabular-nums">
@@ -579,13 +579,13 @@ export default function CompositionBuilder({
               </div>
 
               {/* Add Topic Action in Section */}
-              <div className="p-2.5 bg-zinc-50/60 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800/80 flex justify-start">
+              <div className="p-2.5 bg-[#f4f4f5]/60 dark:bg-[#232325]/60 border-t border-black/[0.08] dark:border-white/[0.08] flex justify-start">
                 <button
                   type="button"
                   onClick={() => addTopicRow(sIdx)}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-2xs"
+                  className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#19191b] text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150"
                 >
-                  <Plus className="h-3 w-3" strokeWidth={1.75} /> Add Topic Row
+                  <Plus className="h-3.5 w-3.5" strokeWidth={1.5} /> Add topic row
                 </button>
               </div>
             </div>
@@ -598,25 +598,25 @@ export default function CompositionBuilder({
         <button
           type="button"
           onClick={addSection}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#121214] text-zinc-800 dark:text-zinc-200 text-xs font-medium hover:border-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors shadow-2xs"
+          className="inline-flex items-center gap-1.5 h-8 px-4 rounded-md border border-dashed border-black/[0.16] dark:border-white/[0.16] bg-transparent text-zinc-800 dark:text-zinc-200 text-xs font-medium hover:border-black/[0.24] dark:hover:border-white/[0.24] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150"
         >
-          <Plus className="h-3.5 w-3.5" strokeWidth={1.75} /> Add Another Section
+          <Plus className="h-4 w-4" strokeWidth={1.5} /> Add another section
         </button>
       </div>
 
       {/* Mandatory Change Reason & Save Footer */}
-      <div className="bg-white dark:bg-[#121214] p-4 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs space-y-3">
+      <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] space-y-3">
         <div>
-          <label className="block text-[11px] font-mono text-zinc-500 mb-1">
-            Mandatory Change Description <span className="text-zinc-400">*</span>
+          <label className="block text-xs text-zinc-500 mb-1 font-normal">
+            Mandatory change description <span className="text-zinc-400">*</span>
           </label>
           <textarea
             required
             rows={2}
             value={changeDescription}
             onChange={(e) => setChangeDescription(e.target.value)}
-            placeholder="Document reason for composition modification."
-            className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+            placeholder="Document reason for composition modification"
+            className="w-full px-3 py-2 text-xs rounded-lg border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
           />
         </div>
 
@@ -624,10 +624,10 @@ export default function CompositionBuilder({
           <button
             type="submit"
             disabled={isSubmitting || validationErrors.length > 0}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)] disabled:opacity-50"
           >
-            <Save className="h-3.5 w-3.5" strokeWidth={1.75} />
-            {isSubmitting ? "Saving..." : "Save Examination Composition"}
+            <Save className="h-4 w-4" strokeWidth={1.5} />
+            {isSubmitting ? "Saving..." : "Save examination composition"}
           </button>
         </div>
       </div>
