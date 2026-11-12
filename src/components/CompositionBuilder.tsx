@@ -88,7 +88,7 @@ export default function CompositionBuilder({
 
   const removeSection = (sectionIndex: number) => {
     if (sections.length <= 1) {
-      alert("An examination requires at least one section.");
+      setFeedback({ type: "error", text: "An examination requires at least one section." });
       return;
     }
     setSections((prev) => prev.filter((_, idx) => idx !== sectionIndex));
@@ -116,7 +116,7 @@ export default function CompositionBuilder({
     );
 
     if (!unusedTopic) {
-      alert("All active topics under this subject are already assigned to this section.");
+      setFeedback({ type: "error", text: "All active topics under this subject are already assigned to this section." });
       return;
     }
 
@@ -281,14 +281,14 @@ export default function CompositionBuilder({
         <div
           className={`p-3.5 rounded-lg flex items-center gap-2.5 text-xs ${
             feedback.type === "success"
-              ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700"
-              : "bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/40"
+              ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08]"
+              : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
           }`}
         >
           {feedback.type === "success" ? (
-            <CheckCircle2 className="h-4 w-4 text-zinc-900 dark:text-zinc-100 shrink-0" strokeWidth={1.75} />
+            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" strokeWidth={1.5} />
           ) : (
-            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.75} />
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.5} />
           )}
           <span>{feedback.text}</span>
         </div>
@@ -296,10 +296,10 @@ export default function CompositionBuilder({
 
       {/* Validation Banner */}
       {validationErrors.length > 0 && (
-        <div className="p-4 rounded-xl bg-red-50/60 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 space-y-1 text-xs">
+        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 space-y-1 text-xs">
           <div className="flex items-center gap-2 font-medium mb-1">
-            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" strokeWidth={1.75} />
-            <span>Composition Validation Issues ({validationErrors.length})</span>
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" strokeWidth={1.5} />
+            <span>Composition validation issues ({validationErrors.length})</span>
           </div>
           {validationErrors.map((err, idx) => (
             <div key={idx} className="pl-6 text-red-700 dark:text-red-300 font-mono text-[11px]">
@@ -310,48 +310,48 @@ export default function CompositionBuilder({
       )}
 
       {/* Overall Examination Summary */}
-      <div className="bg-white dark:bg-[#121214] border border-zinc-200/90 dark:border-zinc-800/90 rounded-xl p-4 shadow-2xs grid grid-cols-2 sm:grid-cols-5 gap-4">
+      <div className="bg-white dark:bg-[#19191b] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-4 grid grid-cols-2 sm:grid-cols-5 gap-4">
         <div>
-          <span className="text-[11px] font-mono text-zinc-500 block">
-            SECTIONS
+          <span className="text-xs text-zinc-500 block font-normal">
+            Sections
           </span>
-          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block tabular-nums">
+          <span className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 mt-2 block tabular-nums">
             {sections.length}
           </span>
         </div>
 
         <div>
-          <span className="text-[11px] font-mono text-zinc-500 block">
-            TOPIC UNITS
+          <span className="text-xs text-zinc-500 block font-normal">
+            Topic units
           </span>
-          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block tabular-nums">
+          <span className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 mt-2 block tabular-nums">
             {examTotalTopics}
           </span>
         </div>
 
         <div>
-          <span className="text-[11px] font-mono text-zinc-500 block">
-            TOTAL QUESTIONS
+          <span className="text-xs text-zinc-500 block font-normal">
+            Total questions
           </span>
-          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block tabular-nums">
+          <span className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 mt-2 block tabular-nums">
             {formatNumber(examTotalQuestions)}
           </span>
         </div>
 
-        <div className="sm:col-span-2 border-t sm:border-t-0 sm:border-l border-zinc-100 dark:border-zinc-800 sm:pl-4 pt-3 sm:pt-0">
-          <span className="text-[11px] font-mono text-zinc-500 block">
-            TIER DISTRIBUTION
+        <div className="sm:col-span-2 border-t sm:border-t-0 sm:border-l border-black/[0.06] dark:border-white/[0.06] sm:pl-4 pt-3 sm:pt-0">
+          <span className="text-xs text-zinc-500 block font-normal">
+            Tier distribution
           </span>
           <div className="flex items-center gap-2 mt-2 text-xs font-mono">
-            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">I Easy: {examTotalEasy}</span>
-            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">II Med: {examTotalMedium}</span>
-            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">III Hard: {examTotalHard}</span>
+            <span className="px-2 py-0.5 rounded bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08]">I Easy: {examTotalEasy}</span>
+            <span className="px-2 py-0.5 rounded bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08]">II Med: {examTotalMedium}</span>
+            <span className="px-2 py-0.5 rounded bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08]">III Hard: {examTotalHard}</span>
           </div>
         </div>
       </div>
 
       {/* Sections List */}
-      <div className="space-y-5">
+      <div className="space-y-4">
         {sections.map((section, sIdx) => {
           const currentSubject = subjects.find((s) => s.id === section.subjectId);
           const availableTopics = currentSubject?.topics || [];
@@ -360,12 +360,12 @@ export default function CompositionBuilder({
           return (
             <div
               key={section.id || sIdx}
-              className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs overflow-hidden"
+              className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden"
             >
               {/* Section Header */}
-              <div className="p-3 bg-zinc-50/70 dark:bg-zinc-800/40 border-b border-zinc-100 dark:border-zinc-800/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="p-3 bg-[#f4f4f5] dark:bg-[#232325] border-b border-black/[0.08] dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2 py-0.5 rounded bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-mono text-[10px] font-medium">
+                  <span className="px-1.5 py-0.5 rounded bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-mono text-[10px] font-medium">
                     Section {sIdx + 1}
                   </span>
                   <input
@@ -373,16 +373,16 @@ export default function CompositionBuilder({
                     required
                     value={section.sectionName}
                     onChange={(e) => updateSectionName(sIdx, e.target.value)}
-                    placeholder="Section Name"
-                    className="h-7 font-medium text-zinc-900 dark:text-zinc-100 text-xs px-2.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200"
+                    placeholder="Section name"
+                    className="h-7 font-normal text-zinc-900 dark:text-zinc-100 text-xs px-2.5 rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#19191b] focus:outline-none"
                   />
                   <select
                     value={section.subjectId}
                     onChange={(e) => updateSectionSubject(sIdx, e.target.value)}
-                    className="h-7 text-xs font-medium px-2.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200"
+                    className="h-7 text-xs font-normal px-2.5 rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 focus:outline-none"
                   >
                     {subjects.map((sub) => (
-                      <option key={sub.id} value={sub.id} className="dark:bg-zinc-900">
+                      <option key={sub.id} value={sub.id} className="dark:bg-[#19191b]">
                         Subject: {sub.name}
                       </option>
                     ))}
@@ -393,17 +393,17 @@ export default function CompositionBuilder({
                   <button
                     type="button"
                     onClick={() => setActiveModalSectionId(section.id || `sec-${sIdx}`)}
-                    className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 text-xs font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-white dark:bg-[#19191b] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150"
                   >
-                    <FileScan className="h-3.5 w-3.5" strokeWidth={1.75} /> Extract from Blueprint
+                    <FileScan className="h-3.5 w-3.5" strokeWidth={1.5} /> Extract from blueprint
                   </button>
                   <button
                     type="button"
                     onClick={() => removeSection(sIdx)}
-                    title="Remove Section"
-                    className="h-7 w-7 inline-flex items-center justify-center text-zinc-400 hover:text-red-600 rounded transition-colors"
+                    title="Remove section"
+                    className="h-7 w-7 inline-flex items-center justify-center text-zinc-400 hover:text-red-600 rounded-md transition-colors duration-150"
                   >
-                    <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
                   </button>
                 </div>
               </div>

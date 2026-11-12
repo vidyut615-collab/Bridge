@@ -59,24 +59,24 @@ export default async function ExaminationDetailPage({ params }: PageProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="pb-5 border-b border-zinc-200/90 dark:border-zinc-800/90">
+      <div className="pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
         <Link
           href="/examinations"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors mb-3"
+          className="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150 mb-3"
         >
-          <ChevronLeft className="h-3.5 w-3.5" strokeWidth={1.75} /> Back to Examination Registry
+          <ChevronLeft className="h-4 w-4" strokeWidth={1.5} /> Back to examination registry
         </Link>
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-semibold text-zinc-950 dark:text-zinc-50 font-mono tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-medium text-zinc-900 dark:text-zinc-100 font-mono tracking-tight">
                 {exam.generatedName}
               </h1>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950">
-                {exam.overallStatus.replace(/_/g, " ")}
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950">
+                {exam.overallStatus.replace(/_/g, " ").toLowerCase()}
               </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-200/70 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-600 dark:text-zinc-400 border border-black/[0.08] dark:border-white/[0.08]">
                 v{exam.currentVersion}
               </span>
             </div>

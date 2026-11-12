@@ -13,18 +13,18 @@ export default async function NewExaminationPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="pb-5 border-b border-zinc-200/90 dark:border-zinc-800/90">
+      <div className="pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
         <Link
           href="/examinations"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors mb-3"
+          className="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150 mb-3"
         >
-          <ChevronLeft className="h-3.5 w-3.5" strokeWidth={1.75} /> Back to Examination Registry
+          <ChevronLeft className="h-4 w-4" strokeWidth={1.5} /> Back to examination registry
         </Link>
-        <h1 className="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-          Register Examination
+        <h1 className="text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
+          Register examination
         </h1>
         <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-          Configure delivery constraints and generate standardized atomic sequence formula.
+          Configure delivery constraints and generate standardized atomic sequence formula
         </p>
       </div>
 
