@@ -81,8 +81,15 @@ export default function MasterDataViews({
     | "addTopic"
     | "renameTopic"
     | "addUser"
+    | "archiveConfirm"
     | null
   >(null);
+  const [archiveTarget, setArchiveTarget] = useState<{
+    id: string;
+    name: string;
+    type: "college" | "subject" | "topic";
+    isArchived: boolean;
+  } | null>(null);
 
   // Form states
   const [targetId, setTargetId] = useState("");
@@ -95,6 +102,7 @@ export default function MasterDataViews({
 
   const resetForm = () => {
     setModalType(null);
+    setArchiveTarget(null);
     setTargetId("");
     setFormName("");
     setFormCode("");
@@ -118,17 +126,17 @@ export default function MasterDataViews({
   return (
     <div className="space-y-6">
       {/* Segmented Control Tabs */}
-      <div className="inline-flex items-center gap-1 p-1 rounded-lg bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200/80 dark:border-zinc-700/80 text-xs">
+      <div className="inline-flex items-center gap-1 p-1 rounded-lg bg-zinc-100 dark:bg-[#161618] border border-zinc-200/80 dark:border-zinc-800/80 text-xs">
         <button
           type="button"
           onClick={() => { setActiveTab("colleges"); setFeedback(null); }}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors ${
             activeTab === "colleges"
-              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-medium shadow-2xs"
+              ? "bg-white dark:bg-[#202023] text-zinc-950 dark:text-zinc-50 font-medium"
               : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <Building2 className="h-3.5 w-3.5" strokeWidth={1.75} />
+          <Building2 className="h-3.5 w-3.5" strokeWidth={1.5} />
           Colleges ({colleges.length})
         </button>
 
@@ -137,11 +145,11 @@ export default function MasterDataViews({
           onClick={() => { setActiveTab("subjects"); setFeedback(null); }}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors ${
             activeTab === "subjects"
-              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-medium shadow-2xs"
+              ? "bg-white dark:bg-[#202023] text-zinc-950 dark:text-zinc-50 font-medium"
               : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <BookOpen className="h-3.5 w-3.5" strokeWidth={1.75} />
+          <BookOpen className="h-3.5 w-3.5" strokeWidth={1.5} />
           Subjects ({subjects.length})
         </button>
 
@@ -150,11 +158,11 @@ export default function MasterDataViews({
           onClick={() => { setActiveTab("topics"); setFeedback(null); }}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors ${
             activeTab === "topics"
-              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-medium shadow-2xs"
+              ? "bg-white dark:bg-[#202023] text-zinc-950 dark:text-zinc-50 font-medium"
               : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <ListTree className="h-3.5 w-3.5" strokeWidth={1.75} />
+          <ListTree className="h-3.5 w-3.5" strokeWidth={1.5} />
           Topics ({topics.length})
         </button>
 
@@ -163,11 +171,11 @@ export default function MasterDataViews({
           onClick={() => { setActiveTab("users"); setFeedback(null); }}
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors ${
             activeTab === "users"
-              ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-50 font-medium shadow-2xs"
+              ? "bg-white dark:bg-[#202023] text-zinc-950 dark:text-zinc-50 font-medium"
               : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
           }`}
         >
-          <Users className="h-3.5 w-3.5" strokeWidth={1.75} />
+          <Users className="h-3.5 w-3.5" strokeWidth={1.5} />
           User Accounts ({users.length})
         </button>
       </div>
@@ -181,9 +189,9 @@ export default function MasterDataViews({
           }`}
         >
           {feedback.type === "success" ? (
-            <CheckCircle2 className="h-4 w-4 text-zinc-900 dark:text-zinc-100 shrink-0" strokeWidth={1.75} />
+            <CheckCircle2 className="h-4 w-4 text-zinc-900 dark:text-zinc-100 shrink-0" strokeWidth={1.5} />
           ) : (
-            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.75} />
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.5} />
           )}
           <span>{feedback.text}</span>
         </div>
@@ -191,27 +199,28 @@ export default function MasterDataViews({
 
       {/* 1. Colleges Tab */}
       {activeTab === "colleges" && (
-        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs overflow-hidden">
+        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden">
           <div className="p-4 border-b border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
             <div>
-              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">College Registry</h2>
+              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">College registry</h2>
               <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
                 Unique uppercase code used for atomic sequence counter allocation
               </p>
             </div>
             <button
               onClick={() => { resetForm(); setModalType("addCollege"); }}
-              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
             >
-              <Plus className="h-3 w-3" strokeWidth={1.75} /> Add College
+              <Plus className="h-3.5 w-3.5" strokeWidth={1.5} /> Add college
             </button>
           </div>
 
           <table className="w-full text-left text-xs">
             <thead className="bg-zinc-50/70 dark:bg-zinc-800/40 text-[11px] font-mono text-zinc-500 border-b border-zinc-100 dark:border-zinc-800/80">
               <tr>
-                <th className="py-2.5 px-4 font-normal">College Name</th>
-                <th className="py-2.5 px-4 font-normal">College Code</th>
+                <th className="py-2.5 px-4 font-normal">College name</th>
+                <th className="py-2.5 px-4 font-normal">College code</th>
                 <th className="py-2.5 px-4 text-center font-normal">Status</th>
                 <th className="py-2.5 px-4 text-right font-normal">Action</th>
               </tr>
@@ -235,17 +244,14 @@ export default function MasterDataViews({
                   <td className="py-3 px-4 text-right">
                     <button
                       onClick={() => {
-                        const reason = prompt(
-                          `Enter mandatory reason to ${
-                            c.isArchived ? "restore" : "archive"
-                          } ${c.name}:`
-                        );
-                        if (reason) {
-                          handleAction(
-                            () => toggleArchiveCollegeAction(c.id, reason),
-                            `College ${c.isArchived ? "restored" : "archived"}.`
-                          );
-                        }
+                        resetForm();
+                        setArchiveTarget({
+                          id: c.id,
+                          name: c.name,
+                          type: "college",
+                          isArchived: c.isArchived,
+                        });
+                        setModalType("archiveConfirm");
                       }}
                       className="text-xs text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors font-mono"
                     >
@@ -261,27 +267,28 @@ export default function MasterDataViews({
 
       {/* 2. Subjects Tab */}
       {activeTab === "subjects" && (
-        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs overflow-hidden">
+        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden">
           <div className="p-4 border-b border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
             <div>
-              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">Subject Master</h2>
+              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">Subject master</h2>
               <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
                 Top-level subject divisions with automatic topic aggregation
               </p>
             </div>
             <button
               onClick={() => { resetForm(); setModalType("addSubject"); }}
-              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
             >
-              <Plus className="h-3 w-3" strokeWidth={1.75} /> Add Subject
+              <Plus className="h-3.5 w-3.5" strokeWidth={1.5} /> Add subject
             </button>
           </div>
 
           <table className="w-full text-left text-xs">
             <thead className="bg-zinc-50/70 dark:bg-zinc-800/40 text-[11px] font-mono text-zinc-500 border-b border-zinc-100 dark:border-zinc-800/80">
               <tr>
-                <th className="py-2.5 px-4 font-normal">Subject Name</th>
-                <th className="py-2.5 px-4 text-center font-normal">Topics Count</th>
+                <th className="py-2.5 px-4 font-normal">Subject name</th>
+                <th className="py-2.5 px-4 text-center font-normal">Topics count</th>
                 <th className="py-2.5 px-4 text-center font-normal">Status</th>
                 <th className="py-2.5 px-4 text-right font-normal">Actions</th>
               </tr>
@@ -316,17 +323,14 @@ export default function MasterDataViews({
                     </button>
                     <button
                       onClick={() => {
-                        const reason = prompt(
-                          `Enter mandatory reason to ${
-                            s.isArchived ? "restore" : "archive"
-                          } ${s.name}:`
-                        );
-                        if (reason) {
-                          handleAction(
-                            () => toggleArchiveSubjectAction(s.id, reason),
-                            `Subject ${s.isArchived ? "restored" : "archived"}.`
-                          );
-                        }
+                        resetForm();
+                        setArchiveTarget({
+                          id: s.id,
+                          name: s.name,
+                          type: "subject",
+                          isArchived: s.isArchived,
+                        });
+                        setModalType("archiveConfirm");
                       }}
                       className="text-xs text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors font-mono"
                     >
@@ -342,10 +346,10 @@ export default function MasterDataViews({
 
       {/* 3. Topics Tab */}
       {activeTab === "topics" && (
-        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs overflow-hidden space-y-4">
+        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden space-y-4">
           <div className="p-4 border-b border-zinc-100 dark:border-zinc-800/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">Topic Master Registry</h2>
+              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">Topic master registry</h2>
               <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
                 Stable internal identifiers (TOP-#####)
               </p>
@@ -355,7 +359,7 @@ export default function MasterDataViews({
               <select
                 value={selectedSubjectId}
                 onChange={(e) => setSelectedSubjectId(e.target.value)}
-                className="h-7 px-2 text-xs font-medium bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded focus:outline-none"
+                className="h-7 px-2 text-xs font-medium bg-zinc-50 dark:bg-[#161618] border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-md focus:outline-none"
               >
                 {subjects.map((sub) => (
                   <option key={sub.id} value={sub.id} className="dark:bg-zinc-900">
@@ -366,9 +370,10 @@ export default function MasterDataViews({
 
               <button
                 onClick={() => { resetForm(); setModalType("addTopic"); }}
-                className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs"
+                className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+                style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
               >
-                <Plus className="h-3 w-3" strokeWidth={1.75} /> Add Topic
+                <Plus className="h-3.5 w-3.5" strokeWidth={1.5} /> Add topic
               </button>
             </div>
           </div>
@@ -376,8 +381,8 @@ export default function MasterDataViews({
           <table className="w-full text-left text-xs">
             <thead className="bg-zinc-50/70 dark:bg-zinc-800/40 text-[11px] font-mono text-zinc-500 border-b border-zinc-100 dark:border-zinc-800/80">
               <tr>
-                <th className="py-2.5 px-4 font-normal">Topic Code</th>
-                <th className="py-2.5 px-4 font-normal">Topic Name</th>
+                <th className="py-2.5 px-4 font-normal">Topic code</th>
+                <th className="py-2.5 px-4 font-normal">Topic name</th>
                 <th className="py-2.5 px-4 text-center font-normal">Status</th>
                 <th className="py-2.5 px-4 text-right font-normal">Actions</th>
               </tr>
@@ -416,17 +421,14 @@ export default function MasterDataViews({
                       </button>
                       <button
                         onClick={() => {
-                          const reason = prompt(
-                            `Enter mandatory reason to ${
-                              top.isArchived ? "restore" : "archive"
-                            } ${top.name}:`
-                          );
-                          if (reason) {
-                            handleAction(
-                              () => toggleArchiveTopicAction(top.id, reason),
-                              `Topic ${top.isArchived ? "restored" : "archived"}.`
-                            );
-                          }
+                          resetForm();
+                          setArchiveTarget({
+                            id: top.id,
+                            name: top.name,
+                            type: "topic",
+                            isArchived: top.isArchived,
+                          });
+                          setModalType("archiveConfirm");
                         }}
                         className="text-xs text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors font-mono"
                       >
@@ -442,19 +444,20 @@ export default function MasterDataViews({
 
       {/* 4. Users Tab */}
       {activeTab === "users" && (
-        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs overflow-hidden">
+        <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden">
           <div className="p-4 border-b border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
             <div>
-              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">Staff Accounts</h2>
+              <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">Staff accounts</h2>
               <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
                 Role-based access permissions (Superadmin vs Staff)
               </p>
             </div>
             <button
               onClick={() => { resetForm(); setModalType("addUser"); }}
-              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
             >
-              <Plus className="h-3 w-3" strokeWidth={1.75} /> Create User
+              <Plus className="h-3.5 w-3.5" strokeWidth={1.5} /> Create user
             </button>
           </div>
 
@@ -485,23 +488,26 @@ export default function MasterDataViews({
 
       {/* MODAL POPUPS */}
       {modalType && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md bg-white dark:bg-[#121214] rounded-xl shadow-2xl border border-zinc-200/90 dark:border-zinc-800/90 p-5 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-md bg-white dark:bg-[#161618] rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">
-                {modalType === "addCollege" && "Add College"}
-                {modalType === "addSubject" && "Add Subject"}
-                {modalType === "renameSubject" && `Rename Subject: ${formName}`}
-                {modalType === "addTopic" && "Add Topic Under Subject"}
-                {modalType === "renameTopic" && `Rename Topic: ${formName}`}
-                {modalType === "addUser" && "Create User Account"}
+                {modalType === "addCollege" && "Add college"}
+                {modalType === "addSubject" && "Add subject"}
+                {modalType === "renameSubject" && `Rename subject: ${formName}`}
+                {modalType === "addTopic" && "Add topic"}
+                {modalType === "renameTopic" && `Rename topic: ${formName}`}
+                {modalType === "addUser" && "Create user account"}
+                {modalType === "archiveConfirm" &&
+                  archiveTarget &&
+                  `${archiveTarget.isArchived ? "Restore" : "Archive"} ${archiveTarget.name}`}
               </h3>
               <button
                 type="button"
                 onClick={resetForm}
                 className="h-7 w-7 inline-flex items-center justify-center text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 rounded transition-colors"
               >
-                <X className="h-4 w-4" strokeWidth={1.75} />
+                <X className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </div>
 
@@ -518,19 +524,19 @@ export default function MasterDataViews({
                 className="space-y-3"
               >
                 <div>
-                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">College Name</label>
+                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">College name</label>
                   <input
                     type="text"
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
                     placeholder="e.g. D. Y. Patil College of Engineering"
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div>
                   <label className="block text-[11px] font-mono text-zinc-500 mb-1">
-                    College Code (Unique uppercase e.g. DYPCOE)
+                    College code (Unique uppercase e.g. DYPCOE)
                   </label>
                   <input
                     type="text"
@@ -538,7 +544,7 @@ export default function MasterDataViews({
                     value={formCode}
                     onChange={(e) => setFormCode(e.target.value.toUpperCase())}
                     placeholder="e.g. DYPCOE"
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 uppercase font-mono placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 uppercase font-mono placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
@@ -551,9 +557,10 @@ export default function MasterDataViews({
                   </button>
                   <button
                     type="submit"
-                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 rounded-md shadow-2xs"
+                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 rounded-md transition-colors"
+                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
                   >
-                    Save College
+                    Save college
                   </button>
                 </div>
               </form>
@@ -570,14 +577,14 @@ export default function MasterDataViews({
                 className="space-y-3"
               >
                 <div>
-                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">Subject Name</label>
+                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">Subject name</label>
                   <input
                     type="text"
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
                     placeholder="e.g. Data Analytics"
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
@@ -590,9 +597,10 @@ export default function MasterDataViews({
                   </button>
                   <button
                     type="submit"
-                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 rounded-md shadow-2xs"
+                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 rounded-md transition-colors"
+                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
                   >
-                    Create Subject
+                    Create subject
                   </button>
                 </div>
               </form>
@@ -615,18 +623,18 @@ export default function MasterDataViews({
                 className="space-y-3"
               >
                 <div>
-                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">New Subject Name</label>
+                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">New subject name</label>
                   <input
                     type="text"
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div>
                   <label className="block text-[11px] font-mono text-zinc-500 mb-1">
-                    Mandatory Change Reason <span className="text-zinc-400">*</span>
+                    Mandatory change reason <span className="text-zinc-400">*</span>
                   </label>
                   <textarea
                     required
@@ -634,7 +642,7 @@ export default function MasterDataViews({
                     value={formReason}
                     onChange={(e) => setFormReason(e.target.value)}
                     placeholder="Reason for renaming subject..."
-                    className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
@@ -647,9 +655,10 @@ export default function MasterDataViews({
                   </button>
                   <button
                     type="submit"
-                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 rounded-md shadow-2xs"
+                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 rounded-md transition-colors"
+                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
                   >
-                    Confirm Rename
+                    Confirm rename
                   </button>
                 </div>
               </form>
@@ -667,14 +676,14 @@ export default function MasterDataViews({
                 className="space-y-3"
               >
                 <div>
-                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">Topic Name</label>
+                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">Topic name</label>
                   <input
                     type="text"
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
                     placeholder="e.g. Permutations and Combinations"
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
@@ -687,9 +696,10 @@ export default function MasterDataViews({
                   </button>
                   <button
                     type="submit"
-                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 rounded-md shadow-2xs"
+                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 rounded-md transition-colors"
+                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
                   >
-                    Save Topic
+                    Save topic
                   </button>
                 </div>
               </form>
@@ -712,18 +722,18 @@ export default function MasterDataViews({
                 className="space-y-3"
               >
                 <div>
-                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">New Topic Name</label>
+                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">New topic name</label>
                   <input
                     type="text"
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div>
                   <label className="block text-[11px] font-mono text-zinc-500 mb-1">
-                    Mandatory Change Reason <span className="text-zinc-400">*</span>
+                    Mandatory change reason <span className="text-zinc-400">*</span>
                   </label>
                   <textarea
                     required
@@ -731,7 +741,7 @@ export default function MasterDataViews({
                     value={formReason}
                     onChange={(e) => setFormReason(e.target.value)}
                     placeholder="Reason for renaming topic..."
-                    className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
@@ -744,9 +754,10 @@ export default function MasterDataViews({
                   </button>
                   <button
                     type="submit"
-                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 rounded-md shadow-2xs"
+                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 rounded-md transition-colors"
+                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
                   >
-                    Confirm Rename
+                    Confirm rename
                   </button>
                 </div>
               </form>
@@ -766,14 +777,14 @@ export default function MasterDataViews({
                 className="space-y-3"
               >
                 <div>
-                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">Full Name</label>
+                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">Full name</label>
                   <input
                     type="text"
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    placeholder="Staff Member Name"
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    placeholder="Staff member name"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div>
@@ -784,7 +795,7 @@ export default function MasterDataViews({
                     value={formEmail}
                     onChange={(e) => setFormEmail(e.target.value)}
                     placeholder="user@truskill.com"
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div>
@@ -795,7 +806,7 @@ export default function MasterDataViews({
                     value={formPassword}
                     onChange={(e) => setFormPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   />
                 </div>
                 <div>
@@ -803,10 +814,10 @@ export default function MasterDataViews({
                   <select
                     value={formRole}
                     onChange={(e) => setFormRole(e.target.value)}
-                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                    className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
                   >
                     <option value="STAFF">STAFF (Operations)</option>
-                    <option value="SUPERADMIN">SUPERADMIN (Full Control)</option>
+                    <option value="SUPERADMIN">SUPERADMIN (Full control)</option>
                   </select>
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
@@ -819,9 +830,70 @@ export default function MasterDataViews({
                   </button>
                   <button
                     type="submit"
-                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 rounded-md shadow-2xs"
+                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 rounded-md transition-colors"
+                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
                   >
-                    Create User
+                    Create user
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {modalType === "archiveConfirm" && archiveTarget && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!formReason.trim()) return;
+                  if (archiveTarget.type === "college") {
+                    handleAction(
+                      () => toggleArchiveCollegeAction(archiveTarget.id, formReason),
+                      `College ${archiveTarget.isArchived ? "restored" : "archived"}.`
+                    );
+                  } else if (archiveTarget.type === "subject") {
+                    handleAction(
+                      () => toggleArchiveSubjectAction(archiveTarget.id, formReason),
+                      `Subject ${archiveTarget.isArchived ? "restored" : "archived"}.`
+                    );
+                  } else if (archiveTarget.type === "topic") {
+                    handleAction(
+                      () => toggleArchiveTopicAction(archiveTarget.id, formReason),
+                      `Topic ${archiveTarget.isArchived ? "restored" : "archived"}.`
+                    );
+                  }
+                }}
+                className="space-y-4"
+              >
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                  Confirm that you want to {archiveTarget.isArchived ? "restore" : "archive"}{" "}
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">{archiveTarget.name}</span>. An audit justification is required for compliance logging.
+                </p>
+                <div>
+                  <label className="block text-[11px] font-mono text-zinc-500 mb-1">
+                    Mandatory change reason <span className="text-zinc-400">*</span>
+                  </label>
+                  <textarea
+                    required
+                    rows={3}
+                    value={formReason}
+                    onChange={(e) => setFormReason(e.target.value)}
+                    placeholder={`Reason for ${archiveTarget.isArchived ? "restoring" : "archiving"} this record...`}
+                    className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-[#161618] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={resetForm}
+                    className="px-3 py-1.5 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-3.5 py-1.5 text-xs font-medium text-white bg-zinc-950 dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 rounded-md transition-colors"
+                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
+                  >
+                    Confirm {archiveTarget.isArchived ? "restore" : "archive"}
                   </button>
                 </div>
               </form>

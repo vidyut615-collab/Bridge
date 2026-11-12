@@ -45,22 +45,22 @@ export default function LoginPage() {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-sm space-y-6 bg-white dark:bg-[#121214] p-7 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs transition-colors">
+      <div className="w-full max-w-sm space-y-6 bg-white dark:bg-[#121214] p-7 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 transition-colors">
         <div className="text-center">
-          <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl overflow-hidden shadow-xs mb-3 border border-zinc-200/80 dark:border-zinc-800 bg-zinc-950">
+          <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl overflow-hidden mb-3 border border-zinc-200/80 dark:border-zinc-800 bg-zinc-950">
             <Image src="/icon.png" alt="Bridge Logo" width={44} height={44} className="object-cover" priority />
           </div>
           <h2 className="text-sm font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 font-mono">
             BRIDGE
           </h2>
           <p className="mt-1 text-xs text-zinc-500">
-            Assessment Operations & Observability Ledger
+            Assessment operations and observability ledger
           </p>
         </div>
 
         {error && (
           <div className="rounded-lg bg-red-50 dark:bg-red-950/20 p-3 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 flex items-center gap-2 text-xs">
-            <AlertCircle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" strokeWidth={1.75} />
+            <AlertCircle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" strokeWidth={1.5} />
             <span>{error}</span>
           </div>
         )}
@@ -68,7 +68,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
-              Email Address
+              Email address
             </label>
             <input
               type="email"
@@ -97,10 +97,11 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full mt-2 inline-flex items-center justify-center gap-1.5 h-8 px-4 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs disabled:opacity-50"
+            className="w-full mt-2 inline-flex items-center justify-center gap-1.5 h-8 px-4 rounded-md bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
+            style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)" }}
           >
             {isLoading ? "Signing in..." : "Authenticate"}
-            <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+            <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
           </button>
         </form>
 
