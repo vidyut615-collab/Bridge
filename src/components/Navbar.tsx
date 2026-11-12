@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -10,7 +11,6 @@ import {
   History,
   LogOut,
   User as UserIcon,
-  Layers,
 } from "lucide-react";
 import { logoutAction } from "@/app/actions/authActions";
 import { SessionUser } from "@/lib/auth";
@@ -44,8 +44,8 @@ export default function Navbar({ user }: NavbarProps) {
           {/* Brand Identifier & Navigation */}
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950">
-                <Layers className="h-4 w-4" strokeWidth={1.5} />
+              <div className="flex h-7 w-7 items-center justify-center rounded-md overflow-hidden bg-zinc-900 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-800">
+                <Image src="/icon.png" alt="Bridge Logo" width={28} height={28} className="object-cover" priority />
               </div>
               <div className="flex items-baseline gap-1.5 font-mono">
                 <span className="font-medium text-zinc-900 dark:text-zinc-100 text-xs tracking-tight">

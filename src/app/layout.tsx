@@ -21,12 +21,10 @@ export const metadata: Metadata = {
   description: "Internal operations platform for question bank inventory governance, atomic examination registry, and two-way deployment observability for Truskill.",
   icons: {
     icon: [
-      { url: "/icon.png", sizes: "512x512", type: "image/png" },
       { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
     ],
-    apple: [
-      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: "/apple-icon.png",
   },
 };
 
@@ -55,22 +53,22 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#fafafa] dark:bg-[#141415] text-[#171717] dark:text-[#ededed] font-sans antialiased">
+      <body className="min-h-full flex flex-col bg-zinc-100/70 dark:bg-[#0a0a0c] text-zinc-900 dark:text-zinc-100 font-sans antialiased selection:bg-zinc-900 selection:text-white dark:selection:bg-zinc-100 dark:selection:text-zinc-950">
         <Navbar user={user} />
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7">
           {children}
         </main>
-        <footer className="border-t border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#19191b] py-3 text-xs text-zinc-500">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <footer className="border-t border-zinc-200/80 dark:border-zinc-800/80 bg-white/70 dark:bg-[#0e0e11]/70 backdrop-blur-xs py-4 text-xs text-zinc-500">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2.5">
             <div className="flex items-center gap-2 font-mono text-[11px]">
-              <span className="font-medium text-zinc-900 dark:text-zinc-100 tracking-tight">Bridge</span>
+              <span className="font-semibold text-zinc-950 dark:text-zinc-100 tracking-tight">BRIDGE</span>
               <span className="text-zinc-400 dark:text-zinc-600">/</span>
-              <span className="text-zinc-500 dark:text-zinc-400">Operations Ledger</span>
+              <span className="text-zinc-500 dark:text-zinc-400">OPERATIONS LEDGER</span>
             </div>
             <div className="text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center gap-2 font-mono">
-              <span>Assessment and examination infrastructure</span>
+              <span>Assessment & Exam Infrastructure</span>
               <span className="text-zinc-300 dark:text-zinc-700">•</span>
-              <span className="font-medium text-zinc-800 dark:text-zinc-200">Truskill Ops</span>
+              <span className="font-medium text-zinc-800 dark:text-zinc-200">Truskill Operations</span>
             </div>
           </div>
         </footer>

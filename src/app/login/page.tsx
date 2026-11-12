@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { loginAction } from "@/app/actions/authActions";
-import { Layers, ArrowRight, AlertCircle } from "lucide-react";
+import { ArrowRight, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -46,8 +47,8 @@ export default function LoginPage() {
 
       <div className="w-full max-w-sm space-y-6 bg-white dark:bg-[#121214] p-7 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs transition-colors">
         <div className="text-center">
-          <div className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 shadow-2xs mb-3">
-            <Layers className="h-4 w-4" strokeWidth={1.75} />
+          <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl overflow-hidden shadow-xs mb-3 border border-zinc-200/80 dark:border-zinc-800 bg-zinc-950">
+            <Image src="/icon.png" alt="Bridge Logo" width={44} height={44} className="object-cover" priority />
           </div>
           <h2 className="text-sm font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 font-mono">
             BRIDGE

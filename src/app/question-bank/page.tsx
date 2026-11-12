@@ -66,79 +66,79 @@ export default async function QuestionBankPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-zinc-200/90 dark:border-zinc-800/90">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
-              Question Bank Inventory
+            <h1 className="text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
+              Question bank inventory
             </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-200/70 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
-              {subjects.length} Subjects
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-600 dark:text-zinc-400 border border-black/[0.08] dark:border-white/[0.08]">
+              {subjects.length} subjects
             </span>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            3-tier difficulty governance (Roman I Easy, II Medium, III Hard) per topic. Subject totals represent live aggregates.
+            3-tier difficulty governance (Roman I Easy, II Medium, III Hard) per topic with live subject rollups
           </p>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-[#121214] p-4 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs">
-          <div className="text-[11px] font-mono text-zinc-500">TOTAL INVENTORY</div>
-          <div className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-1 tabular-nums tracking-tight">
+        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08]">
+          <div className="text-xs text-zinc-500 font-normal">Total inventory</div>
+          <div className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 mt-2 tabular-nums">
             {formatNumber(grandTotal)}
           </div>
-          <div className="text-[11px] text-zinc-500 mt-2 font-mono">
-            Across {subjects.length} active subjects
+          <div className="text-xs text-zinc-500 mt-2 font-mono">
+            {subjects.length} active subjects
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#121214] p-4 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs">
-          <div className="text-[11px] font-mono text-zinc-500">I EASY</div>
-          <div className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-1 tabular-nums tracking-tight">
+        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08]">
+          <div className="text-xs text-zinc-500 font-normal">Tier I Easy</div>
+          <div className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 mt-2 tabular-nums">
             {formatNumber(totalEasy)}
           </div>
-          <div className="text-[11px] text-zinc-500 mt-2 font-mono">
+          <div className="text-xs text-zinc-500 mt-2 font-mono">
             {grandTotal > 0 ? `${((totalEasy / grandTotal) * 100).toFixed(1)}%` : "0%"} share
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#121214] p-4 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs">
-          <div className="text-[11px] font-mono text-zinc-500">II MEDIUM</div>
-          <div className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-1 tabular-nums tracking-tight">
+        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08]">
+          <div className="text-xs text-zinc-500 font-normal">Tier II Medium</div>
+          <div className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 mt-2 tabular-nums">
             {formatNumber(totalMedium)}
           </div>
-          <div className="text-[11px] text-zinc-500 mt-2 font-mono">
+          <div className="text-xs text-zinc-500 mt-2 font-mono">
             {grandTotal > 0 ? `${((totalMedium / grandTotal) * 100).toFixed(1)}%` : "0%"} share
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#121214] p-4 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs">
-          <div className="text-[11px] font-mono text-zinc-500">III HARD</div>
-          <div className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-1 tabular-nums tracking-tight">
+        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08]">
+          <div className="text-xs text-zinc-500 font-normal">Tier III Hard</div>
+          <div className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 mt-2 tabular-nums">
             {formatNumber(totalHard)}
           </div>
-          <div className="text-[11px] text-zinc-500 mt-2 font-mono">
+          <div className="text-xs text-zinc-500 mt-2 font-mono">
             {grandTotal > 0 ? `${((totalHard / grandTotal) * 100).toFixed(1)}%` : "0%"} share
           </div>
         </div>
       </div>
 
       {/* Main Table */}
-      <div className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs overflow-hidden">
-        <div className="p-4 border-b border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
-          <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">
-            Subject Breakdown & Tier Weights
+      <div className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
+        <div className="p-4 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
+          <h2 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+            Subject breakdown and tier weights
           </h2>
           <span className="text-[11px] text-zinc-500 font-mono">
-            Displaying {rows.length} subjects
+            {rows.length} subjects
           </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-zinc-50/70 dark:bg-zinc-800/40 text-[11px] font-mono text-zinc-500 border-b border-zinc-100 dark:border-zinc-800/80">
+            <thead className="bg-[#f4f4f5] dark:bg-[#232325] text-[11px] font-mono text-zinc-500 border-b border-black/[0.08] dark:border-white/[0.08]">
               <tr>
                 <th className="py-2.5 px-4 font-normal w-12 text-center">#</th>
                 <th className="py-2.5 px-4 font-normal">Subject</th>
@@ -146,19 +146,19 @@ export default async function QuestionBankPage() {
                 <th className="py-2.5 px-4 text-right font-normal">I Easy</th>
                 <th className="py-2.5 px-4 text-right font-normal">II Med</th>
                 <th className="py-2.5 px-4 text-right font-normal">III Hard</th>
-                <th className="py-2.5 px-4 text-right font-medium text-zinc-950 dark:text-zinc-100">Total</th>
-                <th className="py-2.5 px-4 font-normal w-32">Tier Distribution</th>
-                <th className="py-2.5 px-4 font-normal">Last Updated</th>
+                <th className="py-2.5 px-4 text-right font-medium text-zinc-900 dark:text-zinc-100">Total</th>
+                <th className="py-2.5 px-4 font-normal w-28">Distribution</th>
+                <th className="py-2.5 px-4 font-normal">Last updated</th>
                 <th className="py-2.5 px-4 text-right font-normal">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+            <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
               {rows.map((row) => (
-                <tr key={row.id} className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors">
+                <tr key={row.id} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150">
                   <td className="py-3 px-4 font-mono text-[11px] text-zinc-400 text-center">
                     {row.no}
                   </td>
-                  <td className="py-3 px-4 font-medium text-zinc-900 dark:text-zinc-100">
+                  <td className="py-3 px-4 font-normal text-zinc-900 dark:text-zinc-100">
                     <Link
                       href={`/question-bank/${row.id}`}
                       className="hover:underline underline-offset-2"
@@ -178,14 +178,14 @@ export default async function QuestionBankPage() {
                   <td className="py-3 px-4 text-right font-mono tabular-nums text-zinc-600 dark:text-zinc-400">
                     {formatNumber(row.hard)}
                   </td>
-                  <td className="py-3 px-4 text-right font-mono font-medium tabular-nums text-zinc-950 dark:text-zinc-50">
+                  <td className="py-3 px-4 text-right font-mono font-medium tabular-nums text-zinc-900 dark:text-zinc-100">
                     {formatNumber(row.total)}
                   </td>
                   <td className="py-3 px-4">
-                    <div className="w-24 bg-zinc-100 dark:bg-zinc-800 h-1.5 rounded-full overflow-hidden flex" title={`Easy: ${row.easyPct}%, Med: ${row.medPct}%, Hard: ${row.hardPct}%`}>
-                      <div style={{ width: `${row.easyPct}%` }} className="bg-zinc-400 dark:bg-zinc-500 h-full" />
-                      <div style={{ width: `${row.medPct}%` }} className="bg-zinc-700 dark:bg-zinc-300 h-full" />
-                      <div style={{ width: `${row.hardPct}%` }} className="bg-zinc-950 dark:bg-zinc-100 h-full" />
+                    <div className="w-24 bg-black/[0.06] dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden flex" title={`Easy: ${row.easyPct}%, Med: ${row.medPct}%, Hard: ${row.hardPct}%`}>
+                      <div style={{ width: `${row.easyPct}%` }} className="bg-zinc-300 dark:bg-zinc-600 h-full" />
+                      <div style={{ width: `${row.medPct}%` }} className="bg-zinc-500 dark:bg-zinc-400 h-full" />
+                      <div style={{ width: `${row.hardPct}%` }} className="bg-zinc-900 dark:bg-zinc-100 h-full" />
                     </div>
                   </td>
                   <td className="py-3 px-4 text-[11px] text-zinc-500 font-mono whitespace-nowrap">
@@ -194,9 +194,9 @@ export default async function QuestionBankPage() {
                   <td className="py-3 px-4 text-right">
                     <Link
                       href={`/question-bank/${row.id}`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 transition-colors"
+                      className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-xs font-medium bg-[#f4f4f5] dark:bg-[#232325] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] transition-colors duration-150"
                     >
-                      Manage <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
+                      Manage <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                     </Link>
                   </td>
                 </tr>

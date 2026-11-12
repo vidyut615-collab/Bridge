@@ -39,13 +39,14 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      title={isDark ? "Switch to Light Canvas" : "Switch to Dark Surface"}
-      className="inline-flex items-center justify-center h-8 w-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 transition-colors"
+      title={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-[#f4f4f5] dark:bg-[#232325] text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.06] dark:hover:bg-white/[0.08] border border-black/[0.08] dark:border-white/[0.08] transition-colors duration-150"
     >
       {isDark ? (
-        <Sun className="h-3.5 w-3.5 text-zinc-100" />
+        <Sun className="h-4 w-4 text-zinc-100" strokeWidth={1.5} />
       ) : (
-        <Moon className="h-3.5 w-3.5 text-zinc-900" />
+        <Moon className="h-4 w-4 text-zinc-900" strokeWidth={1.5} />
       )}
     </button>
   );
