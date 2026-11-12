@@ -7,7 +7,7 @@ import AiBlueprintModal from "./AiBlueprintModal";
 import {
   Plus,
   Trash2,
-  Sparkles,
+  FileScan,
   Save,
   AlertCircle,
   CheckCircle2,
@@ -59,7 +59,6 @@ export default function CompositionBuilder({
         })),
       }));
     }
-    // Default initial empty section
     return [
       {
         id: "sec-init-1",
@@ -75,7 +74,6 @@ export default function CompositionBuilder({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  // Section management
   const addSection = () => {
     setSections((prev) => [
       ...prev,
@@ -90,7 +88,7 @@ export default function CompositionBuilder({
 
   const removeSection = (sectionIndex: number) => {
     if (sections.length <= 1) {
-      alert("An examination must contain at least one section.");
+      alert("An examination requires at least one section.");
       return;
     }
     setSections((prev) => prev.filter((_, idx) => idx !== sectionIndex));
@@ -110,7 +108,6 @@ export default function CompositionBuilder({
     );
   };
 
-  // Topic management
   const addTopicRow = (sectionIndex: number) => {
     const sec = sections[sectionIndex];
     const availableTopics = subjects.find((s) => s.id === sec.subjectId)?.topics || [];
@@ -119,7 +116,7 @@ export default function CompositionBuilder({
     );
 
     if (!unusedTopic) {
-      alert("All active topics under this subject are already added to this section.");
+      alert("All active topics under this subject are already assigned to this section.");
       return;
     }
 
@@ -178,7 +175,6 @@ export default function CompositionBuilder({
     );
   };
 
-  // Apply AI Extracted Topics
   const handleApplyAiTopics = (sectionIndex: number, extracted: ReconciledTopic[]) => {
     setSections((prev) =>
       prev.map((s, idx) => {
@@ -199,7 +195,6 @@ export default function CompositionBuilder({
     );
   };
 
-  // Global calculations
   let examTotalQuestions = 0;
   let examTotalEasy = 0;
   let examTotalMedium = 0;
@@ -225,7 +220,7 @@ export default function CompositionBuilder({
             .find((sub) => sub.id === sec.subjectId)
             ?.topics.find((mt) => mt.id === t.topicId)?.name || "Topic";
         validationErrors.push(
-          `${sec.sectionName} > ${topicName}: Easy (${t.level1Easy}) + Medium (${t.level2Medium}) + Hard (${t.level3Hard}) = ${diffSum}, which does not match topic question count (${t.questionCount}).`
+          `${sec.sectionName} > ${topicName}: Easy (${t.level1Easy}) + Medium (${t.level2Medium}) + Hard (${t.level3Hard}) = ${diffSum}, does not match topic target (${t.questionCount}).`
         );
       }
     });
@@ -233,21 +228,21 @@ export default function CompositionBuilder({
     examTotalQuestions += secTotalQs;
 
     if (sec.topics.length === 0) {
-      validationErrors.push(`Section "${sec.sectionName}" has no topics added.`);
+      validationErrors.push(`Section "${sec.sectionName}" has no assigned topics.`);
     }
   });
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validationErrors.length > 0) {
-      setFeedback({ type: "error", text: "Please fix all validation errors before saving." });
+      setFeedback({ type: "error", text: "Resolve validation mismatches before committing." });
       return;
     }
 
     if (!changeDescription.trim()) {
       setFeedback({
         type: "error",
-        text: "A change description is mandatory before saving examination composition.",
+        text: "A mandatory change description is required for audit logs.",
       });
       return;
     }
@@ -265,8 +260,8 @@ export default function CompositionBuilder({
       setFeedback({
         type: "success",
         text: isCompletedExam
-          ? "Composition updated! A new version was created and external platform update flags were triggered."
-          : "Examination composition saved successfully!",
+          ? "Composition updated. New version created and platform sync flags flagged."
+          : "Composition saved.",
       });
       setChangeDescription("");
     } catch (err: unknown) {
@@ -286,14 +281,14 @@ export default function CompositionBuilder({
         <div
           className={`p-3.5 rounded-lg flex items-center gap-2.5 text-xs ${
             feedback.type === "success"
-              ? "bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700"
-              : "bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/30"
+              ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700"
+              : "bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/40"
           }`}
         >
           {feedback.type === "success" ? (
-            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-zinc-900 dark:text-zinc-100 shrink-0" strokeWidth={1.75} />
           ) : (
-            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" />
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.75} />
           )}
           <span>{feedback.text}</span>
         </div>
@@ -302,8 +297,8 @@ export default function CompositionBuilder({
       {/* Validation Banner */}
       {validationErrors.length > 0 && (
         <div className="p-4 rounded-xl bg-red-50/60 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 space-y-1 text-xs">
-          <div className="flex items-center gap-2 font-semibold mb-1">
-            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+          <div className="flex items-center gap-2 font-medium mb-1">
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" strokeWidth={1.75} />
             <span>Composition Validation Issues ({validationErrors.length})</span>
           </div>
           {validationErrors.map((err, idx) => (
@@ -315,38 +310,42 @@ export default function CompositionBuilder({
       )}
 
       {/* Overall Examination Summary */}
-      <div className="bg-white dark:bg-zinc-900/70 border border-zinc-200/80 dark:border-zinc-800 rounded-xl p-4 shadow-xs grid grid-cols-2 sm:grid-cols-5 gap-4">
+      <div className="bg-white dark:bg-[#121214] border border-zinc-200/90 dark:border-zinc-800/90 rounded-xl p-4 shadow-2xs grid grid-cols-2 sm:grid-cols-5 gap-4">
         <div>
-          <span className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider block">
-            Sections
+          <span className="text-[11px] font-mono text-zinc-500 block">
+            SECTIONS
           </span>
-          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block">{sections.length}</span>
+          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block tabular-nums">
+            {sections.length}
+          </span>
         </div>
 
         <div>
-          <span className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider block">
-            Total Topics
+          <span className="text-[11px] font-mono text-zinc-500 block">
+            TOPIC UNITS
           </span>
-          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block">{examTotalTopics}</span>
+          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block tabular-nums">
+            {examTotalTopics}
+          </span>
         </div>
 
         <div>
-          <span className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider block">
-            Total Questions
+          <span className="text-[11px] font-mono text-zinc-500 block">
+            TOTAL QUESTIONS
           </span>
-          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block">
+          <span className="text-2xl font-semibold font-mono text-zinc-950 dark:text-zinc-50 mt-0.5 block tabular-nums">
             {formatNumber(examTotalQuestions)}
           </span>
         </div>
 
-        <div className="sm:col-span-2 border-t sm:border-t-0 sm:border-l border-zinc-200 dark:border-zinc-800 sm:pl-4 pt-3 sm:pt-0">
-          <span className="text-[11px] font-mono font-medium text-zinc-500 uppercase tracking-wider block">
-            Difficulty Distribution
+        <div className="sm:col-span-2 border-t sm:border-t-0 sm:border-l border-zinc-100 dark:border-zinc-800 sm:pl-4 pt-3 sm:pt-0">
+          <span className="text-[11px] font-mono text-zinc-500 block">
+            TIER DISTRIBUTION
           </span>
-          <div className="flex items-center gap-2 mt-1.5 text-xs font-mono">
-            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">Easy (I): {examTotalEasy}</span>
-            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">Med (II): {examTotalMedium}</span>
-            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">Hard (III): {examTotalHard}</span>
+          <div className="flex items-center gap-2 mt-2 text-xs font-mono">
+            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">I Easy: {examTotalEasy}</span>
+            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">II Med: {examTotalMedium}</span>
+            <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">III Hard: {examTotalHard}</span>
           </div>
         </div>
       </div>
@@ -361,12 +360,12 @@ export default function CompositionBuilder({
           return (
             <div
               key={section.id || sIdx}
-              className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs overflow-hidden"
+              className="bg-white dark:bg-[#121214] rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs overflow-hidden"
             >
               {/* Section Header */}
-              <div className="p-3.5 bg-zinc-50/70 dark:bg-zinc-800/40 border-b border-zinc-200/80 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="p-3 bg-zinc-50/70 dark:bg-zinc-800/40 border-b border-zinc-100 dark:border-zinc-800/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2 py-0.5 rounded bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-mono text-[11px] font-semibold">
+                  <span className="px-2 py-0.5 rounded bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-mono text-[10px] font-medium">
                     Section {sIdx + 1}
                   </span>
                   <input
@@ -374,13 +373,13 @@ export default function CompositionBuilder({
                     required
                     value={section.sectionName}
                     onChange={(e) => updateSectionName(sIdx, e.target.value)}
-                    placeholder="Section Title"
-                    className="h-8 font-medium text-zinc-900 dark:text-zinc-100 text-xs px-2.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100"
+                    placeholder="Section Name"
+                    className="h-7 font-medium text-zinc-900 dark:text-zinc-100 text-xs px-2.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200"
                   />
                   <select
                     value={section.subjectId}
                     onChange={(e) => updateSectionSubject(sIdx, e.target.value)}
-                    className="h-8 text-xs font-medium px-2.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100"
+                    className="h-7 text-xs font-medium px-2.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200"
                   >
                     {subjects.map((sub) => (
                       <option key={sub.id} value={sub.id} className="dark:bg-zinc-900">
@@ -394,17 +393,17 @@ export default function CompositionBuilder({
                   <button
                     type="button"
                     onClick={() => setActiveModalSectionId(section.id || `sec-${sIdx}`)}
-                    className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 text-xs font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 text-xs font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                   >
-                    <Sparkles className="h-3.5 w-3.5" /> Upload Blueprint (AI)
+                    <FileScan className="h-3.5 w-3.5" strokeWidth={1.75} /> Extract from Blueprint
                   </button>
                   <button
                     type="button"
                     onClick={() => removeSection(sIdx)}
                     title="Remove Section"
-                    className="h-8 w-8 inline-flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-md transition-colors"
+                    className="h-7 w-7 inline-flex items-center justify-center text-zinc-400 hover:text-red-600 rounded transition-colors"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} />
                   </button>
                 </div>
               </div>
@@ -412,22 +411,22 @@ export default function CompositionBuilder({
               {/* Topics Table */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-zinc-50/50 dark:bg-zinc-800/30 uppercase font-mono tracking-wider text-[11px] text-zinc-500 border-b border-zinc-200/80 dark:border-zinc-800">
+                  <thead className="bg-zinc-50/50 dark:bg-zinc-800/30 font-mono text-[11px] text-zinc-500 border-b border-zinc-100 dark:border-zinc-800/80">
                     <tr>
-                      <th className="py-2 px-3 font-medium">Topic (Filtered by Subject)</th>
-                      <th className="py-2 px-3 text-right font-medium">Composition %</th>
-                      <th className="py-2 px-3 text-right font-medium">Questions</th>
-                      <th className="py-2 px-3 text-right font-medium">Easy (I)</th>
-                      <th className="py-2 px-3 text-right font-medium">Medium (II)</th>
-                      <th className="py-2 px-3 text-right font-medium">Hard (III)</th>
-                      <th className="py-2 px-3 text-center font-medium w-16">Action</th>
+                      <th className="py-2 px-3 font-normal">Topic (Filtered by Subject)</th>
+                      <th className="py-2 px-3 text-right font-normal">Weight %</th>
+                      <th className="py-2 px-3 text-right font-normal">Target Qs</th>
+                      <th className="py-2 px-3 text-right font-normal">I Easy</th>
+                      <th className="py-2 px-3 text-right font-normal">II Med</th>
+                      <th className="py-2 px-3 text-right font-normal">III Hard</th>
+                      <th className="py-2 px-3 text-center font-normal w-14">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
                     {section.topics.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="py-8 text-center text-xs text-zinc-500">
-                          No topics added yet. Click &quot;Add Topic Row&quot; below or &quot;Upload Blueprint (AI)&quot; above.
+                        <td colSpan={7} className="py-8 text-center text-xs text-zinc-500 font-mono">
+                          No topics added. Click &quot;Add Topic Row&quot; or extract from document.
                         </td>
                       </tr>
                     ) : (
@@ -455,7 +454,7 @@ export default function CompositionBuilder({
                                 onChange={(e) =>
                                   updateTopicField(sIdx, tIdx, "topicId", e.target.value)
                                 }
-                                className="h-8 w-full px-2 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100"
+                                className="h-7 w-full px-2 text-xs font-medium rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200"
                               >
                                 {availableTopics.map((mt) => (
                                   <option key={mt.id} value={mt.id} className="dark:bg-zinc-900">
@@ -465,7 +464,7 @@ export default function CompositionBuilder({
                               </select>
                             </td>
 
-                            <td className="py-2 px-3 text-right font-mono text-zinc-500">
+                            <td className="py-2 px-3 text-right font-mono text-zinc-500 tabular-nums">
                               {compPercentage}%
                             </td>
 
@@ -483,7 +482,7 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="h-8 w-16 px-1 text-center text-xs font-semibold rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100"
+                                className="h-7 w-16 px-1 text-center text-xs font-medium rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 tabular-nums"
                               />
                             </td>
 
@@ -501,7 +500,7 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="h-8 w-16 px-1 text-center text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100"
+                                className="h-7 w-16 px-1 text-center text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 tabular-nums"
                               />
                             </td>
 
@@ -519,7 +518,7 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="h-8 w-16 px-1 text-center text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100"
+                                className="h-7 w-16 px-1 text-center text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 tabular-nums"
                               />
                             </td>
 
@@ -537,7 +536,7 @@ export default function CompositionBuilder({
                                     parseInt(e.target.value) || 0
                                   )
                                 }
-                                className="h-8 w-16 px-1 text-center text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100"
+                                className="h-7 w-16 px-1 text-center text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 tabular-nums"
                               />
                             </td>
 
@@ -545,9 +544,9 @@ export default function CompositionBuilder({
                               <button
                                 type="button"
                                 onClick={() => removeTopicRow(sIdx, tIdx)}
-                                className="h-7 w-7 inline-flex items-center justify-center text-zinc-400 hover:text-red-600 rounded-md transition-colors"
+                                className="h-6 w-6 inline-flex items-center justify-center text-zinc-400 hover:text-red-600 rounded transition-colors"
                               >
-                                <Trash2 className="h-3.5 w-3.5" />
+                                <Trash2 className="h-3 w-3" strokeWidth={1.75} />
                               </button>
                             </td>
                           </tr>
@@ -556,21 +555,21 @@ export default function CompositionBuilder({
                     )}
 
                     {/* Section Summary Row */}
-                    <tr className="bg-zinc-50/60 dark:bg-zinc-800/30 font-semibold text-zinc-950 dark:text-zinc-50 border-t border-zinc-200/80 dark:border-zinc-800">
-                      <td className="py-2.5 px-3 uppercase text-[11px] font-mono tracking-wider text-zinc-500">
-                        Section Total ({section.topics.length} topics)
+                    <tr className="bg-zinc-50/60 dark:bg-zinc-800/30 font-medium text-zinc-950 dark:text-zinc-50 border-t border-zinc-200/80 dark:border-zinc-800">
+                      <td className="py-2 px-3 text-[11px] font-mono text-zinc-500">
+                        Section Aggregate ({section.topics.length} topics)
                       </td>
-                      <td className="py-2.5 px-3 text-right font-mono">100%</td>
-                      <td className="py-2.5 px-3 text-right font-mono font-semibold">
+                      <td className="py-2 px-3 text-right font-mono text-zinc-500">100%</td>
+                      <td className="py-2 px-3 text-right font-mono font-medium tabular-nums">
                         {sectionTotalQs}
                       </td>
-                      <td className="py-2.5 px-3 text-right font-mono">
+                      <td className="py-2 px-3 text-right font-mono tabular-nums">
                         {section.topics.reduce((s, t) => s + t.level1Easy, 0)}
                       </td>
-                      <td className="py-2.5 px-3 text-right font-mono">
+                      <td className="py-2 px-3 text-right font-mono tabular-nums">
                         {section.topics.reduce((s, t) => s + t.level2Medium, 0)}
                       </td>
-                      <td className="py-2.5 px-3 text-right font-mono">
+                      <td className="py-2 px-3 text-right font-mono tabular-nums">
                         {section.topics.reduce((s, t) => s + t.level3Hard, 0)}
                       </td>
                       <td></td>
@@ -580,13 +579,13 @@ export default function CompositionBuilder({
               </div>
 
               {/* Add Topic Action in Section */}
-              <div className="p-2.5 bg-zinc-50/60 dark:bg-zinc-800/30 border-t border-zinc-200/80 dark:border-zinc-800 flex justify-start">
+              <div className="p-2.5 bg-zinc-50/60 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800/80 flex justify-start">
                 <button
                   type="button"
                   onClick={() => addTopicRow(sIdx)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-xs font-medium text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-2xs"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-2xs"
                 >
-                  <Plus className="h-3.5 w-3.5" /> Add Topic Row
+                  <Plus className="h-3 w-3" strokeWidth={1.75} /> Add Topic Row
                 </button>
               </div>
             </div>
@@ -599,25 +598,25 @@ export default function CompositionBuilder({
         <button
           type="button"
           onClick={addSection}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 text-xs font-medium hover:border-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 bg-white dark:bg-[#121214] text-zinc-800 dark:text-zinc-200 text-xs font-medium hover:border-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors shadow-2xs"
         >
-          <Plus className="h-3.5 w-3.5" /> Add Another Section
+          <Plus className="h-3.5 w-3.5" strokeWidth={1.75} /> Add Another Section
         </button>
       </div>
 
       {/* Mandatory Change Reason & Save Footer */}
-      <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-[#121214] p-4 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs space-y-3">
         <div>
-          <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1">
-            Mandatory Change Description <span className="text-red-500">*</span>
+          <label className="block text-[11px] font-mono text-zinc-500 mb-1">
+            Mandatory Change Description <span className="text-zinc-400">*</span>
           </label>
           <textarea
             required
             rows={2}
             value={changeDescription}
             onChange={(e) => setChangeDescription(e.target.value)}
-            placeholder="e.g. Added Arithmetic Core section and 8 topics per examination blueprint."
-            className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+            placeholder="Document reason for composition modification."
+            className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
           />
         </div>
 
@@ -625,15 +624,15 @@ export default function CompositionBuilder({
           <button
             type="submit"
             disabled={isSubmitting || validationErrors.length > 0}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-xs disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs disabled:opacity-50"
           >
-            <Save className="h-3.5 w-3.5" />
-            {isSubmitting ? "Saving Composition..." : "Save Examination Composition"}
+            <Save className="h-3.5 w-3.5" strokeWidth={1.75} />
+            {isSubmitting ? "Saving..." : "Save Examination Composition"}
           </button>
         </div>
       </div>
 
-      {/* AI Extraction Modal */}
+      {/* Blueprint Extraction Modal */}
       {activeModalSectionId && activeSectionForModal && activeSubjectForModal && (
         <AiBlueprintModal
           sectionId={activeModalSectionId}

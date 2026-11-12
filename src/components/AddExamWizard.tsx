@@ -49,7 +49,6 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Fetch live name preview whenever category, collegeId or title changes
   useEffect(() => {
     async function updatePreview() {
       if (!title.trim()) {
@@ -88,7 +87,7 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
     }
 
     if (category !== "GLOBAL" && !collegeId) {
-      setError("Please select a college.");
+      setError("Please select a target college.");
       return;
     }
 
@@ -124,18 +123,20 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-lg bg-red-50 dark:bg-red-950/20 p-3.5 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-2.5 text-xs">
-          <AlertCircle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
+        <div className="rounded-lg bg-red-50 dark:bg-red-950/20 p-3.5 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 flex items-center gap-2.5 text-xs">
+          <AlertCircle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" strokeWidth={1.75} />
           <span>{error}</span>
         </div>
       )}
 
       {/* Step 1: Category Selection */}
-      <div className="bg-white dark:bg-zinc-900 p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-[#121214] p-5 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs space-y-3">
         <div>
-          <h2 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">1. Examination Category</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">
-            Select the organizational scope to activate the correct sequence generator.
+          <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">
+            1. Scope & Categorization
+          </h2>
+          <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
+            Determines atomic sequence code and naming convention
           </p>
         </div>
 
@@ -143,85 +144,81 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
           {/* Global */}
           <div
             onClick={() => setCategory("GLOBAL")}
-            className={`cursor-pointer p-4 rounded-xl border transition-all ${
+            className={`cursor-pointer p-4 rounded-lg border transition-colors ${
               category === "GLOBAL"
-                ? "border-zinc-900 dark:border-zinc-100 bg-zinc-50/70 dark:bg-zinc-800/50 ring-1 ring-zinc-900 dark:ring-zinc-100"
-                : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-700"
+                ? "border-zinc-950 dark:border-zinc-100 bg-zinc-50/90 dark:bg-zinc-800/60"
+                : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#141417] hover:border-zinc-300 dark:hover:border-zinc-700"
             }`}
           >
-            <div className="flex items-center gap-2.5 mb-1.5">
-              <div className="p-1.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">
-                <Globe className="h-4 w-4" />
-              </div>
-              <span className="font-semibold text-xs text-zinc-950 dark:text-zinc-50">Platform Examination</span>
+            <div className="flex items-center gap-2 mb-1.5">
+              <Globe className="h-4 w-4 text-zinc-700 dark:text-zinc-300" strokeWidth={1.75} />
+              <span className="font-medium text-xs text-zinc-950 dark:text-zinc-50">Global Assessment</span>
             </div>
-            <p className="text-xs text-zinc-500">
-              Global assessment. Free title entry, no college naming sequence required.
+            <p className="text-[11px] text-zinc-500">
+              Platform-wide examination. Unconstrained title without college code prefix.
             </p>
           </div>
 
           {/* College Training */}
           <div
             onClick={() => setCategory("COLLEGE_TRAINING")}
-            className={`cursor-pointer p-4 rounded-xl border transition-all ${
+            className={`cursor-pointer p-4 rounded-lg border transition-colors ${
               category === "COLLEGE_TRAINING"
-                ? "border-zinc-900 dark:border-zinc-100 bg-zinc-50/70 dark:bg-zinc-800/50 ring-1 ring-zinc-900 dark:ring-zinc-100"
-                : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-700"
+                ? "border-zinc-950 dark:border-zinc-100 bg-zinc-50/90 dark:bg-zinc-800/60"
+                : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#141417] hover:border-zinc-300 dark:hover:border-zinc-700"
             }`}
           >
-            <div className="flex items-center gap-2.5 mb-1.5">
-              <div className="p-1.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">
-                <GraduationCap className="h-4 w-4" />
-              </div>
-              <span className="font-semibold text-xs text-zinc-950 dark:text-zinc-50">College – Training (TR)</span>
+            <div className="flex items-center gap-2 mb-1.5">
+              <GraduationCap className="h-4 w-4 text-zinc-700 dark:text-zinc-300" strokeWidth={1.75} />
+              <span className="font-medium text-xs text-zinc-950 dark:text-zinc-50">College Training (TR)</span>
             </div>
-            <p className="text-xs text-zinc-500">
-              Structured training assessments. Generates <code className="font-mono text-zinc-900 dark:text-zinc-100 text-[11px]">CODE-TR-TITLE-###</code>.
+            <p className="text-[11px] text-zinc-500 font-mono">
+              Formula: COLLEGE-TR-TITLE-###
             </p>
           </div>
 
           {/* College Regular */}
           <div
             onClick={() => setCategory("COLLEGE_REGULAR")}
-            className={`cursor-pointer p-4 rounded-xl border transition-all ${
+            className={`cursor-pointer p-4 rounded-lg border transition-colors ${
               category === "COLLEGE_REGULAR"
-                ? "border-zinc-900 dark:border-zinc-100 bg-zinc-50/70 dark:bg-zinc-800/50 ring-1 ring-zinc-900 dark:ring-zinc-100"
-                : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-700"
+                ? "border-zinc-950 dark:border-zinc-100 bg-zinc-50/90 dark:bg-zinc-800/60"
+                : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#141417] hover:border-zinc-300 dark:hover:border-zinc-700"
             }`}
           >
-            <div className="flex items-center gap-2.5 mb-1.5">
-              <div className="p-1.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">
-                <Briefcase className="h-4 w-4" />
-              </div>
-              <span className="font-semibold text-xs text-zinc-950 dark:text-zinc-50">College – Regular (RG)</span>
+            <div className="flex items-center gap-2 mb-1.5">
+              <Briefcase className="h-4 w-4 text-zinc-700 dark:text-zinc-300" strokeWidth={1.75} />
+              <span className="font-medium text-xs text-zinc-950 dark:text-zinc-50">College Regular (RG)</span>
             </div>
-            <p className="text-xs text-zinc-500">
-              General college assessment. Sequence: <code className="font-mono text-zinc-900 dark:text-zinc-100 text-[11px]">CODE-RG-TITLE-###</code>.
+            <p className="text-[11px] text-zinc-500 font-mono">
+              Formula: COLLEGE-RG-TITLE-###
             </p>
           </div>
         </div>
       </div>
 
       {/* Step 2: College & Title Details with Live Naming Preview */}
-      <div className="bg-white dark:bg-zinc-900 p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-[#121214] p-5 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs space-y-4">
         <div>
-          <h2 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">2. College & Title Specifications</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">
-            Standardized examination title generation engine. Sequence code is allocated automatically upon creation.
+          <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">
+            2. College & Title Specifications
+          </h2>
+          <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
+            Sequence code increments atomically per college and category
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {category !== "GLOBAL" && (
             <div>
-              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
-                Target College <span className="text-red-500">*</span>
+              <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
+                Target College <span className="text-zinc-400">*</span>
               </label>
               <select
                 required
                 value={collegeId}
                 onChange={(e) => setCollegeId(e.target.value)}
-                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+                className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
               >
                 {colleges.map((col) => (
                   <option key={col.id} value={col.id} className="dark:bg-zinc-900">
@@ -233,35 +230,35 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
           )}
 
           <div className={category === "GLOBAL" ? "md:col-span-2" : ""}>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
-              Examination Title <span className="text-red-500">*</span>
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
+              Assessment Title <span className="text-zinc-400">*</span>
             </label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Quantitative Aptitude Mock Test or Placement Assessment"
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              placeholder="e.g. Quantitative Aptitude Assessment"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             />
           </div>
         </div>
 
         {/* Live Name Preview Blueprint Strip */}
         {namePreview && (
-          <div className="p-3.5 rounded-lg bg-zinc-900 dark:bg-zinc-950 text-white border border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="p-3.5 rounded-lg bg-zinc-900 dark:bg-[#18181b] text-white border border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex-1">
-              <span className="text-[10px] font-mono font-medium uppercase tracking-wider text-zinc-400 block mb-0.5">
-                Standardized Title Preview
+              <span className="text-[10px] font-mono text-zinc-400 block mb-0.5">
+                ALLOCATED NAME PREVIEW
               </span>
-              <span className="text-xs sm:text-sm font-mono font-semibold text-zinc-100">
+              <span className="text-xs sm:text-sm font-mono font-medium text-zinc-100">
                 {namePreview}
               </span>
             </div>
             <div className="flex items-center gap-2">
               {codePreview !== "N/A" && (
                 <div className="text-right">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Sequence</span>
+                  <span className="text-[10px] font-mono text-zinc-400 block">Sequence</span>
                   <span className="text-xs font-mono font-semibold bg-zinc-800 px-2 py-0.5 rounded">
                     #{codePreview}
                   </span>
@@ -271,9 +268,9 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
                 type="button"
                 onClick={handleCopyPreview}
                 title="Copy standardized name"
-                className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors"
+                className="inline-flex items-center justify-center h-7 w-7 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors"
               >
-                {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                {copied ? <Check className="h-3.5 w-3.5 text-zinc-100" strokeWidth={1.75} /> : <Copy className="h-3.5 w-3.5" strokeWidth={1.75} />}
               </button>
             </div>
           </div>
@@ -281,23 +278,25 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
       </div>
 
       {/* Step 3: Examination Metadata & Parameters */}
-      <div className="bg-white dark:bg-zinc-900 p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-[#121214] p-5 rounded-xl border border-zinc-200/90 dark:border-zinc-800/90 shadow-2xs space-y-4">
         <div>
-          <h2 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">3. Metadata & Scoring Rules</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">
-            Configure delivery constraints, scoring parameters, and accessibility settings.
+          <h2 className="text-xs font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">
+            3. Delivery & Scoring Constraints
+          </h2>
+          <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
+            Exam duration, marking values, schedule, and attempt limits
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
               Visibility
             </label>
             <select
               value={testType}
               onChange={(e) => setTestType(e.target.value as "PUBLIC" | "PRIVATE")}
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             >
               <option value="PRIVATE">Private (Restricted)</option>
               <option value="PUBLIC">Public</option>
@@ -305,7 +304,7 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
               Duration (Minutes)
             </label>
             <input
@@ -314,12 +313,12 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
               required
               value={durationMinutes}
               onChange={(e) => setDurationMinutes(parseInt(e.target.value) || 60)}
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
               Marks Correct (+)
             </label>
             <input
@@ -328,12 +327,12 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
               required
               value={marksCorrect}
               onChange={(e) => setMarksCorrect(parseFloat(e.target.value) || 1)}
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
               Marks Incorrect (-)
             </label>
             <input
@@ -342,44 +341,44 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
               required
               value={marksIncorrect}
               onChange={(e) => setMarksIncorrect(parseFloat(e.target.value) || 0)}
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800/80">
           <div>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
               Start Schedule (IST)
             </label>
             <input
               type="datetime-local"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
               End Schedule (IST)
             </label>
             <input
               type="datetime-local"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
               Attempt Policy
             </label>
             <select
               value={attemptPolicy}
               onChange={(e) => setAttemptPolicy(e.target.value as "UNLIMITED" | "LIMITED")}
-              className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+              className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
             >
               <option value="UNLIMITED">Unlimited Attempts</option>
               <option value="LIMITED">Limited Attempts</option>
@@ -388,7 +387,7 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
 
           {attemptPolicy === "LIMITED" && (
             <div>
-              <label className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-zinc-500 mb-1.5">
                 Max Allowed Attempts
               </label>
               <input
@@ -396,7 +395,7 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
                 min="1"
                 value={maxAttempts}
                 onChange={(e) => setMaxAttempts(parseInt(e.target.value) || 1)}
-                className="h-9 w-full px-3 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-colors"
+                className="h-8 w-full px-3 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50/70 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 font-mono focus:bg-white dark:focus:bg-zinc-900 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
               />
             </div>
           )}
@@ -408,17 +407,17 @@ export default function AddExamWizard({ colleges }: AddExamWizardProps) {
         <button
           type="button"
           onClick={() => router.push("/examinations")}
-          className="h-9 px-4 rounded-lg border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+          className="h-8 px-4 rounded-md border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-zinc-950 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-xs disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 h-8 px-4 rounded-md bg-zinc-950 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs disabled:opacity-50"
         >
-          {isSubmitting ? "Allocating Sequence Code..." : "Register Examination & Build Composition"}
-          <ArrowRight className="h-3.5 w-3.5" />
+          {isSubmitting ? "Allocating..." : "Register Examination"}
+          <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.75} />
         </button>
       </div>
     </form>

@@ -58,31 +58,31 @@ export default async function ExaminationDetailPage({ params }: PageProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header — Flat, Minimalist */}
-      <div className="pb-5 border-b border-zinc-200/80 dark:border-zinc-800">
+      {/* Header */}
+      <div className="pb-5 border-b border-zinc-200/90 dark:border-zinc-800/90">
         <Link
           href="/examinations"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors mb-3"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors mb-3"
         >
-          <ChevronLeft className="h-3.5 w-3.5" /> Back to Examination Registry
+          <ChevronLeft className="h-3.5 w-3.5" strokeWidth={1.75} /> Back to Examination Registry
         </Link>
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-semibold text-zinc-950 dark:text-zinc-50 font-mono tracking-tight">
                 {exam.generatedName}
               </h1>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950">
                 {exam.overallStatus.replace(/_/g, " ")}
               </span>
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-200/70 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                 v{exam.currentVersion}
               </span>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-              <span className="font-mono text-zinc-900 dark:text-zinc-100 font-semibold">{exam.examId}</span>
+              <span className="font-mono text-zinc-900 dark:text-zinc-100 font-medium">{exam.examId}</span>
               <span>•</span>
               <span className="capitalize">{exam.category.replace(/_/g, " ").toLowerCase()}</span>
               {exam.college && (

@@ -45,29 +45,29 @@ export default async function ExaminationsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header — Flat, Minimalist */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-zinc-200/80 dark:border-zinc-800">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-zinc-200/90 dark:border-zinc-800/90">
         <div>
-          <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
               Examination Registry
             </h1>
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-200/70 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
               {rawExams.length} Registered
             </span>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Internal registry of all assessments, naming sequences, test blueprints, and platform deployment statuses.
+            Assessment names, atomic sequence formulas, test blueprints, and deployment pipeline states.
           </p>
         </div>
 
         <div>
           <Link
             href="/examinations/new"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-zinc-950 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-zinc-950 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-2xs"
           >
-            <Plus className="h-3.5 w-3.5" />
-            Add Examination
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.75} />
+            New Examination
           </Link>
         </div>
       </div>
