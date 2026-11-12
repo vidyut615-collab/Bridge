@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bridge — Assessment Operations & Observability",
+  title: "Bridge - Truskill",
   description: "Internal operations platform for question bank inventory governance, atomic examination registry, and two-way deployment observability for Truskill.",
   icons: {
     icon: [
