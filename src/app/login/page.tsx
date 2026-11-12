@@ -31,8 +31,9 @@ export default function LoginPage() {
         router.push("/dashboard");
         router.refresh();
       }
-    } catch {
-      setError("An unexpected error occurred during sign-in.");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "An unexpected error occurred during sign-in.";
+      setError(msg);
       setIsLoading(false);
     }
   };
