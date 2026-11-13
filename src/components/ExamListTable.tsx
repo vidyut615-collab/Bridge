@@ -210,10 +210,22 @@ export default function ExamListTable({ exams }: ExamListTableProps) {
                       <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-mono font-medium border ${
                         exam.testpressStatus === "COMPLETED"
                           ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                          : exam.testpressStatus === "ARCHIVED"
+                          ? "bg-zinc-500/10 text-zinc-500 border-zinc-500/20"
                           : "bg-[var(--bg-raised)] text-[var(--text-muted)] border-[var(--border-hairline)]"
                       }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${exam.testpressStatus === "COMPLETED" ? "bg-emerald-500" : "bg-zinc-400"}`} />
-                        {exam.testpressStatus === "COMPLETED" ? "Synced" : "Pending"}
+                        <span className={`w-1.5 h-1.5 rounded-full ${
+                          exam.testpressStatus === "COMPLETED"
+                            ? "bg-emerald-500"
+                            : exam.testpressStatus === "ARCHIVED"
+                            ? "bg-zinc-400"
+                            : "bg-amber-400"
+                        }`} />
+                        {exam.testpressStatus === "COMPLETED"
+                          ? "Published"
+                          : exam.testpressStatus === "ARCHIVED"
+                          ? "Archived"
+                          : "Draft"}
                       </span>
                       {exam.testpressUpdatePending && (
                         <div className="text-[11px] text-amber-500 font-mono font-medium mt-1">
@@ -229,7 +241,7 @@ export default function ExamListTable({ exams }: ExamListTableProps) {
                           : "bg-[var(--bg-raised)] text-[var(--text-muted)] border-[var(--border-hairline)]"
                       }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${exam.lmsStatus === "COMPLETED" ? "bg-emerald-500" : "bg-zinc-400"}`} />
-                        {exam.lmsStatus === "COMPLETED" ? "Synced" : "Pending"}
+                        {exam.lmsStatus === "COMPLETED" ? "Listed" : "Unlisted"}
                       </span>
                       {exam.lmsUpdatePending && (
                         <div className="text-[11px] text-amber-500 font-mono font-medium mt-1">

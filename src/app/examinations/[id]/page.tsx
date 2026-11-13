@@ -2,8 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import ExamDetailTabs from "@/components/ExamDetailTabs";
-import { formatDateKolkata } from "@/lib/utils";
+import ExamDetailUnified from "@/components/ExamDetailUnified";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -43,6 +42,14 @@ export default async function ExaminationDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  // Fetch audit logs for change history attribution
+  const auditLogs = await prisma.auditLog.findMany({
+    where: { entityId: id },
+    orderBy: { createdAt: "desc" },
+    include: { changedByUser: true },
+    take: 50,
+  });
+
   // Fetch all active subjects and topics for the Composition Builder
   const subjects = await prisma.subject.findMany({
     where: { isArchived: false },
@@ -57,59 +64,19 @@ export default async function ExaminationDetailPage({ params }: PageProps) {
   });
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="pb-6 border-b border-[var(--border-hairline)]">
+    <div className="space-y-6">
+      {/* Navigation Breadcrumb */}
+      <div>
         <Link
           href="/examinations"
-          className="craft-button-secondary inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium mb-4"
+          className="craft-button-secondary inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium"
         >
           <ChevronLeft className="h-4 w-4" strokeWidth={1.5} /> Back to Examination Registry
         </Link>
-
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] font-mono tracking-tight">
-                {exam.generatedName}
-              </h1>
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider border ${
-                exam.overallStatus === "PUBLISHED" || exam.overallStatus === "COMPLETED"
-                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-                  : exam.overallStatus === "IN_REVIEW"
-                  ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20"
-                  : "bg-[var(--bg-raised)] text-[var(--text-secondary)] border-[var(--border-hairline)]"
-              }`}>
-                {exam.overallStatus.replace(/_/g, " ").toLowerCase()}
-              </span>
-              <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[var(--bg-raised)] text-[var(--text-primary)] border border-[var(--border-hairline)]">
-                v{exam.currentVersion}
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2.5 mt-2.5 text-sm text-[var(--text-secondary)]">
-              <span className="font-mono text-[var(--text-primary)] font-semibold">{exam.examId}</span>
-              <span>•</span>
-              <span className="capitalize">{exam.category.replace(/_/g, " ").toLowerCase()}</span>
-              {exam.college && (
-                <>
-                  <span>•</span>
-                  <span className="font-medium text-[var(--text-primary)]">
-                    {exam.college.name} ({exam.college.code})
-                  </span>
-                </>
-              )}
-              <span>•</span>
-              <span className="font-mono font-medium">{exam.durationMinutes} min</span>
-              <span>•</span>
-              <span className="font-mono text-xs text-[var(--text-muted)]">Registered {formatDateKolkata(exam.createdAt)}</span>
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* Main Tabbed Interface */}
-      <ExamDetailTabs
+      {/* Unified Examination Interface */}
+      <ExamDetailUnified
         exam={{
           id: exam.id,
           examId: exam.examId,
@@ -174,6 +141,13 @@ export default async function ExaminationDetailPage({ params }: PageProps) {
           changeDescription: v.changeDescription,
           changedByName: v.changedByUser.name,
           createdAt: v.createdAt,
+        }))}
+        auditLogs={auditLogs.map((a) => ({
+          id: a.id,
+          action: a.action,
+          changeDescription: a.changeDescription,
+          changedByName: a.changedByUser.name,
+          createdAt: a.createdAt,
         }))}
       />
     </div>

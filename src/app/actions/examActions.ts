@@ -210,14 +210,14 @@ export async function updateExamMetadataAction(params: {
   endDate?: string;
   attemptPolicy: "UNLIMITED" | "LIMITED";
   maxAttempts?: number;
-  changeDescription: string;
+  changeDescription?: string;
 }) {
   const user = await getCurrentUser();
   if (!user) throw new Error("Unauthorized.");
 
-  if (!params.changeDescription || params.changeDescription.trim().length === 0) {
-    throw new Error("A change description is mandatory when updating examination metadata.");
-  }
+  const effectiveChangeDesc =
+    params.changeDescription?.trim() ||
+    `Updated parameters: duration ${params.durationMinutes}m, marks ${params.totalMarks}`;
 
   const exam = await prisma.exam.findUnique({
     where: { id: params.examId },
@@ -272,7 +272,7 @@ export async function updateExamMetadataAction(params: {
             durationMinutes: params.durationMinutes,
             totalMarks: params.totalMarks,
           }),
-          changeDescription: params.changeDescription.trim(),
+          changeDescription: effectiveChangeDesc,
           changedBy: user.id,
         },
       });
@@ -292,14 +292,14 @@ export async function updateExamMetadataAction(params: {
             examId: exam.id,
             platform: "TESTPRESS",
             action: "UPDATE_PENDING",
-            changeDescription: params.changeDescription.trim(),
+            changeDescription: effectiveChangeDesc,
             confirmedBy: user.id,
           },
           {
             examId: exam.id,
             platform: "TRUSKILL_LMS",
             action: "UPDATE_PENDING",
-            changeDescription: params.changeDescription.trim(),
+            changeDescription: effectiveChangeDesc,
             confirmedBy: user.id,
           },
         ],
@@ -322,7 +322,7 @@ export async function updateExamMetadataAction(params: {
           generatedName: updatedGeneratedName,
           duration: params.durationMinutes,
         }),
-        changeDescription: params.changeDescription.trim(),
+        changeDescription: effectiveChangeDesc,
         changedBy: user.id,
       },
     });
@@ -357,14 +357,18 @@ export interface SectionInput {
 export async function saveExamCompositionAction(params: {
   examId: string;
   sections: SectionInput[];
-  changeDescription: string;
+  changeDescription?: string;
 }) {
   const user = await getCurrentUser();
   if (!user) throw new Error("Unauthorized.");
 
-  if (!params.changeDescription || params.changeDescription.trim().length === 0) {
-    throw new Error("A change description is mandatory for updating composition.");
-  }
+  const totalQuestions = params.sections.reduce(
+    (sum, s) => sum + s.topics.reduce((ts, t) => ts + t.questionCount, 0),
+    0
+  );
+  const effectiveChangeDesc =
+    params.changeDescription?.trim() ||
+    `Updated question composition: ${totalQuestions} questions across ${params.sections.length} sections`;
 
   // Validate all composition rules per PRD Section 11.8
   for (const sec of params.sections) {
@@ -467,7 +471,7 @@ export async function saveExamCompositionAction(params: {
           examId: exam.id,
           versionNumber: newVersion,
           snapshotData: JSON.stringify(params.sections),
-          changeDescription: params.changeDescription.trim(),
+          changeDescription: effectiveChangeDesc,
           changedBy: user.id,
         },
       });
@@ -486,14 +490,14 @@ export async function saveExamCompositionAction(params: {
             examId: exam.id,
             platform: "TESTPRESS",
             action: "UPDATE_PENDING",
-            changeDescription: `Composition updated: ${params.changeDescription.trim()}`,
+            changeDescription: effectiveChangeDesc,
             confirmedBy: user.id,
           },
           {
             examId: exam.id,
             platform: "TRUSKILL_LMS",
             action: "UPDATE_PENDING",
-            changeDescription: `Composition updated: ${params.changeDescription.trim()}`,
+            changeDescription: effectiveChangeDesc,
             confirmedBy: user.id,
           },
         ],
@@ -507,7 +511,7 @@ export async function saveExamCompositionAction(params: {
         entityId: exam.id,
         action: "UPDATE",
         newValues: JSON.stringify(params.sections),
-        changeDescription: params.changeDescription.trim(),
+        changeDescription: effectiveChangeDesc,
         changedBy: user.id,
       },
     });
@@ -670,6 +674,176 @@ export async function confirmPlatformUpdateAction(params: {
         entityId: params.examId,
         action: "UPDATE",
         changeDescription: `Confirmed ${params.platform === "TESTPRESS" ? "Testpress" : "Truskill LMS"} update: ${params.changeDescription.trim()}`,
+        changedBy: user.id,
+      },
+    });
+  });
+
+  revalidatePath(`/examinations/${params.examId}`);
+  revalidatePath("/examinations");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+// ----------------------------------------------------
+// 8. Streamlined Direct Testpress Status Action
+// ----------------------------------------------------
+export async function setExamTestpressStatusAction(params: {
+  examId: string;
+  status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
+}) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized.");
+
+  const exam = await prisma.exam.findUnique({
+    where: { id: params.examId },
+    include: { platformStatus: true },
+  });
+  if (!exam) throw new Error("Examination not found.");
+
+  await prisma.$transaction(async (tx) => {
+    let testpressStatus = "PENDING";
+    let testpressCompletedAt: Date | null = null;
+    let testpressCompletedBy: string | null = null;
+    let nextOverall = "DRAFT";
+
+    if (params.status === "PUBLISHED") {
+      testpressStatus = "COMPLETED";
+      testpressCompletedAt = new Date();
+      testpressCompletedBy = user.id;
+      nextOverall = exam.platformStatus?.lmsStatus === "COMPLETED" ? "COMPLETED" : "READY_ON_TESTPRESS";
+    } else if (params.status === "ARCHIVED") {
+      testpressStatus = "ARCHIVED";
+      nextOverall = "ARCHIVED";
+    } else {
+      testpressStatus = "PENDING";
+      nextOverall = "DRAFT";
+    }
+
+    await tx.examPlatformStatus.update({
+      where: { examId: params.examId },
+      data: {
+        testpressStatus,
+        testpressCompletedAt,
+        testpressCompletedBy,
+        testpressUpdatePending: false,
+      },
+    });
+
+    await tx.exam.update({
+      where: { id: params.examId },
+      data: { overallStatus: nextOverall },
+    });
+
+    const desc =
+      params.status === "PUBLISHED"
+        ? "Published on Testpress"
+        : params.status === "ARCHIVED"
+        ? "Archived / removed from Testpress"
+        : "Marked as Draft on Testpress";
+
+    await tx.platformUpdateHistory.create({
+      data: {
+        examId: params.examId,
+        platform: "TESTPRESS",
+        action: params.status === "PUBLISHED" ? "PUBLISHED" : params.status === "ARCHIVED" ? "ARCHIVED" : "DRAFT",
+        changeDescription: `${desc} by ${user.name}`,
+        confirmedBy: user.id,
+      },
+    });
+
+    await tx.auditLog.create({
+      data: {
+        entityType: "PLATFORM_STATUS",
+        entityId: exam.id,
+        action: params.status,
+        newValues: JSON.stringify({ testpressStatus, status: params.status }),
+        changeDescription: `${desc} by ${user.name}`,
+        changedBy: user.id,
+      },
+    });
+  });
+
+  revalidatePath(`/examinations/${params.examId}`);
+  revalidatePath("/examinations");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+// ----------------------------------------------------
+// 9. Streamlined Direct Truskill LMS Toggle Action
+// ----------------------------------------------------
+export async function toggleExamTruskillLmsAction(params: {
+  examId: string;
+  isListed: boolean;
+}) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized.");
+
+  const exam = await prisma.exam.findUnique({
+    where: { id: params.examId },
+    include: { platformStatus: true },
+  });
+  if (!exam) throw new Error("Examination not found.");
+
+  await prisma.$transaction(async (tx) => {
+    const lmsStatus = params.isListed ? "COMPLETED" : "PENDING";
+    const lmsCompletedAt = params.isListed ? new Date() : null;
+    const lmsCompletedBy = params.isListed ? user.id : null;
+
+    // If marking as listed on Truskill LMS and Testpress wasn't already marked completed, set Testpress to completed too
+    let testpressUpdate = {};
+    if (params.isListed && exam.platformStatus?.testpressStatus !== "COMPLETED") {
+      testpressUpdate = {
+        testpressStatus: "COMPLETED",
+        testpressCompletedAt: new Date(),
+        testpressCompletedBy: user.id,
+      };
+    }
+
+    await tx.examPlatformStatus.update({
+      where: { examId: params.examId },
+      data: {
+        lmsStatus,
+        lmsCompletedAt,
+        lmsCompletedBy,
+        lmsUpdatePending: false,
+        ...testpressUpdate,
+      },
+    });
+
+    const nextOverall = params.isListed
+      ? "COMPLETED"
+      : exam.platformStatus?.testpressStatus === "COMPLETED"
+      ? "READY_ON_TESTPRESS"
+      : "DRAFT";
+
+    await tx.exam.update({
+      where: { id: params.examId },
+      data: { overallStatus: nextOverall },
+    });
+
+    const desc = params.isListed
+      ? `Listed on Truskill LMS by ${user.name}`
+      : `Unlisted from Truskill LMS by ${user.name}`;
+
+    await tx.platformUpdateHistory.create({
+      data: {
+        examId: params.examId,
+        platform: "TRUSKILL_LMS",
+        action: params.isListed ? "LISTED" : "UNLISTED",
+        changeDescription: desc,
+        confirmedBy: user.id,
+      },
+    });
+
+    await tx.auditLog.create({
+      data: {
+        entityType: "PLATFORM_STATUS",
+        entityId: exam.id,
+        action: params.isListed ? "LIST" : "UNLIST",
+        newValues: JSON.stringify({ lmsStatus, isListed: params.isListed }),
+        changeDescription: desc,
         changedBy: user.id,
       },
     });

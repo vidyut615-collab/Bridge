@@ -239,14 +239,6 @@ export default function CompositionBuilder({
       return;
     }
 
-    if (!changeDescription.trim()) {
-      setFeedback({
-        type: "error",
-        text: "A mandatory change description is required for audit logs.",
-      });
-      return;
-    }
-
     setIsSubmitting(true);
     setFeedback(null);
 
@@ -254,14 +246,12 @@ export default function CompositionBuilder({
       await saveExamCompositionAction({
         examId,
         sections,
-        changeDescription,
+        changeDescription: changeDescription.trim() || undefined,
       });
 
       setFeedback({
         type: "success",
-        text: isCompletedExam
-          ? "Composition updated. New version created and platform sync flags flagged."
-          : "Composition saved.",
+        text: "Composition successfully saved. History and version ledger updated.",
       });
       setChangeDescription("");
     } catch (err: unknown) {
@@ -610,32 +600,26 @@ export default function CompositionBuilder({
         </button>
       </div>
 
-      {/* Mandatory Change Reason & Save Footer */}
-      <div className="craft-card p-6 space-y-4">
-        <div>
-          <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
-            Mandatory Change Description <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            required
-            rows={2}
+      {/* Save Action Bar (No compulsory prompt!) */}
+      <div className="craft-card p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex-1">
+          <input
+            type="text"
             value={changeDescription}
             onChange={(e) => setChangeDescription(e.target.value)}
-            placeholder="Document reason for composition modification (e.g. Added 5 quantitative aptitude questions per curriculum review)"
-            className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-indigo-500 focus:outline-none transition-colors duration-150"
+            placeholder="Optional change note (e.g. Adjusted topic counts for Testpress)"
+            className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-indigo-500 focus:outline-none transition-colors"
           />
         </div>
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={isSubmitting || validationErrors.length > 0}
-            className="craft-button-primary h-11 px-8 text-sm font-medium inline-flex items-center gap-2"
-          >
-            <Save className="h-4 w-4" strokeWidth={1.5} />
-            {isSubmitting ? "Saving Composition..." : "Save Examination Composition"}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={isSubmitting || validationErrors.length > 0}
+          className="craft-button-primary h-11 px-8 text-sm font-medium inline-flex items-center justify-center gap-2 shrink-0"
+        >
+          <Save className="h-4 w-4" strokeWidth={1.5} />
+          {isSubmitting ? "Saving Composition..." : "Save Examination Composition"}
+        </button>
       </div>
 
       {/* Blueprint Extraction Modal */}
