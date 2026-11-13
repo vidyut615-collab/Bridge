@@ -114,54 +114,54 @@ export default function AiBlueprintModal({
   const unmatchedCount = extractedTopics.filter((t) => t.isUnmatched || !t.matchedTopicId).length;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto">
-      <div className="w-full max-w-4xl bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto">
+      <div className="w-full max-w-4xl craft-card border border-[var(--border-hairline)] overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
         {/* Modal Header */}
-        <div className="px-5 py-3.5 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between bg-[#f4f4f5] dark:bg-[#232325]">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1 rounded bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950">
-              <FileScan className="h-4 w-4" strokeWidth={1.5} />
+        <div className="px-6 py-4 border-b border-[var(--border-hairline)] flex items-center justify-between bg-[var(--bg-raised)]">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-500">
+              <FileScan className="h-5 w-5" strokeWidth={1.5} />
             </div>
             <div>
-              <h3 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-                Blueprint document extraction: {sectionName}
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+                AI Blueprint OCR Extraction: {sectionName}
               </h3>
-              <p className="text-[11px] text-zinc-500 font-mono">
-                Subject: {subjectName} • OCR reconciliation
+              <p className="text-xs text-[var(--text-secondary)] font-mono mt-0.5">
+                Target Subject: {subjectName} • Automatic Topic Reconciliation
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="h-7 w-7 inline-flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-md transition-colors duration-150"
+            className="h-8 w-8 inline-flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] rounded-lg transition-colors duration-150"
           >
-            <X className="h-4 w-4" strokeWidth={1.5} />
+            <X className="h-5 w-5" strokeWidth={1.5} />
           </button>
         </div>
 
         {/* Modal Content */}
-        <div className="p-5 overflow-y-auto space-y-4 flex-1">
+        <div className="p-6 overflow-y-auto space-y-5 flex-1">
           {error && (
-            <div className="p-3 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center gap-2.5 text-xs">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" strokeWidth={1.5} />
+            <div className="p-4 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center gap-3 text-sm">
+              <AlertCircle className="h-5 w-5 shrink-0 text-red-500" strokeWidth={1.5} />
               <span>{error}</span>
             </div>
           )}
 
           {!hasExtracted ? (
             /* Upload step */
-            <div className="space-y-4">
-              <div className="border border-dashed border-black/[0.16] dark:border-white/[0.16] rounded-xl p-8 text-center bg-[#f4f4f5]/40 dark:bg-[#232325]/40 transition-colors duration-150">
-                <UploadCloud className="h-8 w-8 text-zinc-400 mx-auto mb-2" strokeWidth={1.5} />
-                <p className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-                  Upload blueprint image
+            <div className="space-y-5">
+              <div className="border border-dashed border-[var(--border-prominent)] rounded-xl p-10 text-center bg-[var(--bg-raised)]/40 hover:bg-[var(--bg-raised)]/60 transition-colors duration-150">
+                <UploadCloud className="h-10 w-10 text-indigo-500 mx-auto mb-3" strokeWidth={1.5} />
+                <p className="text-sm font-semibold text-[var(--text-primary)]">
+                  Upload Curriculum Blueprint Snapshot
                 </p>
-                <p className="text-[11px] text-zinc-500 mt-1 mb-3 font-mono">
-                  PNG, JPG, or JPEG format
+                <p className="text-xs text-[var(--text-secondary)] mt-1 mb-4 font-mono">
+                  High-resolution PNG, JPG, or JPEG specification document
                 </p>
-                <label className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md bg-white dark:bg-[#19191b] border border-black/[0.08] dark:border-white/[0.08] text-xs font-medium text-zinc-900 dark:text-zinc-100 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] cursor-pointer transition-colors duration-150">
-                  <ImageIcon className="h-4 w-4 text-zinc-400" strokeWidth={1.5} />
-                  Select image file
+                <label className="craft-button-secondary inline-flex items-center gap-2 h-9 px-4 text-xs font-medium cursor-pointer">
+                  <ImageIcon className="h-4 w-4 text-indigo-500" strokeWidth={1.5} />
+                  Choose Blueprint File
                   <input
                     type="file"
                     accept="image/png,image/jpeg,image/jpg"
@@ -170,101 +170,101 @@ export default function AiBlueprintModal({
                   />
                 </label>
                 {file && (
-                  <p className="text-[11px] font-mono text-zinc-800 dark:text-zinc-200 mt-2.5">
+                  <p className="text-xs font-mono font-medium text-[var(--text-primary)] mt-3">
                     {file.name} ({(file.size / 1024).toFixed(1)} KB)
                   </p>
                 )}
               </div>
 
               {imagePreview && (
-                <div className="p-3 bg-[#f4f4f5] dark:bg-[#232325] rounded-xl max-h-60 overflow-hidden flex items-center justify-center border border-black/[0.08] dark:border-white/[0.08]">
+                <div className="p-4 bg-[var(--bg-raised)] rounded-xl max-h-64 overflow-hidden flex items-center justify-center border border-[var(--border-hairline)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={imagePreview}
                     alt="Blueprint Preview"
-                    className="max-h-52 rounded object-contain border border-black/[0.08] dark:border-white/[0.08]"
+                    className="max-h-56 rounded-lg object-contain border border-[var(--border-hairline)]"
                   />
                 </div>
               )}
             </div>
           ) : (
             /* Review & Reconcile step */
-            <div className="space-y-4">
-              <div className="flex items-center justify-between bg-[#f4f4f5] dark:bg-[#232325] p-3 rounded-lg border border-black/[0.08] dark:border-white/[0.08]">
-                <div className="flex items-center gap-3 font-mono text-xs">
-                  <span className="text-zinc-500">
-                    Extracted topics: <span className="font-medium text-zinc-900 dark:text-zinc-100 tabular-nums">{extractedTopics.length}</span>
+            <div className="space-y-5">
+              <div className="flex items-center justify-between bg-[var(--bg-raised)] p-4 rounded-xl border border-[var(--border-hairline)]">
+                <div className="flex items-center gap-3 font-mono text-sm">
+                  <span className="text-[var(--text-secondary)]">
+                    Extracted Topics: <span className="font-bold text-[var(--text-primary)] tabular-nums">{extractedTopics.length}</span>
                   </span>
                   <span>•</span>
-                  <span className="text-zinc-500">
-                    Total questions: <span className="font-medium text-zinc-900 dark:text-zinc-100 tabular-nums">{totalExtractedQuestions}</span>
+                  <span className="text-[var(--text-secondary)]">
+                    Total Questions: <span className="font-bold text-[var(--text-primary)] tabular-nums">{totalExtractedQuestions}</span>
                   </span>
                 </div>
                 {unmatchedCount > 0 ? (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white dark:bg-[#19191b] text-red-600 dark:text-red-400 border border-red-500/20 flex items-center gap-1.5">
-                    <AlertCircle className="h-3 w-3 text-red-500" strokeWidth={1.5} />
+                  <span className="px-3 py-1 rounded-md text-xs font-mono font-semibold bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center gap-1.5">
+                    <AlertCircle className="h-3.5 w-3.5 text-red-500" strokeWidth={1.5} />
                     {unmatchedCount} unmatched {unmatchedCount === 1 ? "topic" : "topics"}
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3 w-3" strokeWidth={1.5} />
-                    All topics reconciled
+                  <span className="px-3 py-1 rounded-md text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" strokeWidth={1.5} />
+                    All Topics Reconciled
                   </span>
                 )}
               </div>
 
-              <div className="border border-black/[0.08] dark:border-white/[0.08] rounded-lg overflow-hidden">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#f4f4f5] dark:bg-[#232325] text-[11px] font-mono text-zinc-500 border-b border-black/[0.08] dark:border-white/[0.08]">
+              <div className="border border-[var(--border-hairline)] rounded-xl overflow-hidden">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-[var(--bg-raised)] text-xs font-semibold text-[var(--text-muted)] border-b border-[var(--border-hairline)]">
                     <tr>
-                      <th className="py-2 px-3 font-normal">Extracted blueprint topic</th>
-                      <th className="py-2 px-3 text-right font-normal">Target Qs</th>
-                      <th className="py-2 px-3 text-right font-normal">I Easy</th>
-                      <th className="py-2 px-3 text-right font-normal">II Med</th>
-                      <th className="py-2 px-3 text-right font-normal">III Hard</th>
-                      <th className="py-2 px-3 font-normal">Master topic mapping</th>
+                      <th className="py-3 px-4">Extracted Blueprint Topic</th>
+                      <th className="py-3 px-4 text-right">Target Qs</th>
+                      <th className="py-3 px-4 text-right">Tier I Easy</th>
+                      <th className="py-3 px-4 text-right">Tier II Med</th>
+                      <th className="py-3 px-4 text-right">Tier III Hard</th>
+                      <th className="py-3 px-4">Master Topic Mapping</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+                  <tbody className="divide-y divide-[var(--border-hairline)]">
                     {extractedTopics.map((top, idx) => (
                       <tr
                         key={idx}
                         className={
                           top.isUnmatched
                             ? "bg-red-500/10"
-                            : "hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150"
+                            : "hover:bg-[var(--bg-raised)]/40 transition-colors duration-150"
                         }
                       >
-                        <td className="py-2.5 px-3 font-normal text-zinc-900 dark:text-zinc-100">
+                        <td className="py-3.5 px-4 font-medium text-[var(--text-primary)]">
                           {top.extractedTopicName}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono font-medium text-zinc-900 dark:text-zinc-100 tabular-nums">
+                        <td className="py-3.5 px-4 text-right font-mono font-bold text-[var(--text-primary)] tabular-nums">
                           {top.questionCount}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono text-zinc-600 dark:text-zinc-400 tabular-nums">{top.level1Easy}</td>
-                        <td className="py-2.5 px-3 text-right font-mono text-zinc-600 dark:text-zinc-400 tabular-nums">{top.level2Medium}</td>
-                        <td className="py-2.5 px-3 text-right font-mono text-zinc-600 dark:text-zinc-400 tabular-nums">{top.level3Hard}</td>
-                        <td className="py-2.5 px-3">
+                        <td className="py-3.5 px-4 text-right font-mono text-emerald-600 dark:text-emerald-400 font-semibold tabular-nums">{top.level1Easy}</td>
+                        <td className="py-3.5 px-4 text-right font-mono text-amber-600 dark:text-amber-400 font-semibold tabular-nums">{top.level2Medium}</td>
+                        <td className="py-3.5 px-4 text-right font-mono text-indigo-600 dark:text-indigo-400 font-semibold tabular-nums">{top.level3Hard}</td>
+                        <td className="py-3.5 px-4">
                           {top.isUnmatched ? (
                             <div className="flex items-center gap-2">
                               <select
                                 onChange={(e) => handleResolveTopic(idx, e.target.value)}
                                 defaultValue=""
-                                className="h-7 px-2 text-xs bg-white dark:bg-[#19191b] rounded-md border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-zinc-100 focus:outline-none"
+                                className="h-8 px-2.5 text-xs bg-[var(--bg-card)] rounded-lg border border-[var(--border-hairline)] text-[var(--text-primary)] focus:border-indigo-500 focus:outline-none"
                               >
                                 <option value="" disabled>
                                   Select master topic
                                 </option>
                                 {masterTopics.map((m) => (
-                                  <option key={m.id} value={m.id} className="dark:bg-[#19191b]">
+                                  <option key={m.id} value={m.id} className="dark:bg-[#11141c]">
                                     {m.name}
                                   </option>
                                 ))}
                               </select>
                             </div>
                           ) : (
-                            <span className="font-normal text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">
-                              <CheckCircle2 className="h-3.5 w-3.5 text-zinc-500" strokeWidth={1.5} />
+                            <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-2 text-sm">
+                              <CheckCircle2 className="h-4 w-4 text-emerald-500" strokeWidth={1.5} />
                               {top.matchedTopicName}
                             </span>
                           )}
@@ -279,11 +279,11 @@ export default function AiBlueprintModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-5 py-3 border-t border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-[var(--border-hairline)] bg-[var(--bg-raised)] flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
-            className="px-3 py-1.5 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150"
+            className="craft-button-secondary h-9 px-4 text-xs font-medium"
           >
             Cancel
           </button>
@@ -293,17 +293,17 @@ export default function AiBlueprintModal({
               type="button"
               disabled={!file || isProcessing}
               onClick={handleExtract}
-              className="inline-flex items-center gap-1.5 h-8 px-3.5 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)] disabled:opacity-50"
+              className="craft-button-primary h-9 px-5 text-xs font-medium inline-flex items-center gap-2"
             >
               <FileScan className="h-4 w-4" strokeWidth={1.5} />
-              {isProcessing ? "Processing document..." : "Scan and extract"}
+              {isProcessing ? "Processing Blueprint..." : "Scan & Extract Blueprint"}
             </button>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => setHasExtracted(false)}
-                className="px-3 py-1.5 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150"
+                className="craft-button-secondary h-9 px-4 text-xs font-medium"
               >
                 Re-upload
               </button>
@@ -311,10 +311,10 @@ export default function AiBlueprintModal({
                 type="button"
                 disabled={unmatchedCount > 0}
                 onClick={handleApply}
-                className="inline-flex items-center gap-1.5 h-8 px-3.5 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)] disabled:opacity-50"
+                className="craft-button-primary h-9 px-5 text-xs font-medium inline-flex items-center gap-2"
               >
                 <CheckCircle2 className="h-4 w-4" strokeWidth={1.5} />
-                Apply to section
+                Apply to Section
               </button>
             </div>
           )}

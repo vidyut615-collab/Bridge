@@ -155,60 +155,60 @@ export default function ExamDetailTabs({
   return (
     <div className="space-y-6">
       {/* Segmented Tab Navigation */}
-      <div className="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-[#f4f4f5] dark:bg-[#232325] border border-black/[0.08] dark:border-white/[0.08] text-xs">
+      <div className="craft-card-subtle p-1.5 inline-flex flex-wrap items-center gap-1.5 border border-[var(--border-hairline)] rounded-xl">
         <button
           type="button"
           onClick={() => setActiveTab("composition")}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors duration-150 ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all duration-150 ${
             activeTab === "composition"
-              ? "bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 font-medium border border-black/[0.08] dark:border-white/[0.08]"
-              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+              ? "bg-[var(--bg-raised)] text-[var(--text-primary)] font-semibold shadow-sm border border-[var(--border-hairline)]"
+              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)]/40 font-medium"
           }`}
         >
           <Layers className="h-4 w-4" strokeWidth={1.5} />
-          Composition matrix
+          Composition Matrix
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("operations")}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors duration-150 ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all duration-150 ${
             activeTab === "operations"
-              ? "bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 font-medium border border-black/[0.08] dark:border-white/[0.08]"
-              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+              ? "bg-[var(--bg-raised)] text-[var(--text-primary)] font-semibold shadow-sm border border-[var(--border-hairline)]"
+              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)]/40 font-medium"
           }`}
         >
           <Send className="h-4 w-4" strokeWidth={1.5} />
-          Deployment pipeline
+          Deployment Pipeline
           {(platformStatus?.testpressUpdatePending || platformStatus?.lmsUpdatePending) && (
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
           )}
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors duration-150 ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all duration-150 ${
             activeTab === "overview"
-              ? "bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 font-medium border border-black/[0.08] dark:border-white/[0.08]"
-              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+              ? "bg-[var(--bg-raised)] text-[var(--text-primary)] font-semibold shadow-sm border border-[var(--border-hairline)]"
+              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)]/40 font-medium"
           }`}
         >
           <FileSpreadsheet className="h-4 w-4" strokeWidth={1.5} />
-          Parameters and settings
+          Parameters & Settings
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("history")}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-colors duration-150 ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all duration-150 ${
             activeTab === "history"
-              ? "bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 font-medium border border-black/[0.08] dark:border-white/[0.08]"
-              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+              ? "bg-[var(--bg-raised)] text-[var(--text-primary)] font-semibold shadow-sm border border-[var(--border-hairline)]"
+              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)]/40 font-medium"
           }`}
         >
           <History className="h-4 w-4" strokeWidth={1.5} />
-          Version audit ({versions.length + 1})
+          Version Audit ({versions.length + 1})
         </button>
       </div>
 
@@ -234,65 +234,65 @@ export default function ExamDetailTabs({
 
       {/* 3. Overview & Metadata Tab */}
       {activeTab === "overview" && (
-        <form onSubmit={handleUpdateMetadata} className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] p-5 space-y-5">
+        <form onSubmit={handleUpdateMetadata} className="craft-card p-6 space-y-6">
           <div>
-            <h2 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-              Assessment metadata
+            <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+              Assessment Delivery Metadata
             </h2>
-            <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
-              Title modifications preserve sequence code ({exam.uniqueCode})
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+              Title modifications preserve deterministic sequence code ({exam.uniqueCode})
             </p>
           </div>
 
           {metadataFeedback && (
             <div
-              className={`p-3.5 rounded-lg flex items-center gap-2.5 text-xs ${
+              className={`p-4 rounded-xl flex items-center gap-3 text-sm ${
                 metadataFeedback.type === "success"
-                  ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08]"
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
                   : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
               }`}
             >
               {metadataFeedback.type === "success" ? (
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" strokeWidth={1.5} />
+                <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" strokeWidth={1.5} />
               ) : (
-                <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.5} />
+                <AlertCircle className="h-5 w-5 text-red-500 shrink-0" strokeWidth={1.5} />
               )}
               <span>{metadataFeedback.text}</span>
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs text-zinc-500 mb-1.5 font-normal">
-                Descriptive title
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                Descriptive Title
               </label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors duration-150"
+                className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] focus:border-indigo-500 focus:outline-none transition-colors duration-150"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-zinc-500 mb-1.5 font-normal">
-                Visibility type
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                Visibility Type
               </label>
               <select
                 value={testType}
                 onChange={(e) => setTestType(e.target.value as "PUBLIC" | "PRIVATE")}
-                className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors duration-150"
+                className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] focus:border-indigo-500 focus:outline-none transition-colors duration-150"
               >
-                <option value="PRIVATE">Private (Restricted)</option>
-                <option value="PUBLIC">Public</option>
+                <option value="PRIVATE">Private (Restricted / Enrolled)</option>
+                <option value="PUBLIC">Public (Open Link)</option>
               </select>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
             <div>
-              <label className="block text-xs text-zinc-500 mb-1.5 font-normal">
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                 Duration (minutes)
               </label>
               <input
@@ -301,13 +301,13 @@ export default function ExamDetailTabs({
                 required
                 value={durationMinutes}
                 onChange={(e) => setDurationMinutes(parseInt(e.target.value) || 60)}
-                className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 font-mono focus:outline-none transition-colors duration-150"
+                className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] font-mono tabular-nums focus:border-indigo-500 focus:outline-none transition-colors duration-150"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-zinc-500 mb-1.5 font-normal">
-                Total marks
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                Total Marks
               </label>
               <input
                 type="number"
@@ -315,13 +315,13 @@ export default function ExamDetailTabs({
                 required
                 value={totalMarks}
                 onChange={(e) => setTotalMarks(parseFloat(e.target.value) || 100)}
-                className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 font-mono focus:outline-none transition-colors duration-150"
+                className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] font-mono tabular-nums focus:border-indigo-500 focus:outline-none transition-colors duration-150"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-zinc-500 mb-1.5 font-normal">
-                Marks for correct (+)
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                Marks for Correct (+)
               </label>
               <input
                 type="number"
@@ -329,13 +329,13 @@ export default function ExamDetailTabs({
                 required
                 value={marksCorrect}
                 onChange={(e) => setMarksCorrect(parseFloat(e.target.value) || 1)}
-                className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 font-mono focus:outline-none transition-colors duration-150"
+                className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] font-mono tabular-nums focus:border-indigo-500 focus:outline-none transition-colors duration-150"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-zinc-500 mb-1.5 font-normal">
-                Marks for incorrect (-)
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                Marks for Incorrect (-)
               </label>
               <input
                 type="number"
@@ -343,22 +343,22 @@ export default function ExamDetailTabs({
                 required
                 value={marksIncorrect}
                 onChange={(e) => setMarksIncorrect(parseFloat(e.target.value) || 0)}
-                className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 font-mono focus:outline-none transition-colors duration-150"
+                className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] font-mono tabular-nums focus:border-indigo-500 focus:outline-none transition-colors duration-150"
               />
             </div>
           </div>
 
-          <div className="space-y-1.5 pt-4 border-t border-black/[0.06] dark:border-white/[0.06]">
-            <label className="block text-xs text-zinc-500 font-normal">
-              Mandatory change reason <span className="text-zinc-400">*</span>
+          <div className="space-y-2 pt-4 border-t border-[var(--border-hairline)]">
+            <label className="block text-xs font-medium text-[var(--text-secondary)]">
+              Mandatory Change Reason <span className="text-red-500">*</span>
             </label>
             <textarea
               required
               rows={2}
               value={changeDescription}
               onChange={(e) => setChangeDescription(e.target.value)}
-              placeholder="Document reason for metadata modification"
-              className="w-full px-3 py-2 text-xs rounded-lg border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
+              placeholder="Explicitly document rationale for parameter change (e.g. Extended duration by +15m per faculty review)"
+              className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-indigo-500 focus:outline-none transition-colors duration-150"
             />
           </div>
 
@@ -366,10 +366,10 @@ export default function ExamDetailTabs({
             <button
               type="submit"
               disabled={isUpdatingMetadata}
-              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)] disabled:opacity-50"
+              className="craft-button-primary h-10 px-6 text-sm font-medium inline-flex items-center gap-2"
             >
               <Save className="h-4 w-4" strokeWidth={1.5} />
-              {isUpdatingMetadata ? "Saving..." : "Save metadata modifications"}
+              {isUpdatingMetadata ? "Saving Changes..." : "Save Metadata Modifications"}
             </button>
           </div>
         </form>
@@ -377,49 +377,49 @@ export default function ExamDetailTabs({
 
       {/* 4. History & Versions Tab */}
       {activeTab === "history" && (
-        <div className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
-          <div className="p-4 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
-            <h2 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-              Historical versions
+        <div className="craft-card overflow-hidden">
+          <div className="px-6 py-4 border-b border-[var(--border-hairline)] flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+              Historical Version Audit Trail
             </h2>
-            <span className="text-[11px] text-zinc-500 font-mono">
-              Active: v{exam.currentVersion}
+            <span className="text-xs text-[var(--text-muted)] font-mono">
+              Active Version: v{exam.currentVersion}
             </span>
           </div>
 
-          <table className="w-full text-left text-xs">
-            <thead className="bg-[#f4f4f5] dark:bg-[#232325] text-[11px] font-mono text-zinc-500 border-b border-black/[0.08] dark:border-white/[0.08]">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-[var(--bg-raised)] text-xs font-semibold text-[var(--text-muted)] border-b border-[var(--border-hairline)]">
               <tr>
-                <th className="py-2.5 px-4 font-normal">Version</th>
-                <th className="py-2.5 px-4 font-normal">Change description</th>
-                <th className="py-2.5 px-4 font-normal">User</th>
-                <th className="py-2.5 px-4 font-normal">Timestamp (IST)</th>
+                <th className="py-3 px-4">Version</th>
+                <th className="py-3 px-4">Change Description</th>
+                <th className="py-3 px-4">User</th>
+                <th className="py-3 px-4">Timestamp (IST)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-              <tr className="bg-[#f4f4f5]/60 dark:bg-[#232325]/60 font-medium">
-                <td className="py-3 px-4 font-mono text-zinc-900 dark:text-zinc-100">
+            <tbody className="divide-y divide-[var(--border-hairline)]">
+              <tr className="bg-[var(--bg-raised)]/60 font-medium">
+                <td className="py-3.5 px-4 font-mono font-semibold text-[var(--text-primary)]">
                   v{exam.currentVersion} (Current)
                 </td>
-                <td className="py-3 px-4 text-zinc-900 dark:text-zinc-100 font-normal">
+                <td className="py-3.5 px-4 text-[var(--text-primary)]">
                   Active specification in effect
                 </td>
-                <td className="py-3 px-4 text-zinc-500 font-mono">—</td>
-                <td className="py-3 px-4 text-zinc-500 font-mono">Current</td>
+                <td className="py-3.5 px-4 text-[var(--text-muted)] font-mono">—</td>
+                <td className="py-3.5 px-4 text-[var(--text-muted)] font-mono">Current</td>
               </tr>
 
               {versions.map((ver) => (
-                <tr key={ver.id} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150">
-                  <td className="py-3 px-4 font-mono text-zinc-900 dark:text-zinc-100">
+                <tr key={ver.id} className="hover:bg-[var(--bg-raised)]/40 transition-colors duration-150">
+                  <td className="py-3.5 px-4 font-mono font-semibold text-[var(--text-primary)]">
                     v{ver.versionNumber}
                   </td>
-                  <td className="py-3 px-4 text-zinc-600 dark:text-zinc-400 font-normal">
+                  <td className="py-3.5 px-4 text-[var(--text-secondary)]">
                     {ver.changeDescription}
                   </td>
-                  <td className="py-3 px-4 text-zinc-900 dark:text-zinc-100 font-normal">
+                  <td className="py-3.5 px-4 text-[var(--text-primary)] font-medium">
                     {ver.changedByName}
                   </td>
-                  <td className="py-3 px-4 font-mono text-zinc-500">
+                  <td className="py-3.5 px-4 font-mono text-xs text-[var(--text-muted)]">
                     {formatDateKolkata(ver.createdAt)}
                   </td>
                 </tr>

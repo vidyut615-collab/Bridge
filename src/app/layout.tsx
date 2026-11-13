@@ -53,22 +53,25 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-zinc-100/70 dark:bg-[#0a0a0c] text-zinc-900 dark:text-zinc-100 font-sans antialiased selection:bg-zinc-900 selection:text-white dark:selection:bg-zinc-100 dark:selection:text-zinc-950">
+      <body className="min-h-full flex flex-col bg-[var(--bg-page)] text-[var(--text-primary)] font-sans antialiased selection:bg-zinc-900 selection:text-white dark:selection:bg-zinc-100 dark:selection:text-zinc-950">
         <Navbar user={user} />
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7">
+        <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 lg:px-10 py-8">
           {children}
         </main>
-        <footer className="border-t border-zinc-200/80 dark:border-zinc-800/80 bg-white/70 dark:bg-[#0e0e11]/70 backdrop-blur-xs py-4 text-xs text-zinc-500">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+        <footer className="border-t border-[var(--border-hairline)] bg-[var(--bg-card)] py-4 text-xs">
+          <div className="max-w-[1440px] mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2 font-mono text-[11px]">
-              <span className="font-semibold text-zinc-950 dark:text-zinc-100 tracking-tight">BRIDGE</span>
-              <span className="text-zinc-400 dark:text-zinc-600">/</span>
-              <span className="text-zinc-500 dark:text-zinc-400">OPERATIONS LEDGER</span>
+              <span className="font-semibold text-[var(--text-primary)] tracking-tight">BRIDGE</span>
+              <span className="text-[var(--text-muted)]">/</span>
+              <span className="text-[var(--text-secondary)]">ASSESSMENT INFRASTRUCTURE</span>
             </div>
-            <div className="text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center gap-2 font-mono">
-              <span>Assessment & Exam Infrastructure</span>
-              <span className="text-zinc-300 dark:text-zinc-700">•</span>
-              <span className="font-medium text-zinc-800 dark:text-zinc-200">Truskill Operations</span>
+            <div className="text-[11px] text-[var(--text-muted)] flex items-center gap-3 font-mono">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>All systems nominal</span>
+              </span>
+              <span>•</span>
+              <span className="text-[var(--text-secondary)]">Truskill Assessment Operations</span>
             </div>
           </div>
         </footer>

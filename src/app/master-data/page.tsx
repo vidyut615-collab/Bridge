@@ -36,20 +36,20 @@ export default async function MasterDataPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[var(--border-hairline)]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
-              Master data governance
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+              Master Data Governance
             </h1>
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-600 dark:text-zinc-400 border border-black/[0.08] dark:border-white/[0.08]">
-              <Shield className="h-3.5 w-3.5" strokeWidth={1.5} /> Superadmin access
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
+              <Shield className="h-3.5 w-3.5" strokeWidth={1.5} /> Superadmin Access
             </span>
           </div>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Colleges, subjects, topics, and staff credentials. Soft-delete archival preserves historic integrity.
+          <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
+            Manage institutional partner colleges, academic subjects, topic taxonomies, and authenticated staff credentials with immutable audit preservation
           </p>
         </div>
       </div>

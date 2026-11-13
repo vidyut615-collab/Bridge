@@ -57,21 +57,21 @@ export default function ExamListTable({ exams }: ExamListTableProps) {
       {/* Search and Filters Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Search Input */}
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" strokeWidth={1.5} />
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search"
-            className="h-8 w-full pl-8 pr-3 text-xs rounded-md bg-[#f4f4f5] dark:bg-[#232325] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
+            placeholder="Search by name, ID, or college..."
+            className="h-9 w-full pl-9 pr-3 text-xs rounded-lg bg-[var(--bg-card)] border border-[var(--border-hairline)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none transition-colors"
           />
         </div>
 
         {/* Filter Segments */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Category filter */}
-          <div className="flex items-center gap-0.5 bg-[#f4f4f5] dark:bg-[#232325] p-0.5 rounded-lg border border-black/[0.08] dark:border-white/[0.08] text-xs">
+          <div className="flex items-center gap-1 bg-[var(--bg-raised)] p-1 rounded-lg border border-[var(--border-hairline)] text-xs">
             {[
               { id: "ALL", label: "All types" },
               { id: "COLLEGE_TRAINING", label: "TR" },
@@ -82,10 +82,10 @@ export default function ExamListTable({ exams }: ExamListTableProps) {
                 key={cat.id}
                 type="button"
                 onClick={() => setCategoryFilter(cat.id)}
-                className={`px-2.5 py-1 text-xs rounded-md transition-colors duration-150 ${
+                className={`px-3 py-1 text-xs rounded-md font-medium transition-colors duration-150 ${
                   categoryFilter === cat.id
-                    ? "bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 font-medium border border-black/[0.08] dark:border-white/[0.08]"
-                    : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    ? "bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-hairline)] shadow-xs"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 {cat.label}
@@ -94,10 +94,10 @@ export default function ExamListTable({ exams }: ExamListTableProps) {
           </div>
 
           {/* Status filter */}
-          <div className="flex items-center gap-0.5 bg-[#f4f4f5] dark:bg-[#232325] p-0.5 rounded-lg border border-black/[0.08] dark:border-white/[0.08] text-xs">
+          <div className="flex items-center gap-1 bg-[var(--bg-raised)] p-1 rounded-lg border border-[var(--border-hairline)] text-xs">
             {[
               { id: "ALL", label: "All status" },
-              { id: "COMPLETED", label: "Completed" },
+              { id: "COMPLETED", label: "Deployed" },
               { id: "TESTPRESS_PENDING", label: "TP pending" },
               { id: "LMS_PENDING", label: "LMS pending" },
             ].map((st) => (
@@ -105,10 +105,10 @@ export default function ExamListTable({ exams }: ExamListTableProps) {
                 key={st.id}
                 type="button"
                 onClick={() => setStatusFilter(st.id)}
-                className={`px-2.5 py-1 text-xs rounded-md transition-colors duration-150 ${
+                className={`px-3 py-1 text-xs rounded-md font-medium transition-colors duration-150 ${
                   statusFilter === st.id
-                    ? "bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 font-medium border border-black/[0.08] dark:border-white/[0.08]"
-                    : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    ? "bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border-hairline)] shadow-xs"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 {st.label}
@@ -119,133 +119,141 @@ export default function ExamListTable({ exams }: ExamListTableProps) {
       </div>
 
       {/* Examinations Table Container */}
-      <div className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
-        <div className="px-4 py-3 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
-          <span className="text-xs text-zinc-500 font-mono">
-            Showing <strong className="text-zinc-900 dark:text-zinc-100 font-medium">{filteredExams.length}</strong> of {exams.length} examinations
+      <div className="craft-card overflow-hidden">
+        <div className="px-5 py-3.5 border-b border-[var(--border-hairline)] flex items-center justify-between">
+          <span className="text-xs text-[var(--text-muted)] font-mono">
+            Showing <strong className="text-[var(--text-primary)] font-semibold">{filteredExams.length}</strong> of {exams.length} examinations
           </span>
-          <span className="text-[11px] font-mono text-zinc-400">
-            Audit-synchronized
+          <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium">
+            Audit synchronized
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-[#f4f4f5] dark:bg-[#232325] text-[11px] font-mono text-zinc-500 border-b border-black/[0.08] dark:border-white/[0.08]">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-[var(--bg-raised)] text-xs font-semibold text-[var(--text-muted)] border-b border-[var(--border-hairline)]">
               <tr>
-                <th className="py-2.5 px-4 font-normal">Exam name and code</th>
-                <th className="py-2.5 px-4 font-normal">Category</th>
-                <th className="py-2.5 px-4 font-normal">College</th>
-                <th className="py-2.5 px-4 text-center font-normal">Sections / Qs</th>
-                <th className="py-2.5 px-4 text-center font-normal">Duration</th>
-                <th className="py-2.5 px-4 text-center font-normal">Testpress</th>
-                <th className="py-2.5 px-4 text-center font-normal">Truskill LMS</th>
-                <th className="py-2.5 px-4 text-center font-normal">Status</th>
-                <th className="py-2.5 px-4 text-right font-normal">Action</th>
+                <th className="py-3 px-4">Exam Name & Code</th>
+                <th className="py-3 px-4">Category</th>
+                <th className="py-3 px-4">College</th>
+                <th className="py-3 px-4 text-center">Sections / Qs</th>
+                <th className="py-3 px-4 text-center">Duration</th>
+                <th className="py-3 px-4 text-center">Testpress</th>
+                <th className="py-3 px-4 text-center">Truskill LMS</th>
+                <th className="py-3 px-4 text-center">Status</th>
+                <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+            <tbody className="divide-y divide-[var(--border-hairline)]">
               {filteredExams.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="py-12 text-center text-xs text-zinc-500 font-mono">
+                  <td colSpan={9} className="py-14 text-center text-sm text-[var(--text-muted)] font-mono">
                     No examinations match filter query
                   </td>
                 </tr>
               ) : (
                 filteredExams.map((exam) => (
-                  <tr key={exam.id} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150">
-                    <td className="py-3 px-4">
+                  <tr key={exam.id} className="hover:bg-[var(--bg-raised)]/60 transition-colors duration-150">
+                    <td className="py-3.5 px-4">
                       <Link
                         href={`/examinations/${exam.id}`}
-                        className="font-mono font-medium text-zinc-900 dark:text-zinc-100 hover:underline block text-xs"
+                        className="font-medium text-sm text-[var(--text-primary)] hover:underline block leading-snug"
                       >
                         {exam.generatedName}
                       </Link>
-                      <div className="flex items-center gap-1.5 mt-0.5 font-mono text-[11px] text-zinc-400">
-                        <span>{exam.examId}</span>
+                      <div className="flex items-center gap-2 mt-1 font-mono text-xs text-[var(--text-muted)]">
+                        <span className="text-[var(--text-secondary)] font-medium">{exam.examId}</span>
                         <span>•</span>
                         <span className="capitalize">{exam.testType.toLowerCase()}</span>
                         <span>•</span>
-                        <span className="text-zinc-700 dark:text-zinc-300">v{exam.currentVersion}</span>
+                        <span className="text-[var(--text-primary)] font-medium">v{exam.currentVersion}</span>
                       </div>
                     </td>
 
-                    <td className="py-3 px-4">
-                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#f4f4f5] dark:bg-[#232325] text-zinc-700 dark:text-zinc-300 border border-black/[0.08] dark:border-white/[0.08]">
+                    <td className="py-3.5 px-4">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono font-medium bg-[var(--bg-raised)] text-[var(--text-secondary)] border border-[var(--border-hairline)]">
                         {exam.category === "COLLEGE_TRAINING"
-                          ? "TR"
+                          ? "College Training"
                           : exam.category === "COLLEGE_REGULAR"
-                          ? "RG"
+                          ? "College Regular"
                           : "Global"}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4 text-zinc-500">
+                    <td className="py-3.5 px-4 text-[var(--text-muted)]">
                       {exam.college ? (
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-zinc-900 dark:text-zinc-100 font-medium">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-sm text-[var(--text-primary)] font-semibold">
                             {exam.college.code}
                           </span>
-                          <span className="truncate max-w-[120px] text-[11px] text-zinc-400">
+                          <span className="truncate max-w-[140px] text-xs text-[var(--text-muted)]">
                             {exam.college.name}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-zinc-400 font-mono">—</span>
+                        <span className="text-[var(--text-muted)] font-mono">—</span>
                       )}
                     </td>
 
-                    <td className="py-3 px-4 text-center font-mono">
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100 tabular-nums">{exam.totalQuestions} Qs</span>
-                      <div className="text-[10px] text-zinc-400">
-                        {exam.sectionsCount} {exam.sectionsCount === 1 ? "sec" : "secs"}
+                    <td className="py-3.5 px-4 text-center font-mono">
+                      <span className="font-semibold text-sm text-[var(--text-primary)] tabular-nums">{exam.totalQuestions} Qs</span>
+                      <div className="text-xs text-[var(--text-muted)]">
+                        {exam.sectionsCount} {exam.sectionsCount === 1 ? "section" : "sections"}
                       </div>
                     </td>
 
-                    <td className="py-3 px-4 text-center font-mono text-zinc-600 dark:text-zinc-400 tabular-nums">
+                    <td className="py-3.5 px-4 text-center font-mono text-sm text-[var(--text-secondary)] tabular-nums">
                       {exam.durationMinutes}m
                     </td>
 
-                    <td className="py-3 px-4 text-center">
-                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono border ${
+                    <td className="py-3.5 px-4 text-center">
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-mono font-medium border ${
                         exam.testpressStatus === "COMPLETED"
-                          ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-800 dark:text-zinc-200 border-black/[0.08] dark:border-white/[0.08]"
-                          : "bg-transparent text-zinc-500 border-black/[0.08] dark:border-white/[0.08]"
+                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                          : "bg-[var(--bg-raised)] text-[var(--text-muted)] border-[var(--border-hairline)]"
                       }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${exam.testpressStatus === "COMPLETED" ? "bg-emerald-500" : "bg-zinc-400"}`} />
                         {exam.testpressStatus === "COMPLETED" ? "Synced" : "Pending"}
                       </span>
                       {exam.testpressUpdatePending && (
-                        <div className="text-[9px] text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+                        <div className="text-[11px] text-amber-500 font-mono font-medium mt-1">
                           Update req
                         </div>
                       )}
                     </td>
 
-                    <td className="py-3 px-4 text-center">
-                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono border ${
+                    <td className="py-3.5 px-4 text-center">
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-mono font-medium border ${
                         exam.lmsStatus === "COMPLETED"
-                          ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-800 dark:text-zinc-200 border-black/[0.08] dark:border-white/[0.08]"
-                          : "bg-transparent text-zinc-500 border-black/[0.08] dark:border-white/[0.08]"
+                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                          : "bg-[var(--bg-raised)] text-[var(--text-muted)] border-[var(--border-hairline)]"
                       }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${exam.lmsStatus === "COMPLETED" ? "bg-emerald-500" : "bg-zinc-400"}`} />
                         {exam.lmsStatus === "COMPLETED" ? "Synced" : "Pending"}
                       </span>
                       {exam.lmsUpdatePending && (
-                        <div className="text-[9px] text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+                        <div className="text-[11px] text-amber-500 font-mono font-medium mt-1">
                           Update req
                         </div>
                       )}
                     </td>
 
-                    <td className="py-3 px-4 text-center">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950">
+                    <td className="py-3.5 px-4 text-center">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold uppercase tracking-wider border ${
+                        exam.overallStatus === "PUBLISHED" || exam.overallStatus === "COMPLETED"
+                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                          : exam.overallStatus === "IN_REVIEW"
+                          ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20"
+                          : "bg-[var(--bg-raised)] text-[var(--text-secondary)] border-[var(--border-hairline)]"
+                      }`}>
                         {exam.overallStatus.replace(/_/g, " ").toLowerCase()}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-3.5 px-4 text-right">
                       <Link
                         href={`/examinations/${exam.id}`}
-                        className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md text-xs font-medium bg-[#f4f4f5] dark:bg-[#232325] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150"
+                        className="craft-button-secondary inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium"
                       >
                         Open <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                       </Link>

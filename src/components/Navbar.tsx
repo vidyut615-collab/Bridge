@@ -38,27 +38,27 @@ export default function Navbar({ user }: NavbarProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#141415] transition-colors duration-150">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-[var(--border-hairline)] bg-[var(--bg-card)]/90 backdrop-blur-md transition-colors duration-150">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-10">
         <div className="flex h-14 items-center justify-between">
           {/* Brand Identifier & Navigation */}
-          <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md overflow-hidden bg-zinc-900 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-800">
-                <Image src="/icon.png" alt="Bridge Logo" width={28} height={28} className="object-cover" priority />
+          <div className="flex items-center gap-8">
+            <Link href="/dashboard" className="flex items-center gap-2.5 group">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden bg-zinc-950 dark:bg-zinc-900 border border-[var(--border-hairline)] transition-transform duration-150 group-hover:scale-[1.02]">
+                <Image src="/icon.png" alt="Bridge Logo" width={32} height={32} className="object-cover" priority />
               </div>
               <div className="flex items-baseline gap-1.5 font-mono">
-                <span className="font-medium text-zinc-900 dark:text-zinc-100 text-xs tracking-tight">
+                <span className="font-semibold text-[var(--text-primary)] text-sm tracking-tight">
                   Bridge
                 </span>
-                <span className="text-zinc-400 dark:text-zinc-500 text-[11px]">
+                <span className="text-[var(--text-muted)] text-[11px] font-normal">
                   ops
                 </span>
               </div>
             </Link>
 
             {/* Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-1.5">
               {navLinks.map((item) => {
                 const Icon = item.icon;
                 const isActive =
@@ -70,21 +70,21 @@ export default function Navbar({ user }: NavbarProps) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs transition-colors duration-150 ${
+                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-[13px] transition-colors duration-150 ${
                       isActive
-                        ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 font-medium border border-black/[0.08] dark:border-white/[0.08]"
-                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-black/[0.04] dark:hover:bg-white/[0.04]"
+                        ? "bg-[var(--bg-raised)] text-[var(--text-primary)] font-medium border border-[var(--border-hairline)] shadow-xs"
+                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)]"
                     }`}
                   >
                     <Icon
                       className={`h-4 w-4 ${
                         isActive
-                          ? "text-zinc-900 dark:text-zinc-100"
-                          : "text-zinc-400 dark:text-zinc-500"
+                          ? "text-[var(--text-primary)]"
+                          : "text-[var(--text-muted)]"
                       }`}
                       strokeWidth={1.5}
                     />
-                    {item.label}
+                    <span>{item.label}</span>
                   </Link>
                 );
               })}
@@ -92,18 +92,20 @@ export default function Navbar({ user }: NavbarProps) {
           </div>
 
           {/* User Controls & Utility Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <ThemeToggle />
 
-            <div className="flex items-center gap-2 pl-2 border-l border-black/[0.08] dark:border-white/[0.08]">
-              <div className="hidden sm:flex items-center gap-2 bg-[#f4f4f5] dark:bg-[#232325] border border-black/[0.08] dark:border-white/[0.08] rounded-md px-2.5 py-1">
-                <UserIcon className="h-3.5 w-3.5 text-zinc-500" strokeWidth={1.5} />
+            <div className="flex items-center gap-2 pl-2.5 border-l border-[var(--border-hairline)]">
+              <div className="hidden sm:flex items-center gap-2 bg-[var(--bg-raised)] border border-[var(--border-hairline)] rounded-md px-3 py-1">
+                <div className="h-5 w-5 rounded-full bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 flex items-center justify-center text-[10px] font-mono font-medium">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+                  <span className="text-xs font-medium text-[var(--text-primary)]">
                     {user.name}
                   </span>
-                  <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400">
-                    ({user.role.toLowerCase()})
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider">
+                    {user.role}
                   </span>
                 </div>
               </div>
@@ -112,7 +114,7 @@ export default function Navbar({ user }: NavbarProps) {
                 <button
                   type="submit"
                   title="Sign out"
-                  className="flex h-8 w-8 items-center justify-center rounded-md text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150"
+                  className="flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition-colors duration-150"
                 >
                   <LogOut className="h-4 w-4" strokeWidth={1.5} />
                 </button>

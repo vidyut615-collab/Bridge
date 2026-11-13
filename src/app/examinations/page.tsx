@@ -44,30 +44,30 @@ export default async function ExaminationsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[var(--border-hairline)]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
-              Examination registry
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+              Examination Registry
             </h1>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-600 dark:text-zinc-400 border border-black/[0.08] dark:border-white/[0.08]">
-              {rawExams.length} registered
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-[var(--bg-raised)] text-[var(--text-secondary)] border border-[var(--border-hairline)]">
+              {rawExams.length} specifications
             </span>
           </div>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Assessment names, atomic sequence formulas, test blueprints, and deployment pipeline states
+          <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
+            Atomic naming formulas, section blueprint allocators, and two-way deployment pipeline sync status across delivery nodes.
           </p>
         </div>
 
         <div>
           <Link
             href="/examinations/new"
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md bg-zinc-900 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)]"
+            className="craft-button-primary inline-flex items-center gap-2 h-10 px-5 text-sm font-medium"
           >
             <Plus className="h-4 w-4" strokeWidth={1.5} />
-            New examination
+            <span>New Examination</span>
           </Link>
         </div>
       </div>

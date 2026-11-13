@@ -57,46 +57,52 @@ export default async function ExaminationDetailPage({ params }: PageProps) {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
+      <div className="pb-6 border-b border-[var(--border-hairline)]">
         <Link
           href="/examinations"
-          className="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150 mb-3"
+          className="craft-button-secondary inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium mb-4"
         >
-          <ChevronLeft className="h-4 w-4" strokeWidth={1.5} /> Back to examination registry
+          <ChevronLeft className="h-4 w-4" strokeWidth={1.5} /> Back to Examination Registry
         </Link>
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-medium text-zinc-900 dark:text-zinc-100 font-mono tracking-tight">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] font-mono tracking-tight">
                 {exam.generatedName}
               </h1>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider border ${
+                exam.overallStatus === "PUBLISHED" || exam.overallStatus === "COMPLETED"
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                  : exam.overallStatus === "IN_REVIEW"
+                  ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20"
+                  : "bg-[var(--bg-raised)] text-[var(--text-secondary)] border-[var(--border-hairline)]"
+              }`}>
                 {exam.overallStatus.replace(/_/g, " ").toLowerCase()}
               </span>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-600 dark:text-zinc-400 border border-black/[0.08] dark:border-white/[0.08]">
+              <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[var(--bg-raised)] text-[var(--text-primary)] border border-[var(--border-hairline)]">
                 v{exam.currentVersion}
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-              <span className="font-mono text-zinc-900 dark:text-zinc-100 font-medium">{exam.examId}</span>
+            <div className="flex flex-wrap items-center gap-2.5 mt-2.5 text-sm text-[var(--text-secondary)]">
+              <span className="font-mono text-[var(--text-primary)] font-semibold">{exam.examId}</span>
               <span>•</span>
               <span className="capitalize">{exam.category.replace(/_/g, " ").toLowerCase()}</span>
               {exam.college && (
                 <>
                   <span>•</span>
-                  <span className="font-medium text-zinc-800 dark:text-zinc-200">
+                  <span className="font-medium text-[var(--text-primary)]">
                     {exam.college.name} ({exam.college.code})
                   </span>
                 </>
               )}
               <span>•</span>
-              <span className="font-mono">{exam.durationMinutes} min</span>
+              <span className="font-mono font-medium">{exam.durationMinutes} min</span>
               <span>•</span>
-              <span className="font-mono">Registered {formatDateKolkata(exam.createdAt)}</span>
+              <span className="font-mono text-xs text-[var(--text-muted)]">Registered {formatDateKolkata(exam.createdAt)}</span>
             </div>
           </div>
         </div>

@@ -5,10 +5,13 @@ import {
   BookOpen,
   FileSpreadsheet,
   CheckCircle2,
-  AlertCircle,
   ArrowRight,
   Plus,
   ArrowUpRight,
+  Layers,
+  Sparkles,
+  Zap,
+  Activity,
 } from "lucide-react";
 import { formatDateKolkata, formatNumber } from "@/lib/utils";
 
@@ -84,81 +87,83 @@ export default async function DashboardPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Top Command Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-[var(--border-hairline)]">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
-              Operations overview
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+              Operations command
             </h1>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-600 dark:text-zinc-400 border border-black/[0.08] dark:border-white/[0.08]">
-              IST live
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              IST LIVE
             </span>
           </div>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Central register for question bank inventory, deterministic naming, and deployment status
+          <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
+            Central repository for question bank inventory, deterministic blueprint composition, and deployment pipelines.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Link
             href="/question-bank"
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#19191b] text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150"
+            className="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-card)] text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition-colors duration-150"
           >
-            <BookOpen className="h-4 w-4 text-zinc-400" strokeWidth={1.5} />
-            Question bank
+            <BookOpen className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
+            <span>Question bank</span>
           </Link>
           <Link
             href="/examinations/new"
-            className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md bg-zinc-900 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)]"
+            className="inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.15)]"
           >
             <Plus className="h-4 w-4" strokeWidth={1.5} />
-            New examination
+            <span>New examination</span>
           </Link>
         </div>
       </div>
 
-      {/* External Platform Sync Required (Priority Banner) */}
+      {/* External Platform Sync Required (Priority Alert) */}
       {pendingPlatformUpdates.length > 0 && (
-        <div className="rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#19191b] p-4">
-          <div className="flex items-center justify-between pb-3 border-b border-black/[0.08] dark:border-white/[0.08] mb-3">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-amber-500" />
-              <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+        <div className="craft-card p-5 border-amber-300/60 dark:border-amber-800/40 bg-amber-50/30 dark:bg-amber-950/10">
+          <div className="flex items-center justify-between pb-3 border-b border-amber-200/60 dark:border-amber-900/30 mb-3">
+            <div className="flex items-center gap-2.5">
+              <span className="h-2 w-2 rounded-full bg-amber-500 animate-ping" />
+              <span className="text-sm font-semibold text-amber-950 dark:text-amber-200">
                 External platform synchronization required ({pendingPlatformUpdates.length})
               </span>
             </div>
-            <span className="text-[11px] text-zinc-500 font-mono">
+            <span className="text-xs text-amber-700 dark:text-amber-400 font-mono">
               Action required
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {pendingPlatformUpdates.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between p-3 rounded-lg bg-[#f4f4f5] dark:bg-[#232325] border border-black/[0.08] dark:border-white/[0.08] text-xs"
+                className="flex items-center justify-between p-3.5 rounded-lg bg-[var(--bg-card)] border border-[var(--border-hairline)] text-sm"
               >
                 <div>
-                  <div className="font-mono text-xs font-medium text-zinc-900 dark:text-zinc-100">
+                  <div className="font-mono text-sm font-semibold text-[var(--text-primary)]">
                     {item.exam.generatedName}
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-mono mt-0.5">
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] font-mono mt-1">
                     {item.testpressUpdatePending && (
-                      <span className="text-zinc-800 dark:text-zinc-200">Testpress pending</span>
+                      <span className="text-amber-600 dark:text-amber-400">Testpress sync pending</span>
                     )}
                     {item.testpressUpdatePending && item.lmsUpdatePending && <span>•</span>}
                     {item.lmsUpdatePending && (
-                      <span className="text-zinc-800 dark:text-zinc-200">LMS pending</span>
+                      <span className="text-amber-600 dark:text-amber-400">LMS sync pending</span>
                     )}
                   </div>
                 </div>
                 <Link
                   href={`/examinations/${item.exam.id}`}
-                  className="inline-flex items-center gap-1 text-[11px] font-medium h-7 px-2.5 rounded-md bg-white dark:bg-[#19191b] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors duration-150"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium h-8 px-3 rounded-md bg-[var(--bg-raised)] text-[var(--text-primary)] border border-[var(--border-hairline)] hover:bg-[var(--border-hairline)] transition-colors"
                 >
-                  Sync <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  <span>Sync</span>
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                 </Link>
               </div>
             ))}
@@ -166,144 +171,231 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Questions */}
-        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] flex flex-col justify-between">
+        <div className="craft-card p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between text-zinc-500 text-xs font-normal">
+            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-[var(--text-muted)]">
               <span>Total inventory</span>
-              <BookOpen className="h-4 w-4 text-zinc-400" strokeWidth={1.5} />
+              <BookOpen className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
             </div>
-            <div className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 tabular-nums mt-2">
+            <div className="text-3xl font-semibold font-mono text-[var(--text-primary)] tabular-nums mt-3">
               {formatNumber(totalQuestions)}
-            </div>
-
-            {/* Proportional distribution gauge */}
-            <div className="w-full bg-black/[0.06] dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden flex mt-3">
-              <div style={{ width: `${easyPct}%` }} title={`Easy ${easyPct}%`} className="bg-zinc-300 dark:bg-zinc-600 h-full" />
-              <div style={{ width: `${medPct}%` }} title={`Medium ${medPct}%`} className="bg-zinc-500 dark:bg-zinc-400 h-full" />
-              <div style={{ width: `${hardPct}%` }} title={`Hard ${hardPct}%`} className="bg-zinc-900 dark:bg-zinc-100 h-full" />
+              <span className="text-xs font-normal text-[var(--text-muted)] ml-1.5 font-sans">questions</span>
             </div>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between text-xs text-zinc-500">
+          <div className="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-between text-xs text-[var(--text-muted)]">
             <span>{subjectsCount} active subjects</span>
-            <span className="font-mono text-zinc-800 dark:text-zinc-300">3 tiers</span>
+            <span className="font-mono text-[var(--text-primary)] font-medium">{topics.length} topics</span>
           </div>
         </div>
 
-        {/* Difficulty Breakdown */}
-        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] flex flex-col justify-between">
+        {/* Tier Distribution Gauge */}
+        <div className="craft-card p-5 flex flex-col justify-between">
           <div>
-            <div className="text-zinc-500 text-xs font-normal">
-              Tier distribution
+            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-[var(--text-muted)]">
+              <span>Tier balance</span>
+              <Layers className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
             </div>
-            <div className="grid grid-cols-3 gap-2 mt-2 font-mono text-xs">
+            <div className="grid grid-cols-3 gap-2 mt-3 font-mono">
               <div>
-                <span className="text-[11px] text-zinc-500 block">I Easy</span>
-                <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 tabular-nums">
+                <span className="text-[11px] text-emerald-600 dark:text-emerald-400 block font-sans">I Easy</span>
+                <span className="text-base font-semibold text-[var(--text-primary)] tabular-nums">
                   {formatNumber(totalEasy)}
                 </span>
-                <span className="text-[10px] text-zinc-400 block">{easyPct}%</span>
+                <span className="text-[10px] text-[var(--text-muted)] block">{easyPct}%</span>
               </div>
               <div>
-                <span className="text-[11px] text-zinc-500 block">II Med</span>
-                <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 tabular-nums">
+                <span className="text-[11px] text-amber-600 dark:text-amber-400 block font-sans">II Med</span>
+                <span className="text-base font-semibold text-[var(--text-primary)] tabular-nums">
                   {formatNumber(totalMedium)}
                 </span>
-                <span className="text-[10px] text-zinc-400 block">{medPct}%</span>
+                <span className="text-[10px] text-[var(--text-muted)] block">{medPct}%</span>
               </div>
               <div>
-                <span className="text-[11px] text-zinc-500 block">III Hard</span>
-                <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 tabular-nums">
+                <span className="text-[11px] text-indigo-600 dark:text-indigo-400 block font-sans">III Hard</span>
+                <span className="text-base font-semibold text-[var(--text-primary)] tabular-nums">
                   {formatNumber(totalHard)}
                 </span>
-                <span className="text-[10px] text-zinc-400 block">{hardPct}%</span>
+                <span className="text-[10px] text-[var(--text-muted)] block">{hardPct}%</span>
               </div>
             </div>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-black/[0.06] dark:border-white/[0.06] text-xs text-zinc-500 truncate">
+          <div className="mt-4 pt-3 border-t border-[var(--border-hairline)] text-xs text-[var(--text-muted)] truncate font-mono">
             {latestInventoryUpdate ? (
-              <span>Last: {latestInventoryUpdate.topic.name}</span>
+              <span>Updated: {latestInventoryUpdate.topic.name}</span>
             ) : (
-              <span>No recorded inventory updates</span>
+              <span>Ready for composition</span>
             )}
           </div>
         </div>
 
         {/* Registered Examinations */}
-        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] flex flex-col justify-between">
+        <div className="craft-card p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between text-zinc-500 text-xs font-normal">
-              <span>Examination registry</span>
-              <FileSpreadsheet className="h-4 w-4 text-zinc-400" strokeWidth={1.5} />
+            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-[var(--text-muted)]">
+              <span>Exam specifications</span>
+              <FileSpreadsheet className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
             </div>
-            <div className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 tabular-nums mt-2">
+            <div className="text-3xl font-semibold font-mono text-[var(--text-primary)] tabular-nums mt-3">
               {formatNumber(totalExams)}
+              <span className="text-xs font-normal text-[var(--text-muted)] ml-1.5 font-sans">registered</span>
             </div>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between text-xs text-zinc-500 font-mono">
-            <span>{trainingExams} TR</span>
+          <div className="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-between text-xs text-[var(--text-muted)] font-mono">
+            <span>{trainingExams} Training</span>
             <span>•</span>
-            <span>{regularExams} RG</span>
+            <span>{regularExams} Regular</span>
             <span>•</span>
             <span>{globalExams} Global</span>
           </div>
         </div>
 
         {/* Operational Deployment Progress */}
-        <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] flex flex-col justify-between">
+        <div className="craft-card p-5 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between text-zinc-500 text-xs font-normal">
+            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-[var(--text-muted)]">
               <span>Deployment pipeline</span>
-              <CheckCircle2 className="h-4 w-4 text-zinc-400" strokeWidth={1.5} />
+              <CheckCircle2 className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
             </div>
-            <div className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 tabular-nums mt-2 flex items-baseline gap-2">
-              <span>{formatNumber(completedExams)}</span>
-              <span className="text-xs font-normal text-zinc-500">completed</span>
+            <div className="text-3xl font-semibold font-mono text-[var(--text-primary)] tabular-nums mt-3">
+              {formatNumber(completedExams)}
+              <span className="text-xs font-normal text-emerald-600 dark:text-emerald-400 ml-1.5 font-sans font-medium">live deployed</span>
             </div>
           </div>
-          <div className="mt-3 pt-2.5 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between text-xs text-zinc-500 font-mono">
-            <span>{readyForTestpress} Testpress</span>
-            <span>{lmsPending} LMS</span>
+          <div className="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-between text-xs text-[var(--text-muted)] font-mono">
+            <span>{readyForTestpress} Testpress queue</span>
+            <span>•</span>
+            <span>{lmsPending} LMS queue</span>
           </div>
         </div>
       </div>
 
-      {/* Main Grid: Question Bank Ledger & Recent Audit Ledger */}
+      {/* MOMENT: Question Bank Tier Spectrum Bar */}
+      <div className="craft-card p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <h2 className="text-sm font-semibold text-[var(--text-primary)] tracking-tight">
+              Master question bank tier spectrum
+            </h2>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+              Live difficulty distribution ratio across {formatNumber(totalQuestions)} active items in all subjects
+            </p>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-mono">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-sm bg-emerald-500" />
+              <span className="text-[var(--text-secondary)]">Easy ({easyPct}%)</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-sm bg-amber-500" />
+              <span className="text-[var(--text-secondary)]">Medium ({medPct}%)</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-sm bg-indigo-500" />
+              <span className="text-[var(--text-secondary)]">Hard ({hardPct}%)</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Proportional continuous bar */}
+        <div className="w-full h-3 rounded-full overflow-hidden flex bg-zinc-200 dark:bg-zinc-800">
+          <div
+            style={{ width: `${easyPct}%` }}
+            className="h-full bg-emerald-500 transition-all duration-300"
+            title={`Easy: ${formatNumber(totalEasy)} (${easyPct}%)`}
+          />
+          <div
+            style={{ width: `${medPct}%` }}
+            className="h-full bg-amber-500 transition-all duration-300"
+            title={`Medium: ${formatNumber(totalMedium)} (${medPct}%)`}
+          />
+          <div
+            style={{ width: `${hardPct}%` }}
+            className="h-full bg-indigo-500 transition-all duration-300"
+            title={`Hard: ${formatNumber(totalHard)} (${hardPct}%)`}
+          />
+        </div>
+
+        {/* Subject Breakdown Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+          {subjectsWithTopics.map((sub) => {
+            const easy = sub.topics.reduce((acc, t) => acc + t.easyCount, 0);
+            const med = sub.topics.reduce((acc, t) => acc + t.mediumCount, 0);
+            const hard = sub.topics.reduce((acc, t) => acc + t.hardCount, 0);
+            const total = easy + med + hard;
+            const subEasyPct = total > 0 ? ((easy / total) * 100).toFixed(0) : "0";
+            const subMedPct = total > 0 ? ((med / total) * 100).toFixed(0) : "0";
+            const subHardPct = total > 0 ? ((hard / total) * 100).toFixed(0) : "0";
+
+            return (
+              <Link
+                key={sub.id}
+                href={`/question-bank/${sub.id}`}
+                className="craft-card-subtle p-3.5 hover:border-[var(--border-strong)] transition-all duration-150 group"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[var(--text-primary)] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {sub.name}
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-[var(--text-muted)] group-hover:translate-x-0.5 transition-transform" />
+                </div>
+                <div className="text-lg font-semibold font-mono text-[var(--text-primary)] tabular-nums mt-1">
+                  {formatNumber(total)}
+                  <span className="text-[11px] font-normal text-[var(--text-muted)] ml-1 font-sans">items</span>
+                </div>
+                {/* Mini bar */}
+                <div className="w-full h-1.5 rounded-full overflow-hidden flex bg-zinc-200 dark:bg-zinc-800 mt-2">
+                  <div style={{ width: `${subEasyPct}%` }} className="h-full bg-emerald-500" />
+                  <div style={{ width: `${subMedPct}%` }} className="h-full bg-amber-500" />
+                  <div style={{ width: `${subHardPct}%` }} className="h-full bg-indigo-500" />
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono mt-2">
+                  <span>{sub.topics.length} topics</span>
+                  <span>{subEasyPct}% / {subMedPct}% / {subHardPct}%</span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Main Grid: Subject Detail Inventory & Recent Audit Feed */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Question Bank Summary Table (2 Columns) */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
-          <div className="p-4 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
+        {/* Question Bank Detailed Summary Table (2 Columns) */}
+        <div className="lg:col-span-2 craft-card overflow-hidden">
+          <div className="p-5 border-b border-[var(--border-hairline)] flex items-center justify-between">
             <div>
-              <h2 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-                Question bank inventory by subject
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] tracking-tight">
+                Subject inventory matrix
               </h2>
-              <p className="text-[11px] text-zinc-500 mt-0.5">
-                Aggregated tier counts across active subjects
+              <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                Atomic item breakdown by difficulty tiers
               </p>
             </div>
             <Link
               href="/question-bank"
-              className="text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white flex items-center gap-1 transition-colors duration-150"
+              className="text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors"
             >
-              All subjects <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.5} />
+              <span>View all topics</span>
+              <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.5} />
             </Link>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#f4f4f5] dark:bg-[#232325] text-[11px] font-mono text-zinc-500 border-b border-black/[0.08] dark:border-white/[0.08]">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-[var(--bg-raised)] text-xs font-mono text-[var(--text-muted)] border-b border-[var(--border-hairline)] uppercase tracking-wider">
                 <tr>
-                  <th className="py-2.5 px-4 font-normal">Subject</th>
-                  <th className="py-2.5 px-4 text-right font-normal">I Easy</th>
-                  <th className="py-2.5 px-4 text-right font-normal">II Med</th>
-                  <th className="py-2.5 px-4 text-right font-normal">III Hard</th>
-                  <th className="py-2.5 px-4 text-right font-medium text-zinc-900 dark:text-zinc-100">Total</th>
-                  <th className="py-2.5 px-4 text-right font-normal">Action</th>
+                  <th className="py-3 px-5 font-normal">Subject</th>
+                  <th className="py-3 px-4 text-right font-normal">I Easy</th>
+                  <th className="py-3 px-4 text-right font-normal">II Med</th>
+                  <th className="py-3 px-4 text-right font-normal">III Hard</th>
+                  <th className="py-3 px-4 text-right font-semibold text-[var(--text-primary)]">Total</th>
+                  <th className="py-3 px-5 text-right font-normal">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+              <tbody className="divide-y divide-[var(--border-hairline)]">
                 {subjectsWithTopics.map((sub) => {
                   const easy = sub.topics.reduce((acc, t) => acc + t.easyCount, 0);
                   const med = sub.topics.reduce((acc, t) => acc + t.mediumCount, 0);
@@ -311,26 +403,29 @@ export default async function DashboardPage() {
                   const total = easy + med + hard;
 
                   return (
-                    <tr key={sub.id} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150">
-                      <td className="py-3 px-4 font-normal text-zinc-900 dark:text-zinc-100">
+                    <tr key={sub.id} className="hover:bg-[var(--bg-raised)] transition-colors duration-150">
+                      <td className="py-3.5 px-5 font-medium text-[var(--text-primary)]">
                         {sub.name}
+                        <span className="block text-xs font-mono text-[var(--text-muted)] font-normal mt-0.5">
+                          {sub.topics.length} active topics
+                        </span>
                       </td>
-                      <td className="py-3 px-4 text-right font-mono tabular-nums text-zinc-600 dark:text-zinc-400">
+                      <td className="py-3.5 px-4 text-right font-mono tabular-nums text-emerald-600 dark:text-emerald-400">
                         {formatNumber(easy)}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono tabular-nums text-zinc-600 dark:text-zinc-400">
+                      <td className="py-3.5 px-4 text-right font-mono tabular-nums text-amber-600 dark:text-amber-400">
                         {formatNumber(med)}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono tabular-nums text-zinc-600 dark:text-zinc-400">
+                      <td className="py-3.5 px-4 text-right font-mono tabular-nums text-indigo-600 dark:text-indigo-400">
                         {formatNumber(hard)}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-medium tabular-nums text-zinc-900 dark:text-zinc-100">
+                      <td className="py-3.5 px-4 text-right font-mono font-semibold tabular-nums text-[var(--text-primary)]">
                         {formatNumber(total)}
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3.5 px-5 text-right">
                         <Link
                           href={`/question-bank/${sub.id}`}
-                          className="inline-flex items-center h-7 px-2.5 rounded-md text-xs font-medium bg-[#f4f4f5] dark:bg-[#232325] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08] transition-colors duration-150"
+                          className="inline-flex items-center h-7 px-3 rounded-md text-xs font-medium bg-[var(--bg-raised)] hover:bg-[var(--border-subtle)] text-[var(--text-primary)] border border-[var(--border-hairline)] transition-colors duration-150"
                         >
                           Manage
                         </Link>
@@ -343,38 +438,39 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Recent Audit Activities (1 Column) */}
-        <div className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] flex flex-col">
-          <div className="p-4 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
+        {/* Operational Audit Stream (1 Column) */}
+        <div className="craft-card flex flex-col overflow-hidden">
+          <div className="p-5 border-b border-[var(--border-hairline)] flex items-center justify-between">
             <div>
-              <h2 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-                Operational ledger
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] tracking-tight">
+                Operational audit ledger
               </h2>
-              <p className="text-[11px] text-zinc-500 mt-0.5">Recent audit events</p>
+              <p className="text-xs text-[var(--text-secondary)] mt-0.5">Immutable system events</p>
             </div>
             <Link
               href="/audit-logs"
-              className="text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white flex items-center gap-1 transition-colors duration-150"
+              className="text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors"
             >
-              Full log <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.5} />
+              <span>Audit stream</span>
+              <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.5} />
             </Link>
           </div>
 
-          <div className="p-4 flex-1 divide-y divide-black/[0.04] dark:divide-white/[0.04] overflow-y-auto max-h-[460px]">
+          <div className="p-5 flex-1 divide-y divide-[var(--border-hairline)] overflow-y-auto max-h-[500px]">
             {recentActivities.map((act) => (
-              <div key={act.id} className="py-3 first:pt-0 last:pb-0">
-                <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1">
-                  <span className="font-medium text-zinc-900 dark:text-zinc-100">{act.changedByUser.name}</span>
-                  <span className="font-mono text-[10px]">{formatDateKolkata(act.createdAt)}</span>
+              <div key={act.id} className="py-3.5 first:pt-0 last:pb-0">
+                <div className="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1">
+                  <span className="font-semibold text-[var(--text-primary)]">{act.changedByUser.name}</span>
+                  <span className="font-mono text-[11px]">{formatDateKolkata(act.createdAt)}</span>
                 </div>
-                <p className="text-xs font-normal text-zinc-700 dark:text-zinc-300 leading-snug">
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                   {act.changeDescription}
                 </p>
-                <div className="flex items-center gap-1.5 mt-1.5 font-mono text-[10px]">
-                  <span className="px-1.5 py-0.5 rounded bg-[#f4f4f5] dark:bg-[#232325] text-zinc-600 dark:text-zinc-400 border border-black/[0.08] dark:border-white/[0.08]">
-                    {act.entityType}
+                <div className="flex items-center gap-2 mt-2 font-mono text-[10px]">
+                  <span className="px-2 py-0.5 rounded bg-[var(--bg-raised)] text-[var(--text-secondary)] border border-[var(--border-hairline)]">
+                    {act.entityType.replace(/_/g, " ")}
                   </span>
-                  <span className="px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-medium">
+                  <span className="px-2 py-0.5 rounded bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium">
                     {act.action}
                   </span>
                 </div>

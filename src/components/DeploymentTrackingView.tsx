@@ -95,29 +95,29 @@ export default function DeploymentTrackingView({
 
       {/* Subsequent Update Required Banner */}
       {(platformStatus?.testpressUpdatePending || platformStatus?.lmsUpdatePending) && (
-        <div className="bg-white dark:bg-[#19191b] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-4 space-y-3">
-          <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 text-xs font-medium">
-            <span className="h-2 w-2 rounded-full bg-amber-500" />
-            <span>External platform synchronization required</span>
+        <div className="craft-card p-6 space-y-4 border-amber-500/30 bg-amber-500/5">
+          <div className="flex items-center gap-2.5 text-[var(--text-primary)] text-sm font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+            <span>External Platform Synchronization Required</span>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            This examination specification was modified after initial deployment. Perform updates on external portals and confirm below.
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+            This examination composition or metadata was modified after initial release. Please apply the changes directly in external test delivery portals and confirm the audit completion below.
           </p>
 
-          <div className="space-y-1">
-            <label className="block text-xs text-zinc-500 font-normal">
-              Mandatory confirmation remarks <span className="text-zinc-400">*</span>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-medium text-[var(--text-secondary)]">
+              Mandatory Confirmation Remarks <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={updateNotes}
               onChange={(e) => setUpdateNotes(e.target.value)}
-              placeholder="e.g. Updated question count from 40 to 45 on Testpress"
-              className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
+              placeholder="e.g. Updated question count from 40 to 45 on Testpress portal"
+              className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-card)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-amber-500 focus:outline-none transition-colors duration-150"
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 pt-1">
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             {platformStatus?.testpressUpdatePending && (
               <button
                 type="button"
@@ -133,10 +133,10 @@ export default function DeploymentTrackingView({
                     "Testpress update confirmed."
                   )
                 }
-                className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 disabled:opacity-50 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)]"
+                className="craft-button-primary inline-flex items-center gap-2 h-10 px-5 text-xs font-medium disabled:opacity-50"
               >
                 <CheckCircle2 className="h-4 w-4" strokeWidth={1.5} />
-                Confirm Testpress updated
+                Confirm Testpress Updated
               </button>
             )}
 
@@ -155,10 +155,10 @@ export default function DeploymentTrackingView({
                     "Truskill LMS update confirmed."
                   )
                 }
-                className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 disabled:opacity-50 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)]"
+                className="craft-button-primary inline-flex items-center gap-2 h-10 px-5 text-xs font-medium disabled:opacity-50"
               >
                 <CheckCircle2 className="h-4 w-4" strokeWidth={1.5} />
-                Confirm Truskill LMS updated
+                Confirm Truskill LMS Updated
               </button>
             )}
           </div>
@@ -166,61 +166,61 @@ export default function DeploymentTrackingView({
       )}
 
       {/* Two-Stage Deployment Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Stage 1: Testpress Creation */}
-        <div className="p-5 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#19191b] space-y-4">
+        <div className="craft-card p-6 space-y-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-700 dark:text-zinc-300 border border-black/[0.08] dark:border-white/[0.08]">
+            <div className="flex items-center gap-2.5">
+              <span className="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-[var(--bg-raised)] text-[var(--text-primary)] border border-[var(--border-hairline)]">
                 Stage 1
               </span>
-              <h3 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">Testpress creation</h3>
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Testpress Creation</h3>
             </div>
-            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium border ${
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold border ${
               isTestpressDone
-                ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-800 dark:text-zinc-200 border-black/[0.08] dark:border-white/[0.08]"
-                : "bg-transparent text-zinc-500 border-black/[0.08] dark:border-white/[0.08]"
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                : "bg-[var(--bg-raised)] text-[var(--text-muted)] border-[var(--border-hairline)]"
             }`}>
               {isTestpressDone ? (
                 <>
-                  <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={1.5} /> Completed
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" strokeWidth={1.5} /> Completed
                 </>
               ) : (
                 <>
-                  <Clock className="h-3.5 w-3.5" strokeWidth={1.5} /> Pending
+                  <Clock className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} /> Pending
                 </>
               )}
             </span>
           </div>
 
-          <p className="text-xs text-zinc-500">
-            Create examination on Testpress matching name, question allocations, duration, and marking scheme.
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+            Create assessment container on Testpress matching standardized title, section allocations, duration, and marking scheme.
           </p>
 
           {isTestpressDone ? (
-            <div className="p-3 bg-[#f4f4f5] dark:bg-[#232325] rounded-lg border border-black/[0.08] dark:border-white/[0.08] space-y-1 text-xs">
-              <div className="flex items-center justify-between text-zinc-500 text-[11px]">
-                <span>Completed by <strong className="text-zinc-900 dark:text-zinc-100 font-medium">{platformStatus?.testpressCompletedByName}</strong></span>
+            <div className="p-4 bg-[var(--bg-raised)] rounded-xl border border-[var(--border-hairline)] space-y-2 text-sm">
+              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs">
+                <span>Completed by <strong className="text-[var(--text-primary)] font-semibold">{platformStatus?.testpressCompletedByName}</strong></span>
                 <span className="font-mono">{formatDateKolkata(platformStatus?.testpressCompletedAt)}</span>
               </div>
               {platformStatus?.testpressNotes && (
-                <div className="text-zinc-800 dark:text-zinc-200 font-normal pt-1 border-t border-black/[0.06] dark:border-white/[0.06]">
-                  Notes: &quot;{platformStatus.testpressNotes}&quot;
+                <div className="text-[var(--text-primary)] pt-2 border-t border-[var(--border-hairline)] text-xs">
+                  Remarks: &quot;{platformStatus.testpressNotes}&quot;
                 </div>
               )}
             </div>
           ) : (
-            <div className="space-y-2.5 pt-1">
+            <div className="space-y-3 pt-1">
               <div>
-                <label className="block text-xs text-zinc-500 mb-1 font-normal">
-                  Optional remarks / notes
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                  Optional Remarks / Reference ID
                 </label>
                 <input
                   type="text"
                   value={testpressNotes}
                   onChange={(e) => setTestpressNotes(e.target.value)}
                   placeholder="e.g. Created on Testpress portal with 32 questions"
-                  className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
+                  className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-indigo-500 focus:outline-none transition-colors duration-150"
                 />
               </div>
               <button
@@ -236,10 +236,10 @@ export default function DeploymentTrackingView({
                     "Testpress creation marked completed."
                   )
                 }
-                className="w-full inline-flex items-center justify-center gap-1.5 h-8 px-4 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)] disabled:opacity-50"
+                className="craft-button-primary w-full inline-flex items-center justify-center gap-2 h-10 px-4 text-sm font-medium disabled:opacity-50"
               >
                 <CheckCircle2 className="h-4 w-4" strokeWidth={1.5} />
-                Mark Testpress completed
+                Mark Testpress Completed
               </button>
             </div>
           )}
@@ -247,69 +247,67 @@ export default function DeploymentTrackingView({
 
         {/* Stage 2: Truskill LMS Listing */}
         <div
-          className={`p-5 rounded-xl border transition-colors duration-150 space-y-4 ${
-            !isTestpressDone
-              ? "bg-[#f4f4f5]/40 dark:bg-[#19191b]/40 border-black/[0.08] dark:border-white/[0.08] opacity-60"
-              : "bg-white dark:bg-[#19191b] border-black/[0.08] dark:border-white/[0.08]"
+          className={`craft-card p-6 space-y-5 transition-colors duration-150 ${
+            !isTestpressDone ? "opacity-60" : ""
           }`}
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-normal bg-[#f4f4f5] dark:bg-[#232325] text-zinc-700 dark:text-zinc-300 border border-black/[0.08] dark:border-white/[0.08]">
+            <div className="flex items-center gap-2.5">
+              <span className="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-[var(--bg-raised)] text-[var(--text-primary)] border border-[var(--border-hairline)]">
                 Stage 2
               </span>
-              <h3 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">Truskill LMS listing</h3>
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Truskill LMS Listing</h3>
             </div>
-            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium border ${
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold border ${
               isLmsDone
-                ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-800 dark:text-zinc-200 border-black/[0.08] dark:border-white/[0.08]"
-                : "bg-transparent text-zinc-500 border-black/[0.08] dark:border-white/[0.08]"
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                : "bg-[var(--bg-raised)] text-[var(--text-muted)] border-[var(--border-hairline)]"
             }`}>
               {isLmsDone ? (
                 <>
-                  <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={1.5} /> Completed
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" strokeWidth={1.5} /> Completed
                 </>
               ) : (
                 <>
-                  <Clock className="h-3.5 w-3.5" strokeWidth={1.5} /> Pending
+                  <Clock className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} /> Pending
                 </>
               )}
             </span>
           </div>
 
-          <p className="text-xs text-zinc-500">
-            List assessment on Truskill LMS with schedule dates, attempt policies, and cohort accessibility.
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+            List assessment on Truskill LMS with delivery dates, attempt policies, batch enrollments, and cohort accessibility.
           </p>
 
           {!isTestpressDone ? (
-            <div className="p-3 bg-[#f4f4f5] dark:bg-[#232325] rounded-lg text-xs font-mono text-zinc-500 flex items-center gap-2 border border-black/[0.08] dark:border-white/[0.08]">
-              <Clock className="h-4 w-4 shrink-0 text-zinc-400" strokeWidth={1.5} />
-              <span>Dependency: Truskill LMS listing requires Testpress completion first</span>
+            <div className="p-4 bg-[var(--bg-raised)] rounded-xl text-xs font-mono text-[var(--text-secondary)] flex items-center gap-2.5 border border-[var(--border-hairline)]">
+              <Clock className="h-4 w-4 shrink-0 text-amber-500" strokeWidth={1.5} />
+              <span>Prerequisite: Truskill LMS listing requires Testpress completion first</span>
             </div>
           ) : isLmsDone ? (
-            <div className="p-3 bg-[#f4f4f5] dark:bg-[#232325] rounded-lg border border-black/[0.08] dark:border-white/[0.08] space-y-1 text-xs">
-              <div className="flex items-center justify-between text-zinc-500 text-[11px]">
-                <span>Completed by <strong className="text-zinc-900 dark:text-zinc-100 font-medium">{platformStatus?.lmsCompletedByName}</strong></span>
+            <div className="p-4 bg-[var(--bg-raised)] rounded-xl border border-[var(--border-hairline)] space-y-2 text-sm">
+              <div className="flex items-center justify-between text-[var(--text-secondary)] text-xs">
+                <span>Completed by <strong className="text-[var(--text-primary)] font-semibold">{platformStatus?.lmsCompletedByName}</strong></span>
                 <span className="font-mono">{formatDateKolkata(platformStatus?.lmsCompletedAt)}</span>
               </div>
               {platformStatus?.lmsNotes && (
-                <div className="text-zinc-800 dark:text-zinc-200 font-normal pt-1 border-t border-black/[0.06] dark:border-white/[0.06]">
-                  Notes: &quot;{platformStatus.lmsNotes}&quot;
+                <div className="text-[var(--text-primary)] pt-2 border-t border-[var(--border-hairline)] text-xs">
+                  Remarks: &quot;{platformStatus.lmsNotes}&quot;
                 </div>
               )}
             </div>
           ) : (
-            <div className="space-y-2.5 pt-1">
+            <div className="space-y-3 pt-1">
               <div>
-                <label className="block text-xs text-zinc-500 mb-1 font-normal">
-                  Optional remarks / notes
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
+                  Optional Remarks / LMS Course Link
                 </label>
                 <input
                   type="text"
                   value={lmsNotes}
                   onChange={(e) => setLmsNotes(e.target.value)}
                   placeholder="e.g. Published on LMS for Spring 2026 Batch"
-                  className="h-8 w-full px-3 text-xs rounded-md border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
+                  className="h-10 w-full px-3.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-indigo-500 focus:outline-none transition-colors duration-150"
                 />
               </div>
               <button
@@ -325,10 +323,10 @@ export default function DeploymentTrackingView({
                     "Truskill LMS listing marked completed."
                   )
                 }
-                className="w-full inline-flex items-center justify-center gap-1.5 h-8 px-4 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)] disabled:opacity-50"
+                className="craft-button-primary w-full inline-flex items-center justify-center gap-2 h-10 px-4 text-sm font-medium disabled:opacity-50"
               >
                 <CheckCircle2 className="h-4 w-4" strokeWidth={1.5} />
-                Mark Truskill LMS completed
+                Mark Truskill LMS Completed
               </button>
             </div>
           )}
@@ -336,52 +334,52 @@ export default function DeploymentTrackingView({
       </div>
 
       {/* Subsequent Platform Update History */}
-      <div className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
-        <div className="p-4 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <History className="h-4 w-4 text-zinc-400" strokeWidth={1.5} />
-            <h2 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-              Deployment confirmation ledger
+      <div className="craft-card overflow-hidden">
+        <div className="px-6 py-4 border-b border-[var(--border-hairline)] flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <History className="h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
+            <h2 className="text-sm font-semibold text-[var(--text-primary)]">
+              Deployment Confirmation Ledger
             </h2>
           </div>
-          <span className="text-[11px] text-zinc-500 font-mono">
+          <span className="text-xs text-[var(--text-muted)] font-mono">
             {updateHistories.length} records
           </span>
         </div>
 
         {updateHistories.length === 0 ? (
-          <div className="p-8 text-center text-xs text-zinc-500 font-mono">
+          <div className="py-12 text-center text-sm text-[var(--text-muted)] font-mono">
             No subsequent platform updates recorded
           </div>
         ) : (
-          <table className="w-full text-left text-xs">
-            <thead className="bg-[#f4f4f5] dark:bg-[#232325] text-[11px] font-mono text-zinc-500 border-b border-black/[0.08] dark:border-white/[0.08]">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-[var(--bg-raised)] text-xs font-semibold text-[var(--text-muted)] border-b border-[var(--border-hairline)]">
               <tr>
-                <th className="py-2.5 px-4 font-normal">Timestamp (IST)</th>
-                <th className="py-2.5 px-4 font-normal">Platform</th>
-                <th className="py-2.5 px-4 text-center font-normal">Action</th>
-                <th className="py-2.5 px-4 font-normal">Confirmed by</th>
-                <th className="py-2.5 px-4 font-normal">Remarks</th>
+                <th className="py-3 px-4">Timestamp (IST)</th>
+                <th className="py-3 px-4">Platform</th>
+                <th className="py-3 px-4 text-center">Action</th>
+                <th className="py-3 px-4">Confirmed By</th>
+                <th className="py-3 px-4">Remarks</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+            <tbody className="divide-y divide-[var(--border-hairline)]">
               {updateHistories.map((h) => (
-                <tr key={h.id} className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150">
-                  <td className="py-2.5 px-4 font-mono text-[11px] text-zinc-500 whitespace-nowrap">
+                <tr key={h.id} className="hover:bg-[var(--bg-raised)]/40 transition-colors duration-150">
+                  <td className="py-3.5 px-4 font-mono text-xs text-[var(--text-muted)] whitespace-nowrap">
                     {formatDateKolkata(h.createdAt)}
                   </td>
-                  <td className="py-2.5 px-4 font-normal text-zinc-900 dark:text-zinc-100">
+                  <td className="py-3.5 px-4 font-medium text-[var(--text-primary)]">
                     {h.platform === "TESTPRESS" ? "Testpress" : "Truskill LMS"}
                   </td>
-                  <td className="py-2.5 px-4 text-center">
-                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#f4f4f5] dark:bg-[#232325] text-zinc-800 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.08]">
+                  <td className="py-3.5 px-4 text-center">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono font-medium bg-[var(--bg-raised)] text-[var(--text-secondary)] border border-[var(--border-hairline)]">
                       {h.action.replace(/_/g, " ").toLowerCase()}
                     </span>
                   </td>
-                  <td className="py-2.5 px-4 font-normal text-zinc-900 dark:text-zinc-100">
+                  <td className="py-3.5 px-4 font-medium text-[var(--text-primary)]">
                     {h.confirmedByName}
                   </td>
-                  <td className="py-2.5 px-4 text-zinc-600 dark:text-zinc-400 font-normal">
+                  <td className="py-3.5 px-4 text-[var(--text-secondary)]">
                     {h.changeDescription}
                   </td>
                 </tr>

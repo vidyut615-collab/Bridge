@@ -11,21 +11,31 @@ export default async function NewExaminationPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
+      <div className="pb-6 border-b border-[var(--border-hairline)]">
         <Link
           href="/examinations"
-          className="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150 mb-3"
+          className="craft-button-secondary inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium mb-4"
         >
-          <ChevronLeft className="h-4 w-4" strokeWidth={1.5} /> Back to examination registry
+          <ChevronLeft className="h-4 w-4" strokeWidth={1.5} /> Back to Examination Registry
         </Link>
-        <h1 className="text-2xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
-          Register examination
-        </h1>
-        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-          Configure delivery constraints and generate standardized atomic sequence formula
-        </p>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+              Register New Examination
+            </h1>
+            <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
+              Configure delivery constraints, institutional parameters, and generate standardized deterministic naming sequence
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Formula Generator Ready
+            </span>
+          </div>
+        </div>
       </div>
 
       <AddExamWizard colleges={colleges} />

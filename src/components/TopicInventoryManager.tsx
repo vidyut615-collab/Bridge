@@ -109,124 +109,125 @@ export default function TopicInventoryManager({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-8">
       {/* 4 Rollup Metric Tiles */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-white dark:bg-[#19191b] border border-black/[0.08] dark:border-white/[0.08]">
-          <span className="text-xs text-zinc-500 block font-normal">
-            Topics configured
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="craft-card p-5">
+          <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)] block">
+            Configured topics
           </span>
-          <span className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 tabular-nums mt-2 block">
+          <span className="text-3xl font-semibold font-mono text-[var(--text-primary)] tabular-nums mt-3 block">
             {topics.length}
+            <span className="text-xs font-normal text-[var(--text-muted)] ml-1.5 font-sans">units</span>
           </span>
-          <span className="text-xs text-zinc-500 mt-2 block font-mono">
+          <span className="text-xs text-[var(--text-muted)] mt-3 block font-mono">
             Active syllabus items
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-[#19191b] border border-black/[0.08] dark:border-white/[0.08]">
-          <span className="text-xs text-zinc-500 block font-normal">
+        <div className="craft-card p-5">
+          <span className="text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block">
             Tier I Easy
           </span>
-          <span className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 tabular-nums mt-2 block">
+          <span className="text-3xl font-semibold font-mono text-emerald-600 dark:text-emerald-400 tabular-nums mt-3 block">
             {formatNumber(totalEasy)}
           </span>
-          <span className="text-xs text-zinc-500 mt-2 block font-mono">
-            {grandTotal > 0 ? `${((totalEasy / grandTotal) * 100).toFixed(1)}%` : "0%"} of subject
+          <span className="text-xs text-[var(--text-muted)] mt-3 block font-mono">
+            {grandTotal > 0 ? `${((totalEasy / grandTotal) * 100).toFixed(1)}%` : "0%"} of subject total
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-[#19191b] border border-black/[0.08] dark:border-white/[0.08]">
-          <span className="text-xs text-zinc-500 block font-normal">
+        <div className="craft-card p-5">
+          <span className="text-xs font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
             Tier II Medium
           </span>
-          <span className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 tabular-nums mt-2 block">
+          <span className="text-3xl font-semibold font-mono text-amber-600 dark:text-amber-400 tabular-nums mt-3 block">
             {formatNumber(totalMedium)}
           </span>
-          <span className="text-xs text-zinc-500 mt-2 block font-mono">
-            {grandTotal > 0 ? `${((totalMedium / grandTotal) * 100).toFixed(1)}%` : "0%"} of subject
+          <span className="text-xs text-[var(--text-muted)] mt-3 block font-mono">
+            {grandTotal > 0 ? `${((totalMedium / grandTotal) * 100).toFixed(1)}%` : "0%"} of subject total
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-[#19191b] border border-black/[0.08] dark:border-white/[0.08]">
+        <div className="craft-card p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-zinc-500 block font-normal">
+            <span className="text-xs font-mono uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block">
               Tier III Hard
             </span>
             {totalDelta !== 0 && (
-              <span className="inline-flex items-center text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08]">
+              <span className="inline-flex items-center text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                 {totalDelta > 0 ? `+${totalDelta}` : totalDelta} net
               </span>
             )}
           </div>
-          <span className="text-[28px] leading-none font-medium font-mono text-zinc-900 dark:text-zinc-100 tabular-nums mt-2 block">
+          <span className="text-3xl font-semibold font-mono text-indigo-600 dark:text-indigo-400 tabular-nums mt-3 block">
             {formatNumber(totalHard)}
           </span>
-          <span className="text-xs text-zinc-500 mt-2 block font-mono">
-            {grandTotal > 0 ? `${((totalHard / grandTotal) * 100).toFixed(1)}%` : "0%"} of subject
+          <span className="text-xs text-[var(--text-muted)] mt-3 block font-mono">
+            {grandTotal > 0 ? `${((totalHard / grandTotal) * 100).toFixed(1)}%` : "0%"} of subject total
           </span>
         </div>
       </div>
 
       {message && (
         <div
-          className={`p-3.5 rounded-lg flex items-center gap-2.5 text-xs ${
+          className={`p-4 rounded-xl flex items-center gap-3 text-sm ${
             message.type === "success"
-              ? "bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.08]"
-              : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
+              ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40"
+              : "bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900/40"
           }`}
         >
           {message.type === "success" ? (
-            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" strokeWidth={1.5} />
+            <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0" strokeWidth={1.5} />
           ) : (
-            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.5} />
+            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0" strokeWidth={1.5} />
           )}
           <span>{message.text}</span>
         </div>
       )}
 
       {/* Topics Matrix Table */}
-      <div className="bg-white dark:bg-[#19191b] rounded-xl border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
-        <div className="p-4 border-b border-black/[0.08] dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="craft-card overflow-hidden">
+        <div className="p-5 border-b border-[var(--border-hairline)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h3 className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] tracking-tight">
               Topic units ({topics.length} items)
             </h3>
-            <p className="text-[11px] text-zinc-500 mt-0.5 font-mono">
-              Direct cell edit • Recalculates dynamically
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+              Direct cell edit · Instant live aggregate calculation
             </p>
           </div>
 
           {/* Quick search input */}
-          <div className="relative w-full sm:w-60">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" strokeWidth={1.5} />
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-[var(--text-muted)]" strokeWidth={1.5} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search topics"
-              className="h-8 w-full pl-8 pr-3 text-xs rounded-md bg-[#f4f4f5] dark:bg-[#232325] border border-black/[0.08] dark:border-white/[0.08] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
+              placeholder="Search by topic code or name..."
+              className="h-9 w-full pl-9 pr-3 text-xs rounded-lg bg-[var(--bg-raised)] border border-[var(--border-hairline)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none transition-colors"
             />
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-[#f4f4f5] dark:bg-[#232325] text-[11px] font-mono text-zinc-500 border-b border-black/[0.08] dark:border-white/[0.08]">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-[var(--bg-raised)] text-xs font-mono text-[var(--text-muted)] border-b border-[var(--border-hairline)] uppercase tracking-wider">
               <tr>
-                <th className="py-2.5 px-4 w-28 font-normal">Code</th>
-                <th className="py-2.5 px-4 font-normal">Topic name</th>
-                <th className="py-2.5 px-4 text-center w-28 font-normal">I Easy</th>
-                <th className="py-2.5 px-4 text-center w-28 font-normal">II Med</th>
-                <th className="py-2.5 px-4 text-center w-28 font-normal">III Hard</th>
-                <th className="py-2.5 px-4 text-right w-28 font-medium text-zinc-900 dark:text-zinc-100">Topic total</th>
-                <th className="py-2.5 px-4 w-60 font-normal">Folder path</th>
+                <th className="py-3 px-5 w-32 font-normal">Code</th>
+                <th className="py-3 px-5 font-normal">Topic name</th>
+                <th className="py-3 px-4 text-center w-32 font-normal">I Easy</th>
+                <th className="py-3 px-4 text-center w-32 font-normal">II Med</th>
+                <th className="py-3 px-4 text-center w-32 font-normal">III Hard</th>
+                <th className="py-3 px-4 text-right w-32 font-semibold text-[var(--text-primary)]">Topic total</th>
+                <th className="py-3 px-5 w-72 font-normal">Folder path</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+            <tbody className="divide-y divide-[var(--border-hairline)]">
               {filteredTopics.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-xs text-zinc-500 font-mono">
+                  <td colSpan={7} className="py-10 text-center text-xs text-[var(--text-muted)] font-mono">
                     No topics matched query &quot;{searchQuery}&quot;
                   </td>
                 </tr>
@@ -243,17 +244,17 @@ export default function TopicInventoryManager({
                   return (
                     <tr
                       key={t.id}
-                      className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150"
+                      className="hover:bg-[var(--bg-raised)] transition-colors duration-150"
                     >
-                      <td className="py-2.5 px-4 font-mono text-[11px] text-zinc-500">
+                      <td className="py-3 px-5 font-mono text-xs text-[var(--text-muted)] font-medium">
                         {t.topicCode}
                       </td>
 
-                      <td className="py-2.5 px-4 font-normal text-zinc-900 dark:text-zinc-100">
+                      <td className="py-3 px-5 font-medium text-[var(--text-primary)]">
                         {t.name}
                       </td>
 
-                      <td className="py-2.5 px-4 text-center">
+                      <td className="py-3 px-4 text-center">
                         <input
                           type="number"
                           min="0"
@@ -262,11 +263,11 @@ export default function TopicInventoryManager({
                           onChange={(e) =>
                             handleFieldChange(t.id, "easyCount", parseInt(e.target.value) || 0)
                           }
-                          className="h-7 w-20 px-2 py-0.5 text-center font-mono font-medium text-xs text-zinc-900 dark:text-zinc-100 bg-[#f4f4f5] dark:bg-[#232325] rounded border border-black/[0.08] dark:border-white/[0.08] focus:outline-none transition-colors duration-150"
+                          className="h-8 w-24 px-2 text-center font-mono font-semibold text-sm text-[var(--text-primary)] bg-[var(--bg-raised)] rounded-lg border border-[var(--border-hairline)] focus:outline-none focus:border-emerald-500 transition-colors"
                         />
                       </td>
 
-                      <td className="py-2.5 px-4 text-center">
+                      <td className="py-3 px-4 text-center">
                         <input
                           type="number"
                           min="0"
@@ -275,11 +276,11 @@ export default function TopicInventoryManager({
                           onChange={(e) =>
                             handleFieldChange(t.id, "mediumCount", parseInt(e.target.value) || 0)
                           }
-                          className="h-7 w-20 px-2 py-0.5 text-center font-mono font-medium text-xs text-zinc-900 dark:text-zinc-100 bg-[#f4f4f5] dark:bg-[#232325] rounded border border-black/[0.08] dark:border-white/[0.08] focus:outline-none transition-colors duration-150"
+                          className="h-8 w-24 px-2 text-center font-mono font-semibold text-sm text-[var(--text-primary)] bg-[var(--bg-raised)] rounded-lg border border-[var(--border-hairline)] focus:outline-none focus:border-amber-500 transition-colors"
                         />
                       </td>
 
-                      <td className="py-2.5 px-4 text-center">
+                      <td className="py-3 px-4 text-center">
                         <input
                           type="number"
                           min="0"
@@ -288,32 +289,32 @@ export default function TopicInventoryManager({
                           onChange={(e) =>
                             handleFieldChange(t.id, "hardCount", parseInt(e.target.value) || 0)
                           }
-                          className="h-7 w-20 px-2 py-0.5 text-center font-mono font-medium text-xs text-zinc-900 dark:text-zinc-100 bg-[#f4f4f5] dark:bg-[#232325] rounded border border-black/[0.08] dark:border-white/[0.08] focus:outline-none transition-colors duration-150"
+                          className="h-8 w-24 px-2 text-center font-mono font-semibold text-sm text-[var(--text-primary)] bg-[var(--bg-raised)] rounded-lg border border-[var(--border-hairline)] focus:outline-none focus:border-indigo-500 transition-colors"
                         />
                       </td>
 
-                      <td className="py-2.5 px-4 text-right font-mono font-medium text-zinc-900 dark:text-zinc-100 tabular-nums text-xs">
+                      <td className="py-3 px-4 text-right font-mono font-semibold text-[var(--text-primary)] tabular-nums text-sm">
                         <div className="flex items-center justify-end gap-1.5">
                           <span>{formatNumber(rowTotal)}</span>
                           {rowDelta !== 0 && (
-                            <span className="text-[10px] text-zinc-400">
+                            <span className="text-xs text-[var(--text-muted)] font-normal font-mono">
                               ({rowDelta > 0 ? `+${rowDelta}` : rowDelta})
                             </span>
                           )}
                         </div>
                       </td>
 
-                      <td className="py-2.5 px-4">
-                        <div className="flex items-center gap-1.5">
-                          <Folder className="h-3.5 w-3.5 text-zinc-400 shrink-0" strokeWidth={1.5} />
+                      <td className="py-3 px-5">
+                        <div className="flex items-center gap-2">
+                          <Folder className="h-4 w-4 text-[var(--text-muted)] shrink-0" strokeWidth={1.5} />
                           <input
                             type="text"
                             value={t.folderName}
                             onChange={(e) =>
                               handleFieldChange(t.id, "folderName", e.target.value)
                             }
-                            placeholder="Folder path"
-                            className="h-7 w-full px-2 py-0.5 text-xs font-mono bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 rounded border border-black/[0.08] dark:border-white/[0.08] focus:outline-none transition-colors duration-150"
+                            placeholder="e.g. Quantitative/Aptitude/Arithmetic"
+                            className="h-8 w-full px-2.5 text-xs font-mono bg-[var(--bg-raised)] text-[var(--text-primary)] placeholder-[var(--text-muted)] rounded-lg border border-[var(--border-hairline)] focus:outline-none transition-colors"
                           />
                         </div>
                       </td>
@@ -323,24 +324,24 @@ export default function TopicInventoryManager({
               )}
 
               {/* Subject Total Row */}
-              <tr className="bg-[#f4f4f5] dark:bg-[#232325] font-medium text-zinc-900 dark:text-zinc-100 border-t border-black/[0.08] dark:border-white/[0.08]">
-                <td colSpan={2} className="py-2.5 px-4 text-[11px] font-mono text-zinc-500">
+              <tr className="bg-[var(--bg-raised)] font-medium text-[var(--text-primary)] border-t border-[var(--border-strong)]">
+                <td colSpan={2} className="py-3 px-5 text-xs font-mono text-[var(--text-muted)] uppercase tracking-wider font-semibold">
                   Subject aggregate total
                 </td>
-                <td className="py-2.5 px-4 text-center font-mono text-xs tabular-nums text-zinc-900 dark:text-zinc-100">
+                <td className="py-3 px-4 text-center font-mono text-sm font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
                   {formatNumber(totalEasy)}
                 </td>
-                <td className="py-2.5 px-4 text-center font-mono text-xs tabular-nums text-zinc-900 dark:text-zinc-100">
+                <td className="py-3 px-4 text-center font-mono text-sm font-semibold tabular-nums text-amber-600 dark:text-amber-400">
                   {formatNumber(totalMedium)}
                 </td>
-                <td className="py-2.5 px-4 text-center font-mono text-xs tabular-nums text-zinc-900 dark:text-zinc-100">
+                <td className="py-3 px-4 text-center font-mono text-sm font-semibold tabular-nums text-indigo-600 dark:text-indigo-400">
                   {formatNumber(totalHard)}
                 </td>
-                <td className="py-2.5 px-4 text-right font-mono font-semibold text-xs tabular-nums text-zinc-900 dark:text-zinc-100">
+                <td className="py-3 px-4 text-right font-mono font-bold text-sm tabular-nums text-[var(--text-primary)]">
                   {formatNumber(grandTotal)}
                 </td>
-                <td className="py-2.5 px-4 text-xs text-zinc-500 font-mono">
-                  {topics.length} topics aggregate
+                <td className="py-3 px-5 text-xs text-[var(--text-muted)] font-mono">
+                  {topics.length} total active topics
                 </td>
               </tr>
             </tbody>
@@ -348,22 +349,22 @@ export default function TopicInventoryManager({
         </div>
       </div>
 
-      {/* Mandatory Change Reason and Submission Ledger */}
-      <div className="bg-white dark:bg-[#19191b] p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] space-y-3">
+      {/* Mandatory Change Reason and Submission Section */}
+      <div className="craft-card p-6 space-y-4">
         <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-xs font-medium text-zinc-900 dark:text-zinc-100">
-              Mandatory change description <span className="text-zinc-400">*</span>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-semibold text-[var(--text-primary)]">
+              Mandatory audit change justification <span className="text-red-500">*</span>
             </label>
-            <span className="text-[11px] text-zinc-400 font-mono">System audit log requirement</span>
+            <span className="text-xs text-[var(--text-muted)] font-mono">Immutable audit trail requirement</span>
           </div>
           <textarea
             required
             rows={2}
             value={changeDescription}
             onChange={(e) => setChangeDescription(e.target.value)}
-            placeholder="Document reason for delta changes (e.g. Added 15 questions to Permutation following Testpress audit)"
-            className="w-full px-3 py-2 text-xs rounded-lg border border-black/[0.08] dark:border-white/[0.08] bg-[#f4f4f5] dark:bg-[#232325] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-colors duration-150"
+            placeholder="Document exact reason for inventory adjustments (e.g., Added 25 questions following Testpress syllabus audit)..."
+            className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-raised)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
           />
         </div>
 
@@ -371,10 +372,10 @@ export default function TopicInventoryManager({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.12)] disabled:opacity-50"
+            className="inline-flex items-center gap-2 h-9 px-5 rounded-lg bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors duration-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.15)] disabled:opacity-50"
           >
             <Save className="h-4 w-4" strokeWidth={1.5} />
-            {isSubmitting ? "Committing..." : "Commit inventory changes"}
+            <span>{isSubmitting ? "Committing changes..." : "Commit inventory changes"}</span>
           </button>
         </div>
       </div>
